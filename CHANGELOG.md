@@ -4,7 +4,18 @@ All notable changes to the FeatBit Claude Code Skills plugin will be documented 
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [1.1.0] - 2026-01-28
 
+### Added
+- Claude Code marketplace support with `.claude-plugin/` directory
+- `plugin.json` manifest for Claude Code plugin system
+- `marketplace.json` catalog for easy distribution
+- Comprehensive installation guide for Claude Code users
+- Users can now install via `/plugin marketplace add featbit/featbit-skills`
+
+### Changed
+- Updated README with Claude Code marketplace installation instructions
+- Enhanced documentation for better Claude Code integration
 ## [1.0.0] - 2026-01-27
 
 ### Added

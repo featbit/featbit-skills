@@ -1,0 +1,44 @@
+{
+  "name": "featbit-marketplace",
+  "owner": {
+    "name": "FeatBit Team",
+    "email": "contact@featbit.co"
+  },
+  "metadata": {
+    "description": "Official FeatBit plugin marketplace for Claude Code",
+    "version": "1.1.0"
+  },
+  "plugins": [
+    {
+      "name": "featbit-skills",
+      "source": "./",
+      "description": "Comprehensive FeatBit integration with 12 specialized skills covering platform documentation, deployment strategies, and SDK implementations for multiple programming languages",
+      "version": "1.1.0",
+      "author": {
+        "name": "FeatBit Team",
+        "email": "contact@featbit.co"
+      },
+      "homepage": "https://featbit.co",
+      "repository": "https://github.com/featbit/featbit-skills",
+      "license": "MIT",
+      "keywords": [
+        "featbit",
+        "feature-flags",
+        "feature-toggles",
+        "ab-testing",
+        "experimentation",
+        "progressive-delivery",
+        "canary-release",
+        "sdk",
+        "deployment",
+        "react",
+        "nodejs",
+        "python",
+        "java",
+        "golang",
+        "dotnet"
+      ],
+      "category": "Development Tools"
+    }
+  ]
+}
