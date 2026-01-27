@@ -1,7 +1,7 @@
 {
   "name": "featbit-skills",
-  "description": "Official FeatBit skills for Claude Code - comprehensive feature flag and A/B testing platform integration with 12 specialized skills",
-  "version": "1.1.0",
+  "description": "Official FeatBit skills for Claude Code - comprehensive feature flag and A/B testing platform integration with 13 specialized skills including dedicated Docker and Kubernetes deployment guides",
+  "version": "1.1.1",
   "author": {
     "name": "FeatBit Team",
     "email": "contact@featbit.co"

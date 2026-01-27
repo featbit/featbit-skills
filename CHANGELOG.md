@@ -4,6 +4,25 @@ All notable changes to the FeatBit Claude Code Skills plugin will be documented 
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.1.1] - 2026-01-28
+
+### Changed
+- Split `featbit-deployment` skill into two specialized skills:
+  - `featbit-deployment-docker`: Dedicated Docker Compose deployment guide
+  - `featbit-deployment-kubernetes`: Dedicated Kubernetes/Helm deployment guide
+- Fixed default login credentials in Docker skill (corrected from `admin@featbit.com` to `test@featbit.com`)
+- Added comprehensive official resources section with direct links to:
+  - Documentation guides
+  - Source code and configuration files (docker-compose.yml, init scripts)
+  - Docker Hub images
+  - Infrastructure as Code templates
+
+### Improved
+- Enhanced deployment documentation accuracy by referencing official GitHub repository files
+- Better skill organization for improved LLM retrieval efficiency
+- Added verification links for all deployment configurations
+
 ## [1.1.0] - 2026-01-28
 
 ### Added
