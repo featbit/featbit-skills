@@ -1,10 +1,16 @@
 ---
 name: featbit-deployment
-description: Expert guidance for deploying FeatBit using Docker Compose, including standalone, standard, and professional deployment options. Use when users ask about deploying, installing, or running FeatBit infrastructure.
+description: Expert guidance for deploying FeatBit using Docker Compose, Kubernetes Helm Charts, and Terraform. Covers standalone, standard, and professional deployment options. Use when users ask about deploying, installing, or running FeatBit infrastructure.
 appliesTo:
   - "**/docker-compose.yml"
   - "**/docker-compose.yaml"
   - "**/*.tf"
+  - "**/values.yaml"
+  - "**/values.yml"
+  - "**/Chart.yaml"
+  - "**/*-deployment.yaml"
+  - "**/*-service.yaml"
+  - "**/*-ingress.yaml"
 ---
 
 # FeatBit Deployment Expert
@@ -51,6 +57,16 @@ FeatBit offers three deployment tiers:
 - **Best For**: Large enterprises, high traffic
 - **Pros**: Massive scalability, advanced analytics
 - **Cons**: Most complex setup
+
+## Deployment Methods
+
+FeatBit can be deployed using:
+
+1. **Docker Compose** - Best for single-server deployments, local development
+2. **Kubernetes (Helm Charts)** - Best for production, cloud-native, scalable deployments
+3. **Terraform** - Infrastructure as Code for AWS deployments
+
+Choose based on your infrastructure and scalability requirements.
 
 ## Quick Start: Standalone Deployment
 
@@ -481,6 +497,284 @@ evaluation-server:
     replicas: 3
 ```
 
+## Kubernetes Deployment (Helm Charts)
+
+### Prerequisites
+- Kubernetes cluster >= 1.23
+- Helm >= 3.7.0
+- kubectl configured to connect to your cluster
+
+### Quick Start with Helm
+
+**Step 1: Add FeatBit Helm Repository**
+```bash
+helm repo add featbit https://featbit.github.io/featbit-charts/
+helm repo update
+```
+
+**Step 2: Install FeatBit (Standard Edition with PostgreSQL)**
+```bash
+# Create namespace
+kubectl create namespace featbit
+
+# Install with default values (development/testing)
+helm install featbit featbit/featbit --namespace featbit
+
+# Install with custom values (production)
+helm install featbit featbit/featbit \
+  -f your-values.yaml \
+  --namespace featbit
+```
+
+**Step 3: Verify Installation**
+```bash
+# Check pods status
+kubectl get pods -n featbit
+
+# Check services
+kubectl get svc -n featbit
+```
+
+### Service Exposure Options
+
+FeatBit requires exposing three services:
+- **UI** (port 8081): Frontend interface
+- **API** (port 5000): API server
+- **Evaluation Server** (port 5100): Real-time feature flag evaluation
+
+**Option 1: Ingress (Recommended for Production)**
+```yaml
+apiExternalUrl: "https://api.example.com"
+evaluationServerExternalUrl: "https://eval.example.com"
+
+ui:
+  ingress:
+    enabled: true
+    host: app.example.com
+    tls:
+      enabled: true
+      secretName: featbit-tls-secret
+
+api:
+  ingress:
+    enabled: true
+    host: api.example.com
+    tls:
+      enabled: true
+      secretName: featbit-tls-secret
+
+els:
+  ingress:
+    enabled: true
+    host: eval.example.com
+    tls:
+      enabled: true
+      secretName: featbit-tls-secret
+```
+
+**Option 2: LoadBalancer (Cloud Environments)**
+```yaml
+apiExternalUrl: "http://API_EXTERNAL_IP:5000"
+evaluationServerExternalUrl: "http://ELS_EXTERNAL_IP:5100"
+
+ui:
+  service:
+    type: LoadBalancer
+
+api:
+  service:
+    type: LoadBalancer
+
+els:
+  service:
+    type: LoadBalancer
+```
+
+**Option 3: NodePort (Development/Testing)**
+```yaml
+apiExternalUrl: "http://NODE_IP:30050"
+evaluationServerExternalUrl: "http://NODE_IP:30100"
+
+ui:
+  service:
+    type: NodePort
+    nodePort: 30025
+
+api:
+  service:
+    type: NodePort
+    nodePort: 30050
+
+els:
+  service:
+    type: NodePort
+    nodePort: 30100
+```
+
+**Option 4: Port Forward (Local Development)**
+```bash
+# UI
+kubectl port-forward service/featbit-ui 8081:8081 -n featbit
+
+# API
+kubectl port-forward service/featbit-api 5000:5000 -n featbit
+
+# Evaluation Server
+kubectl port-forward service/featbit-els 5100:5100 -n featbit
+```
+
+### Key Configuration
+
+**Using External PostgreSQL**
+```yaml
+postgresql:
+  enabled: false
+
+externalPostgresql:
+  host: your-postgres-server.com
+  port: 5432
+  user: postgres
+  database: featbit
+  existingSecret: featbit-db-secret
+  existingSecretPasswordKey: password
+```
+
+**Using External Redis**
+```yaml
+redis:
+  enabled: false
+
+externalRedis:
+  host: your-redis-server.com
+  port: 6379
+  existingSecret: featbit-redis-secret
+  existingSecretPasswordKey: password
+```
+
+**Architecture Tier Selection**
+```yaml
+architecture:
+  tier: "standard"  # Options: "standalone", "standard", "professional"
+  database: "postgres"  # Options: "postgres", "mongodb"
+```
+
+**Auto-Scaling**
+```yaml
+api:
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+
+els:
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 75
+```
+
+### Production Deployment Example (Azure AKS)
+
+The Helm chart repository includes a comprehensive AKS deployment guide with:
+- NGINX Ingress Controller with TLS
+- cert-manager for automatic Let's Encrypt certificates
+- Azure Key Vault integration for secrets
+- Multi-region setup with Azure Traffic Manager
+
+**Example values for AKS:**
+```yaml
+apiExternalUrl: "https://api.featbit.example.com"
+evaluationServerExternalUrl: "https://eval.featbit.example.com"
+
+# Use external Azure Database for PostgreSQL
+postgresql:
+  enabled: false
+externalPostgresql:
+  host: featbit-pg.postgres.database.azure.com
+  port: 5432
+  user: featbitadmin
+  database: featbit
+  existingSecret: azure-kv-postgres-secret
+
+# Use Azure Cache for Redis
+redis:
+  enabled: false
+externalRedis:
+  host: featbit-redis.redis.cache.windows.net
+  port: 6380
+  tls: true
+  existingSecret: azure-kv-redis-secret
+
+# Ingress with TLS
+global:
+  ingressClassName: nginx
+
+ui:
+  ingress:
+    enabled: true
+    host: app.featbit.example.com
+    tls:
+      enabled: true
+      secretName: featbit-tls-cert
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+api:
+  ingress:
+    enabled: true
+    host: api.featbit.example.com
+    tls:
+      enabled: true
+      secretName: featbit-tls-cert
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+els:
+  ingress:
+    enabled: true
+    host: eval.featbit.example.com
+    tls:
+      enabled: true
+      secretName: featbit-tls-cert
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+```
+
+### Upgrade and Migration
+
+**Upgrading to Latest Version**
+```bash
+# Update Helm repo
+helm repo update featbit
+
+# Check available versions
+helm search repo featbit/featbit --versions
+
+# Upgrade (always backup database first!)
+helm upgrade featbit featbit/featbit \
+  --version <target-version> \
+  -f your-values.yaml \
+  --namespace featbit
+```
+
+**Important Notes:**
+- Always backup your database before upgrading
+- Review migration scripts in the chart's `migration/` folder
+- For external databases, manually apply migration scripts
+- Test upgrades in non-production environment first
+
+### Helm Chart Resources
+
+- **Chart Repository**: https://github.com/featbit/featbit-charts
+- **Chart Documentation**: https://github.com/featbit/featbit-charts/blob/main/README.md
+- **Examples**: https://github.com/featbit/featbit-charts/tree/main/charts/featbit/examples
+- **AKS Deployment Guide**: https://github.com/featbit/featbit-charts/tree/main/charts/featbit/examples/aks
+- **Current Version**: 0.9.0 (App: FeatBit 5.2.0)
+
+For detailed Helm configuration options and production deployment patterns, refer to the official chart repository.
+
 ## Monitoring
 
 Add Prometheus and Grafana for observability:
@@ -502,6 +796,7 @@ grafana:
 ## Official Resources
 
 - **Main Repository**: https://github.com/featbit/featbit
+- **Helm Charts**: https://github.com/featbit/featbit-charts
 - **Terraform AWS**: https://github.com/featbit/featbit-terraform-aws
 - **Documentation**: https://docs.featbit.co/installation
 - **Docker Hub**: https://hub.docker.com/u/featbit

@@ -58,6 +58,8 @@ docs/_site/
 # Claude Code specific (optional)
 .claude-code/
 
+.claude/settings.json
+
 # macOS
 .AppleDouble
 .LSOverride

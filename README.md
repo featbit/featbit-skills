@@ -7,7 +7,7 @@ Official Claude Code skills plugin for [FeatBit](https://featbit.co) - an open-s
 
 ## 🎯 What is This?
 
-This plugin provides comprehensive knowledge and guidance for integrating FeatBit into your applications through **12 specialized skills** covering platform documentation, deployment strategies, and SDK implementations across multiple programming languages and frameworks.
+This plugin provides comprehensive knowledge and guidance for integrating FeatBit into your applications through **13 specialized skills** covering platform documentation, deployment strategies, and SDK implementations across multiple programming languages and frameworks.
 
 With these skills, you can:
 
@@ -20,34 +20,29 @@ With these skills, you can:
 
 ## 📦 Installation
 
-### Prerequisites
+### Quick Install (Recommended)
 
-- Claude Code editor with skills support
-- Basic understanding of feature flags (helpful but not required)
-
-### Via Plugin Marketplace (Coming Soon)
+Install directly from Claude Code marketplace:
 
 ```bash
-# When available in marketplace
-/plugin install @featbit/claude-skills
+# In Claude Code
+/plugin marketplace add featbit/featbit-skills
+/plugin install featbit-skills@featbit-marketplace
 ```
 
-### Manual Installation
+That's it! All 13 skills are now available in Claude Code.
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/featbit/featbit-skills.git
-   cd featbit-skills/featbit-plugin
-   ```
+### Verify Installation
 
-2. Link to your Claude Code skills directory:
-   ```bash
-   # On Windows
-   xcopy /E /I skills %USERPROFILE%\.claude\skills\featbit
-   
-   # On macOS/Linux
-   cp -r skills ~/.claude/skills/featbit
-   # Linux/macOS
+```bash
+/plugin list
+```
+
+You should see `featbit-skills` with status "Enabled".
+
+### Detailed Installation Guide
+
+For troubleshooting, enterprise setup, or manual installation, see the [complete installation guide](docs/INSTALLATION.md).
    ln -s "$(pwd)" ~/.claude-code/skills/featbit
    
    # Windows (PowerShell as Administrator)
@@ -69,11 +64,11 @@ After installation, verify the skills are loaded:
 /skills list
 ```
 
-You should see all 12 FeatBit skills listed.
+You should see all 13 FeatBit skills listed.
 
 ## 🎓 Available Skills
 
-This plugin includes **12 specialized skills** organized by category:
+This plugin includes **13 specialized skills** organized by category:
 
 ### Platform & Infrastructure
 
@@ -90,31 +85,39 @@ Complete knowledge of FeatBit's official documentation covering 75+ topics:
 
 **Activates when**: You ask about FeatBit features, concepts, best practices, or general "how-to" questions.
 
-### 2. **FeatBit Deployment** (`featbit-deployment`)
-Comprehensive deployment guidance:
-- Docker Compose (Standalone, Standard, Professional)
-- Environment variables and configuration
-- Terraform deployment to AWS
-- High availability setups
-- Troubleshooting and security
-
-#### **2. FeatBit Deployment** (`featbit-deployment`)
-Comprehensive deployment knowledge for production environments:
-- 🐳 Docker Compose (standalone & standard editions)
-- ☸️ Kubernetes with Helm charts
-- 🔧 Terraform infrastructure as code
-- 📊 Monitoring and observability setup
-- 🔒 Security hardening and best practices
+#### **2. FeatBit Docker Deployment** (`featbit-deployment-docker`)
+Expert guidance for Docker Compose deployments:
+- 🐳 Docker Compose configurations (Standalone, Standard, Professional)
+- 🔧 Environment variables and container orchestration
+- 🔒 Security best practices and secrets management
 - 💾 Backup and recovery strategies
-- ⚡ Performance tuning and scaling
+- 📊 Monitoring with Prometheus and Grafana
+- ⚡ Performance tuning and optimization
+- 🌐 Reverse proxy with nginx and SSL/TLS
 
-**Activates when**: Working with `docker-compose.yml`, `.tf`, Kubernetes manifests, or deployment questions.
+**Activates when**: Working with `docker-compose.yml`, `Dockerfile`, or Docker-based deployment questions.
+
+**Example**: "How do I deploy FeatBit with Docker Compose using MongoDB and Redis?"
+
+#### **3. FeatBit Kubernetes Deployment** (`featbit-deployment-kubernetes`)
+Expert guidance for Kubernetes/Helm deployments:
+- ☸️ Helm Charts installation and configuration
+- 🌐 Service exposure (Ingress, LoadBalancer, NodePort)
+- 📈 Auto-scaling with HPA
+- ☁️ Cloud provider integrations (AKS, EKS, GKE)
+- 🔐 TLS/SSL with cert-manager and Let's Encrypt
+- 🗄️ External database configurations
+- 🔄 Upgrade and rollback strategies
+
+**Activates when**: Working with `values.yaml`, Kubernetes manifests, or Helm deployment questions.
+
+**Example**: "How do I deploy FeatBit to Azure AKS with automatic SSL certificates?"
 
 ---
 
 ### Server-Side SDKs
 
-#### **3. FeatBit .NET SDK** (`featbit-dotnet-sdk`)
+#### **4. FeatBit .NET SDK** (`featbit-dotnet-sdk`)
 Expert guidance for .NET Server SDK integration:
 - 🏗️ ASP.NET Core with dependency injection
 - 🖥️ Console applications and worker services
@@ -127,7 +130,7 @@ Expert guidance for .NET Server SDK integration:
 
 **Example**: "How do I integrate FeatBit in my ASP.NET Core API?"
 
-#### **4. FeatBit Node.js Server SDK** (`featbit-node-server-sdk`)
+#### **5. FeatBit Node.js Server SDK** (`featbit-node-server-sdk`)
 Expert guidance for Node.js Server SDK:
 - ⚡ Express, Koa, NestJS framework integration
 - 👥 Multi-user server applications
@@ -139,7 +142,7 @@ Expert guidance for Node.js Server SDK:
 
 **Example**: "Set up FeatBit in my Express API"
 
-#### **5. FeatBit Python SDK** (`featbit-python-sdk`)
+#### **6. FeatBit Python SDK** (`featbit-python-sdk`)
 Expert guidance for Python Server SDK:
 - 🌶️ Flask and Django framework integration
 - ⚡ FastAPI support
@@ -151,7 +154,7 @@ Expert guidance for Python Server SDK:
 
 **Example**: "Integrate FeatBit with my Flask application"
 
-#### **6. FeatBit Java SDK** (`featbit-java-sdk`)
+#### **7. FeatBit Java SDK** (`featbit-java-sdk`)
 Expert guidance for Java Server SDK:
 - Spring Boot integration
 - Maven and Gradle setup
@@ -167,7 +170,7 @@ Expert guidance for Java Server SDK:
 
 **Example**: "How to use FeatBit in Spring Boot?"
 
-#### **7. FeatBit Go SDK** (`featbit-go-sdk`)
+#### **8. FeatBit Go SDK** (`featbit-go-sdk`)
 Expert guidance for Go Server SDK:
 - 🍸 Gin and Echo framework integration
 - 🌐 Standard HTTP server support
@@ -183,7 +186,7 @@ Expert guidance for Go Server SDK:
 
 ### Client-Side SDKs
 
-#### **8. FeatBit JavaScript Client SDK** (`featbit-javascript-client-sdk`)
+#### **9. FeatBit JavaScript Client SDK** (`featbit-javascript-client-sdk`)
 Expert guidance for browser JavaScript SDK:
 - 🌐 Vanilla JavaScript integration
 - 🖥️ Browser applications (SPA, MPA)
@@ -195,7 +198,7 @@ Expert guidance for browser JavaScript SDK:
 
 **Example**: "Add feature flags to my vanilla JS app"
 
-#### **9. FeatBit React Client SDK** (`featbit-react-client-sdk`)
+#### **10. FeatBit React Client SDK** (`featbit-react-client-sdk`)
 Expert guidance for React SDK:
 - ⚛️ React hooks: `useFlags()`, `useFbClient()`
 - 🎯 Provider pattern with `FbProvider`
@@ -208,7 +211,7 @@ Expert guidance for React SDK:
 
 **Example**: "Use feature flags in my React components"
 
-#### **10. FeatBit React Native SDK** (`featbit-react-native-sdk`)
+#### **11. FeatBit React Native SDK** (`featbit-react-native-sdk`)
 Expert guidance for React Native mobile SDK:
 - 📱 iOS and Android platform support
 - 📲 Device information integration
@@ -224,7 +227,7 @@ Expert guidance for React Native mobile SDK:
 
 ### OpenFeature Providers
 
-#### **11. FeatBit OpenFeature Node.js Provider** (`featbit-openfeature-node-server`)
+#### **12. FeatBit OpenFeature Node.js Provider** (`featbit-openfeature-node-server`)
 Expert guidance for vendor-neutral feature flagging:
 - 🌐 OpenFeature standard API compliance
 - ⚡ Express, Koa, NestJS integration
@@ -236,7 +239,7 @@ Expert guidance for vendor-neutral feature flagging:
 
 **Example**: "Use OpenFeature with FeatBit in my Express API"
 
-#### **12. FeatBit OpenFeature JavaScript Provider** (`featbit-openfeature-js-client`)
+#### **13. FeatBit OpenFeature JavaScript Provider** (`featbit-openfeature-js-client`)
 Expert guidance for browser OpenFeature integration:
 - 🌐 Vendor-neutral browser feature flags
 - ⚛️ React, Vue, Angular integration
@@ -354,10 +357,11 @@ I'll show you how to use FeatBit with React hooks:
    }
 ```
 
-### Example 3: Deployment
+### Example 3: Docker Deployment
 
+**You**: "How do I deploy FeatBit with Docker Compose?"
 
-**Claude** (activating `featbit-deployment`):
+**Claude** (activating `featbit-deployment-docker`):
 ```
 I'll guide you through deploying FeatBit in production with Docker Compose using the Standard edition:
 
@@ -403,7 +407,7 @@ I'll guide you through deploying FeatBit in production with Docker Compose using
 - **75+ Documentation Topics**: Complete platform knowledge
 - **7 Programming Languages**: .NET, JavaScript/TypeScript, Python, Java, Go
 - **15+ Frameworks**: ASP.NET Core, Express, React, Next.js, Django, Flask, FastAPI, Spring Boot, Gin, Echo, React Native
-- **3 Deployment Strategies**: Docker Compose, Kubernetes, Terraform
+- **2 Deployment Methods**: Docker Compose (single-server), Kubernetes/Helm (cloud-native)
 
 ### Smart Activation
 Skills automatically activate based on:
