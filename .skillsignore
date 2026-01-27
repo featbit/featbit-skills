@@ -1,0 +1,32 @@
+# Claude Skills Ignore File
+# Files and directories to exclude from skill loading
+
+# Documentation
+docs/
+CONVERSION.md
+MISSING_SKILLS.md
+STRUCTURE.md
+QUICKSTART.md
+
+# Development files
+.git/
+.gitignore
+node_modules/
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+dist/
+build/
+*.tmp
+
+# Test files
+tests/
+__tests__/
+*.test.js
+*.spec.js

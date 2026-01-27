@@ -1,0 +1,114 @@
+{
+  "name": "@featbit/claude-skills",
+  "version": "1.0.0",
+  "description": "Official Claude Code skills plugin for FeatBit - comprehensive feature flag and A/B testing platform integration",
+  "main": "package.json",
+  "author": {
+    "name": "FeatBit Team",
+    "email": "contact@featbit.co",
+    "url": "https://featbit.co"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/featbit/featbit-skills#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/featbit/featbit-skills.git",
+    "directory": "featbit-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/featbit/featbit-skills/issues",
+    "email": "support@featbit.co"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "claude-skills",
+    "featbit",
+    "feature-flags",
+    "feature-toggles",
+    "ab-testing",
+    "experimentation",
+    "progressive-delivery",
+    "canary-release",
+    "sdk",
+    "deployment",
+    "open-source",
+    "react",
+    "nodejs",
+    "python",
+    "java",
+    "golang",
+    "dotnet"
+  ],
+  "categories": [
+    "Development Tools",
+    "SDKs",
+    "Feature Management",
+    "A/B Testing"
+  ],
+  "skills": [
+    {
+      "name": "featbit-documentation",
+      "path": "skills/featbit-documentation",
+      "description": "Expert knowledge of FeatBit's complete documentation"
+    },
+    {
+      "name": "featbit-deployment",
+      "path": "skills/featbit-deployment",
+      "description": "Comprehensive deployment guidance for FeatBit"
+    },
+    {
+      "name": "featbit-dotnet-sdk",
+      "path": "skills/featbit-dotnet-sdk",
+      "description": "Expert guidance for FeatBit .NET Server SDK integration"
+    },
+    {
+      "name": "featbit-node-server-sdk",
+      "path": "skills/featbit-node-server-sdk",
+      "description": "Expert guidance for FeatBit Node.js Server SDK integration"
+    },
+    {
+      "name": "featbit-python-sdk",
+      "path": "skills/featbit-python-sdk",
+      "description": "Expert guidance for FeatBit Python Server SDK integration"
+    },
+    {
+      "name": "featbit-java-sdk",
+      "path": "skills/featbit-java-sdk",
+      "description": "Expert guidance for FeatBit Java Server SDK integration"
+    },
+    {
+      "name": "featbit-go-sdk",
+      "path": "skills/featbit-go-sdk",
+      "description": "Expert guidance for FeatBit Go Server SDK integration"
+    },
+    {
+      "name": "featbit-javascript-client-sdk",
+      "path": "skills/featbit-javascript-client-sdk",
+      "description": "Expert guidance for FeatBit JavaScript Client SDK"
+    },
+    {
+      "name": "featbit-react-client-sdk",
+      "path": "skills/featbit-react-client-sdk",
+      "description": "Expert guidance for FeatBit React Client SDK"
+    },
+    {
+      "name": "featbit-react-native-sdk",
+      "path": "skills/featbit-react-native-sdk",
+      "description": "Expert guidance for FeatBit React Native SDK"
+    },
+    {
+      "name": "featbit-openfeature-node-server",
+      "path": "skills/featbit-openfeature-node-server",
+      "description": "Expert guidance for FeatBit OpenFeature Node.js Provider"
+    },
+    {
+      "name": "featbit-openfeature-js-client",
+      "path": "skills/featbit-openfeature-js-client",
+      "description": "Expert guidance for FeatBit OpenFeature JavaScript Provider"
+    }
+  ],
+  "engines": {
+    "claude-code": ">=1.0.0"
+  }
+}
