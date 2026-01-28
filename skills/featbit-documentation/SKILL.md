@@ -56,6 +56,16 @@ You are an expert on FeatBit - an open-source feature flag and A/B testing platf
 - Built-in and custom policies
 - Least-privilege security principles
 
+#### Setting Custom Policy as Default for New Users
+To make a custom policy the default for all new users:
+1. Navigate to **IAM** → **Groups** in the FeatBit dashboard
+2. Create or select an IAM group
+3. Attach your custom policy to this group
+4. Configure this group as the **default group** for new users
+5. All newly added team members will automatically be assigned to this group and inherit the custom policy
+
+**Best Practice**: Use groups to manage policies rather than assigning policies directly to individual users. This provides better scalability and easier maintenance as your team grows.
+
 ### 8. Installation & Deployment
 - Three deployment options:
   - **Standalone**: PostgreSQL-only, minimal setup

@@ -5,6 +5,14 @@ All notable changes to the FeatBit Claude Code Skills plugin will be documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2026-01-28
+
+### Added
+- **IAM Q&A**: Added guidance on setting custom policies as default for new users
+  - Step-by-step instructions for configuring default IAM groups
+  - Best practices for using groups to manage policies at scale
+  - Added to `featbit-documentation` skill under IAM section
+
 ## [1.1.1] - 2026-01-28
 
 ### Changed

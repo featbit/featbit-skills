@@ -1,7 +1,7 @@
 # FeatBit Skills for Claude Code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.1.2-blue.svg)](CHANGELOG.md)
 
 Official Claude Code skills plugin for [FeatBit](https://featbit.co) - an open-source, powerful, and scalable feature flags and A/B testing platform.
 
