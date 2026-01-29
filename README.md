@@ -1,13 +1,21 @@
-# FeatBit Skills for Claude Code
+# FeatBit Skills for AI Coding Agents
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-1.1.2-blue.svg)](CHANGELOG.md)
 
-Official Claude Code skills plugin for [FeatBit](https://featbit.co) - an open-source, powerful, and scalable feature flags and A/B testing platform.
+> **✨ Universal Compatibility**: These skills work with **all AI coding agents that support the skills protocol**, including **Claude Code**, **VSCode Copilot**, **Cursor**, and other compatible agents. Install once, use everywhere!
+
+Official skills plugin for [FeatBit](https://featbit.co) - an open-source, powerful, and scalable feature flags and A/B testing platform.
 
 ## 🎯 What is This?
 
 This plugin provides comprehensive knowledge and guidance for integrating FeatBit into your applications through **13 specialized skills** covering platform documentation, deployment strategies, and SDK implementations across multiple programming languages and frameworks.
+
+**🔧 Works with Multiple AI Agents:**
+- ✅ **Claude Code** (Anthropic's AI assistant - inventor of the Skills protocol)
+- ✅ **VSCode** (GitHub Copilot with Skills)
+- ✅ **Cursor** (AI Code Editor with Skills support)
+- ✅ **Any AI agent** that supports the Skills protocol
 
 With these skills, you can:
 
@@ -20,7 +28,13 @@ With these skills, you can:
 
 ## 📦 Installation
 
-### Quick Install (Recommended)
+### For Claude Code (Recommended)
+
+> **Note**: Claude Code invented the skills protocol, providing the most native and seamless experience.
+
+#### Quick Install from Marketplace
+
+Install directly from Claude Code marketplace:
 
 Install directly from Claude Code marketplace:
 
@@ -32,7 +46,7 @@ Install directly from Claude Code marketplace:
 
 That's it! All 13 skills are now available in Claude Code.
 
-### Verify Installation
+#### Verify Installation
 
 ```bash
 /plugin list
@@ -40,31 +54,43 @@ That's it! All 13 skills are now available in Claude Code.
 
 You should see `featbit-skills` with status "Enabled".
 
+### For VSCode (GitHub Copilot)
+
+1. Install the skills in your GitHub Copilot skills directory:
+   ```bash
+   # macOS/Linux
+   mkdir -p ~/.github/skills
+   git clone https://github.com/featbit/featbit-skills.git ~/.github/skills/featbit
+   
+   # Windows (PowerShell)
+   mkdir -Force "$env:USERPROFILE\.github\skills"
+   git clone https://github.com/featbit/featbit-skills.git "$env:USERPROFILE\.github\skills\featbit"
+   ```
+
+2. Restart VSCode to load the skills
+
+3. Verify the skills appear in your Copilot suggestions when working with FeatBit-related code
+
+### For Cursor
+
+1. Install the skills in your Cursor settings directory:
+   ```bash
+   # macOS/Linux
+   mkdir -p ~/.cursor/skills
+   git clone https://github.com/featbit/featbit-skills.git ~/.cursor/skills/featbit
+   
+   # Windows (PowerShell)
+   mkdir -Force "$env:USERPROFILE\.cursor\skills"
+   git clone https://github.com/featbit/featbit-skills.git "$env:USERPROFILE\.cursor\skills\featbit"
+   ```
+
+2. Restart Cursor to load the skills
+
+3. Verify the skills are active in your Cursor AI assistant
+
 ### Detailed Installation Guide
 
 For troubleshooting, enterprise setup, or manual installation, see the [complete installation guide](docs/INSTALLATION.md).
-   ln -s "$(pwd)" ~/.claude-code/skills/featbit
-   
-   # Windows (PowerShell as Administrator)
-   New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Claude Code\skills\featbit" -Target (Get-Location)
-   ```
-
-3. Restart Claude Code or reload skills:
-   ```bash
-   # In Claude Code
-   /skills reload
-   ```
-
-### Verifying Installation
-
-After installation, verify the skills are loaded:
-
-```bash
-# In Claude Code
-/skills list
-```
-
-You should see all 13 FeatBit skills listed.
 
 ## 🎓 Available Skills
 
@@ -255,13 +281,13 @@ Expert guidance for browser OpenFeature integration:
 
 ## 💡 Usage Examples
 
-Simply ask Claude questions while working in your codebase. The relevant skill will automatically activate based on your file context and questions:
+Simply ask your AI coding assistant (Copilot, Cursor, Claude, etc.) questions while working in your codebase. The relevant skill will automatically activate based on your file context and questions:
 
 ### Example 1: Getting Started
 
 **You**: "How do I add feature flags to my ASP.NET Core API?"
 
-**Claude** (activating `featbit-dotnet-sdk`):
+**AI Assistant** (activating `featbit-dotnet-sdk`):
 - OpenFeature standard API
 - Express, NestJS integration
 - Event handling
@@ -281,13 +307,13 @@ Expert guidance for OpenFeature JavaScript provider:
 
 ## Usage Examples
 
-Simply ask Claude questions while working in your codebase. The relevant skill will automatically activate:
+Simply ask your AI coding assistant questions while working in your codebase. The relevant skill will automatically activate:
 
 ### Example 1: Feature Flag Integration
 
 **You**: "How do I integrate FeatBit in my ASP.NET Core API?"
 
-**Claude** (activating `featbit-dotnet-sdk`):
+**AI Assistant** (activating `featbit-dotnet-sdk`):
 ```
 I'll help you integrate FeatBit into your ASP.NET Core API using dependency injection.
 
@@ -324,7 +350,7 @@ I'll help you integrate FeatBit into your ASP.NET Core API using dependency inje
 
 **You**: "Show me how to use feature flags in my React component"
 
-**Claude** (activating `featbit-react-client-sdk`):
+**AI Assistant** (activating `featbit-react-client-sdk`):
 ```
 I'll show you how to use FeatBit with React hooks:
 
@@ -361,7 +387,7 @@ I'll show you how to use FeatBit with React hooks:
 
 **You**: "How do I deploy FeatBit with Docker Compose?"
 
-**Claude** (activating `featbit-deployment-docker`):
+**AI Assistant** (activating `featbit-deployment-docker`):
 ```
 I'll guide you through deploying FeatBit in production with Docker Compose using the Standard edition:
 
@@ -413,7 +439,7 @@ I'll guide you through deploying FeatBit in production with Docker Compose using
 Skills automatically activate based on:
 - 📁 **File Context**: Working with `.cs` files triggers .NET skill
 - 💬 **Question Content**: Asking about "React" triggers React skill
-- 🔍 **Code Analysis**: Claude understands your project structure
+- 🔍 **Code Analysis**: Your AI assistant understands your project structure
 
 ### Real-World Guidance
 - ✅ Complete code examples with best practices
