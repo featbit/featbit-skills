@@ -1,0 +1,324 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit .NET SDK Testing Collection",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-dotnet-sdk",
+    "total_tests": 5,
+    "description": "Evaluation tests for FeatBit .NET Server SDK integration guidance"
+  },
+  "test_items": [
+    {
+      "id": "dotnet-sdk-001",
+      "name": "dotnet-sdk-aspnetcore-di-basic-setup",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates that AI can guide developers through setting up FeatBit .NET SDK with dependency injection in ASP.NET Core applications, including proper service registration and configuration.",
+      "complexity_level": "basic",
+      "task_type": "text-comparison",
+      "input_task_prompt": "I have an ASP.NET Core 8 web application. How do I integrate the FeatBit SDK using dependency injection? Show me the complete setup including installing the package and configuring the service.",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "NuGet package: FeatBit.ServerSdk",
+            "Installation command: dotnet add package FeatBit.ServerSdk",
+            "Service registration: builder.Services.AddFeatBit()",
+            "Configuration with EnvSecret",
+            "Configuration with StreamingUri",
+            "Obtaining IFbClient from DI"
+          ],
+          "should_include": [
+            "appsettings.json configuration example",
+            "Explanation of EnvSecret location",
+            "Using IFbClient in controllers or services",
+            "Async initialization consideration"
+          ],
+          "must_not_include": [
+            "Incorrect package names",
+            "Wrong namespace references",
+            "Deprecated API usage"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Extract all package references from response",
+          "step_2": "Verify 'FeatBit.ServerSdk' is mentioned exactly",
+          "step_3": "Check for AddFeatBit() extension method reference",
+          "step_4": "Verify configuration shows EnvSecret parameter",
+          "step_5": "Confirm code examples use correct C# syntax",
+          "step_6": "Check if dependency injection pattern is properly explained"
+        },
+        "pass_criteria": [
+          "All 6 'must_include' items are present",
+          "At least 2 of 4 'should_include' items are present",
+          "None of the 'must_not_include' items are present",
+          "Code syntax is valid C# for .NET 6+",
+          "Configuration is complete and functional"
+        ],
+        "fail_criteria": [
+          "Missing any 'must_include' item",
+          "Contains any 'must_not_include' item",
+          "Code syntax errors in examples",
+          "Incomplete configuration (missing EnvSecret or StreamingUri)",
+          "Incorrect DI service lifetime explained"
+        ]
+      },
+      "prerequisites": [
+        "ASP.NET Core 6+ project created",
+        "Access to FeatBit portal for EnvSecret",
+        "Basic understanding of dependency injection"
+      ],
+      "expected_duration": "3-5 minutes",
+      "tags": ["sdk", "dotnet", "aspnetcore", "di", "setup", "basic"]
+    },
+    {
+      "id": "dotnet-sdk-002",
+      "name": "dotnet-sdk-user-context-authenticated",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates AI can explain building FbUser objects with custom properties for authenticated users in controller context.",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "In my ASP.NET Core controller, I need to evaluate a feature flag for authenticated users. How do I create a user context with custom properties like role and subscription level? Show me a complete example with the controller code.",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "FbUser.Builder() pattern",
+            "User identifier (User.Identity.Name or similar)",
+            "Custom() method for properties",
+            "Build() method call",
+            "IFbClient injection in constructor",
+            "BoolVariation() or other variation method"
+          ],
+          "should_include": [
+            "Multiple Custom() calls for different properties",
+            "Example custom properties (role, subscription, country, etc.)",
+            "Default value parameter in variation method",
+            "HttpContext or User.Identity usage"
+          ],
+          "must_not_include": [
+            "Hardcoded user keys in production code",
+            "Missing Build() call",
+            "Incorrect method names"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Check for FbUser.Builder pattern usage",
+          "step_2": "Verify user identifier is from authenticated context",
+          "step_3": "Confirm at least 2 Custom() calls for properties",
+          "step_4": "Validate Build() method is called",
+          "step_5": "Check IFbClient is properly injected",
+          "step_6": "Verify variation method includes default value"
+        },
+        "pass_criteria": [
+          "All 6 'must_include' items present",
+          "At least 3 of 4 'should_include' items present",
+          "None of 'must_not_include' items present",
+          "Code demonstrates proper builder pattern",
+          "User context includes meaningful custom properties"
+        ],
+        "fail_criteria": [
+          "Missing FbUser.Builder pattern",
+          "No custom properties shown",
+          "Build() method not called",
+          "Hardcoded user identifiers",
+          "Incorrect C# syntax"
+        ]
+      },
+      "prerequisites": [
+        "ASP.NET Core project with authentication configured",
+        "FeatBit SDK already installed",
+        "Understanding of ASP.NET Core controllers"
+      ],
+      "expected_duration": "3-4 minutes",
+      "tags": ["sdk", "dotnet", "user-context", "authentication", "intermediate"]
+    },
+    {
+      "id": "dotnet-sdk-003",
+      "name": "dotnet-sdk-all-variation-types",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates AI can explain and demonstrate all variation types (bool, string, int, double, JSON) available in FeatBit .NET SDK.",
+      "complexity_level": "intermediate",
+      "task_type": "text-comparison",
+      "input_task_prompt": "What types of feature flags can I evaluate with FeatBit .NET SDK? Show me examples of all different variation types and when to use each one.",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "BoolVariation() method and example",
+            "StringVariation() method and example",
+            "IntVariation() method and example",
+            "DoubleVariation() method and example",
+            "JsonVariation() method and example",
+            "Default values for each type"
+          ],
+          "should_include": [
+            "Use case examples for each type",
+            "Explanation of when to use which type",
+            "JSON parsing/deserialization example",
+            "Type safety considerations"
+          ],
+          "must_not_include": [
+            "Non-existent variation methods",
+            "Incorrect method signatures",
+            "Missing default values"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Count variation method types mentioned (must be 5)",
+          "step_2": "Verify each method has correct signature",
+          "step_3": "Check default values are shown for each",
+          "step_4": "Validate code examples are syntactically correct",
+          "step_5": "Assess if use cases are explained"
+        },
+        "pass_criteria": [
+          "All 5 variation types covered (bool, string, int, double, JSON)",
+          "Each variation method shown with correct signature",
+          "Default values demonstrated for all types",
+          "At least 3 use case examples provided",
+          "Code syntax is correct"
+        ],
+        "fail_criteria": [
+          "Missing any variation type",
+          "Incorrect method signatures",
+          "No default values shown",
+          "Syntax errors in examples"
+        ]
+      },
+      "prerequisites": [
+        "Basic understanding of FeatBit SDK",
+        "Familiarity with C# types"
+      ],
+      "expected_duration": "4-5 minutes",
+      "tags": ["sdk", "dotnet", "variations", "data-types", "intermediate"]
+    },
+    {
+      "id": "dotnet-sdk-004",
+      "name": "dotnet-sdk-console-app-integration",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates AI can guide console application integration which differs from ASP.NET Core (no built-in DI).",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "I have a .NET console application, not an ASP.NET Core app. How do I integrate and use FeatBit SDK without the built-in dependency injection? Show me the complete code.",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "FbOptionsBuilder usage",
+            "FbClient.Create() or new FbClient()",
+            "Manual initialization without DI",
+            "WaitForInitialization() or InitializeAsync()",
+            "IDisposable pattern or using statement",
+            "EnvSecret and URI configuration"
+          ],
+          "should_include": [
+            "Error handling for initialization",
+            "Timeout configuration",
+            "Proper disposal/cleanup",
+            "Async/await pattern usage"
+          ],
+          "must_not_include": [
+            "AddFeatBit() extension (ASP.NET Core specific)",
+            "IServiceCollection references",
+            "WebApplication builder references"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Verify no ASP.NET Core DI patterns used",
+          "step_2": "Check manual FbClient instantiation",
+          "step_3": "Confirm initialization method is called",
+          "step_4": "Validate disposal pattern is shown",
+          "step_5": "Check configuration is complete",
+          "step_6": "Verify async/await usage if applicable"
+        },
+        "pass_criteria": [
+          "Manual SDK initialization shown (no DI)",
+          "Proper disposal pattern demonstrated",
+          "Initialization wait/async handled",
+          "Complete configuration provided",
+          "None of ASP.NET Core patterns present"
+        ],
+        "fail_criteria": [
+          "Uses ASP.NET Core DI patterns",
+          "Missing initialization",
+          "No disposal/cleanup shown",
+          "Incomplete configuration"
+        ]
+      },
+      "prerequisites": [
+        ".NET console application project",
+        "Understanding of IDisposable pattern",
+        "Basic async/await knowledge"
+      ],
+      "expected_duration": "4-5 minutes",
+      "tags": ["sdk", "dotnet", "console-app", "manual-initialization", "intermediate"]
+    },
+    {
+      "id": "dotnet-sdk-005",
+      "name": "dotnet-sdk-error-handling",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates AI can provide guidance on handling SDK initialization failures and network errors.",
+      "complexity_level": "advanced",
+      "task_type": "error-recovery-guidance",
+      "input_task_prompt": "My FeatBit SDK initialization is failing with a timeout error. How should I handle SDK initialization errors and what are the best practices for error handling in production?",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "Try-catch block around initialization",
+            "Timeout configuration explanation (StartWaitTime)",
+            "Fallback strategy when SDK fails",
+            "Default values in variation methods",
+            "Network connectivity considerations"
+          ],
+          "should_include": [
+            "Logging recommendations",
+            "Retry logic suggestions",
+            "Health check endpoint integration",
+            "Graceful degradation strategy",
+            "Checking SDK initialization status"
+          ],
+          "must_not_include": [
+            "Ignoring initialization errors",
+            "Missing default values",
+            "Blocking indefinitely"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Check if error handling code is provided",
+          "step_2": "Verify timeout configuration is mentioned",
+          "step_3": "Assess fallback/default value strategy",
+          "step_4": "Evaluate if networking issues are addressed",
+          "step_5": "Check for production-ready practices"
+        },
+        "pass_criteria": [
+          "Try-catch or error handling shown",
+          "StartWaitTime configuration explained",
+          "Fallback strategy clearly described",
+          "Default values emphasized",
+          "At least 2 'should_include' items present",
+          "Production considerations addressed"
+        ],
+        "fail_criteria": [
+          "No error handling provided",
+          "Missing fallback strategy",
+          "No default values mentioned",
+          "Suggests unsafe practices"
+        ]
+      },
+      "prerequisites": [
+        "FeatBit SDK partially integrated",
+        "Experiencing initialization issues",
+        "Production deployment context"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["sdk", "dotnet", "error-handling", "production", "advanced", "troubleshooting"]
+    }
+  ],
+  "statistics": {
+    "by_complexity": {
+      "basic": 1,
+      "intermediate": 3,
+      "advanced": 1
+    },
+    "by_task_type": {
+      "text-comparison": 2,
+      "code-structure-validation": 2,
+      "error-recovery-guidance": 1
+    }
+  }
+}

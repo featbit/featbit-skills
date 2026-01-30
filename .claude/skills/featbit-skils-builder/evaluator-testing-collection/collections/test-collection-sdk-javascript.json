@@ -1,0 +1,267 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit JavaScript Client SDK Testing Collection",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-javascript-client-sdk",
+    "total_tests": 4,
+    "description": "Evaluation tests for FeatBit JavaScript Client SDK browser integration guidance"
+  },
+  "test_items": [
+    {
+      "id": "js-sdk-001",
+      "name": "js-sdk-basic-browser-setup",
+      "skill": "featbit-javascript-client-sdk",
+      "description": "Validates AI can guide developers through basic JavaScript SDK setup in browser environment with proper initialization.",
+      "complexity_level": "basic",
+      "task_type": "text-comparison",
+      "input_task_prompt": "I'm building a web application and need to integrate FeatBit feature flags in the browser. How do I install and set up the JavaScript SDK? Show me the complete initialization code.",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "npm install @featbit/js-client-sdk",
+            "Import FbClientBuilder and UserBuilder",
+            "FbClientBuilder() usage",
+            "sdkKey() configuration",
+            "streamingUri() configuration",
+            "eventsUri() configuration",
+            "user() configuration with UserBuilder",
+            "build() method call",
+            "waitForInitialization() async call"
+          ],
+          "should_include": [
+            "Try-catch for initialization errors",
+            "UserBuilder with custom properties",
+            "Variation method example (boolVariation)",
+            "WebSocket streaming explanation"
+          ],
+          "must_not_include": [
+            "Node.js server SDK references",
+            "@featbit/node-server-sdk package",
+            "Server-side only patterns"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Check package name is @featbit/js-client-sdk",
+          "step_2": "Verify FbClientBuilder pattern is shown",
+          "step_3": "Confirm all required configuration methods present",
+          "step_4": "Check async initialization with waitForInitialization",
+          "step_5": "Validate JavaScript syntax correctness"
+        },
+        "pass_criteria": [
+          "Correct client SDK package mentioned",
+          "All 9 'must_include' items present",
+          "Proper builder pattern demonstrated",
+          "Async/await or Promise handling shown",
+          "At least 2 'should_include' items present",
+          "No server-side SDK confusion"
+        ],
+        "fail_criteria": [
+          "Wrong package (Node.js SDK)",
+          "Missing required configuration",
+          "No async initialization",
+          "Invalid JavaScript syntax",
+          "Server-side patterns suggested"
+        ]
+      },
+      "prerequisites": [
+        "Browser-based JavaScript project",
+        "npm or package manager available",
+        "FeatBit account with SDK key"
+      ],
+      "expected_duration": "4-5 minutes",
+      "tags": ["sdk", "javascript", "browser", "client-side", "setup", "basic"]
+    },
+    {
+      "id": "js-sdk-002",
+      "name": "js-sdk-user-context-builder",
+      "skill": "featbit-javascript-client-sdk",
+      "description": "Validates AI can explain building comprehensive user contexts with custom properties for targeting.",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "I need to create user contexts with custom properties like country, age, and subscription level for targeted feature rollouts. Show me how to build a proper user object with the JavaScript SDK.",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "UserBuilder constructor with unique key",
+            "name() method",
+            "custom() method for properties",
+            "Multiple custom() calls for different properties",
+            "build() method",
+            "Example with at least 3 custom properties"
+          ],
+          "should_include": [
+            "Explanation of unique user key importance",
+            "Property naming best practices",
+            "Type handling for custom properties",
+            "Real-world property examples (country, age, role, subscription)"
+          ],
+          "must_not_include": [
+            "Missing build() call",
+            "Hardcoded test keys in production context",
+            "Incorrect method names"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Check UserBuilder pattern usage",
+          "step_2": "Count custom() method calls (minimum 3)",
+          "step_3": "Verify build() is called",
+          "step_4": "Assess if unique key importance is explained",
+          "step_5": "Validate JavaScript syntax"
+        },
+        "pass_criteria": [
+          "All 6 'must_include' items present",
+          "At least 3 custom properties demonstrated",
+          "build() method called",
+          "At least 2 'should_include' items present",
+          "Proper builder pattern shown"
+        ],
+        "fail_criteria": [
+          "Missing build() call",
+          "Fewer than 2 custom properties",
+          "Incorrect method names",
+          "No explanation of user key",
+          "Syntax errors"
+        ]
+      },
+      "prerequisites": [
+        "Basic JavaScript SDK setup complete",
+        "Understanding of user targeting concepts",
+        "User authentication system in place"
+      ],
+      "expected_duration": "3-4 minutes",
+      "tags": ["sdk", "javascript", "user-context", "targeting", "intermediate"]
+    },
+    {
+      "id": "js-sdk-003",
+      "name": "js-sdk-user-switching",
+      "skill": "featbit-javascript-client-sdk",
+      "description": "Validates AI can explain the identify() method for switching users in single-page applications.",
+      "complexity_level": "intermediate",
+      "task_type": "text-comparison",
+      "input_task_prompt": "In my single-page application, users can log in and out. How do I switch between different users with the FeatBit JavaScript SDK without reinitializing the entire client?",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "identify() method",
+            "New UserBuilder for second user",
+            "await fbClient.identify(newUser)",
+            "Explanation that re-initialization not needed",
+            "Use case for user login/logout"
+          ],
+          "should_include": [
+            "Complete code example with two users",
+            "Flag re-evaluation after identify",
+            "Performance benefits of identify vs reinit",
+            "SPA context explanation"
+          ],
+          "must_not_include": [
+            "Suggesting to recreate FbClient",
+            "Missing await on identify call",
+            "Incorrect method names"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Check if identify() method is mentioned",
+          "step_2": "Verify it's called with new UserBuilder object",
+          "step_3": "Confirm async/await pattern used",
+          "step_4": "Check if explains advantage over reinit",
+          "step_5": "Validate code example completeness"
+        },
+        "pass_criteria": [
+          "identify() method clearly explained",
+          "All 5 'must_include' items present",
+          "Async pattern demonstrated",
+          "At least 2 'should_include' items present",
+          "Code example is complete and correct"
+        ],
+        "fail_criteria": [
+          "Suggests recreating client",
+          "Missing identify() method",
+          "No async handling",
+          "Incomplete code example",
+          "Incorrect method usage"
+        ]
+      },
+      "prerequisites": [
+        "JavaScript SDK already initialized",
+        "Single-page application architecture",
+        "User authentication flow"
+      ],
+      "expected_duration": "4-5 minutes",
+      "tags": ["sdk", "javascript", "user-switching", "spa", "identify", "intermediate"]
+    },
+    {
+      "id": "js-sdk-004",
+      "name": "js-sdk-client-vs-server-distinction",
+      "skill": "featbit-javascript-client-sdk",
+      "description": "Validates AI can clearly distinguish between client SDK and server SDK, preventing common confusion.",
+      "complexity_level": "basic",
+      "task_type": "documentation-accuracy",
+      "input_task_prompt": "I'm confused about which FeatBit JavaScript SDK to use. I have both a Node.js backend and a React frontend. Can I use the same SDK for both?",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "Clear distinction between client and server SDKs",
+            "@featbit/js-client-sdk for browser/frontend",
+            "@featbit/node-server-sdk for Node.js backend",
+            "Single-user context for client SDK explanation",
+            "Multi-user context for server SDK explanation",
+            "Security implications (SDK keys)"
+          ],
+          "should_include": [
+            "When to use each SDK",
+            "Architecture recommendation",
+            "GitHub repository links for both",
+            "npm package names for both"
+          ],
+          "must_not_include": [
+            "Suggesting client SDK for Node.js backend",
+            "Suggesting server SDK for browser",
+            "Missing security warnings"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Check if both SDKs are clearly differentiated",
+          "step_2": "Verify package names are correct for each",
+          "step_3": "Assess security considerations mentioned",
+          "step_4": "Check environment-appropriate recommendations",
+          "step_5": "Validate GitHub/npm references"
+        },
+        "pass_criteria": [
+          "Both SDKs clearly distinguished",
+          "All 6 'must_include' items present",
+          "Correct package names for each environment",
+          "Security implications explained",
+          "At least 2 'should_include' items present"
+        ],
+        "fail_criteria": [
+          "Confusion between client and server SDKs",
+          "Wrong package recommendations",
+          "Missing security considerations",
+          "Incorrect environment mapping",
+          "Missing package names or links"
+        ]
+      },
+      "prerequisites": [
+        "Full-stack application context",
+        "Understanding of frontend vs backend",
+        "Node.js and browser environments"
+      ],
+      "expected_duration": "4-5 minutes",
+      "tags": ["sdk", "javascript", "client-vs-server", "architecture", "security", "basic"]
+    }
+  ],
+  "statistics": {
+    "by_complexity": {
+      "basic": 2,
+      "intermediate": 2,
+      "advanced": 0
+    },
+    "by_task_type": {
+      "text-comparison": 2,
+      "code-structure-validation": 1,
+      "documentation-accuracy": 1
+    }
+  }
+}

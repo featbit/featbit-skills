@@ -1,0 +1,215 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit OpenTelemetry Observability Testing Collection",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-opentelemetry",
+    "total_tests": 3,
+    "description": "Evaluation tests for FeatBit OpenTelemetry integration and observability setup guidance"
+  },
+  "test_items": [
+    {
+      "id": "otel-001",
+      "name": "otel-basic-configuration-setup",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates AI can guide through basic OpenTelemetry configuration for FeatBit services with required environment variables.",
+      "complexity_level": "intermediate",
+      "task_type": "text-comparison",
+      "input_task_prompt": "I want to enable OpenTelemetry monitoring for my FeatBit deployment. What environment variables do I need to configure and what do they mean?",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "ENABLE_OPENTELEMETRY=true",
+            "OTEL_SERVICE_NAME variable",
+            "OTEL_EXPORTER_OTLP_ENDPOINT variable",
+            "Service-specific names (featbit-api, featbit-els, featbit-das)",
+            "Collector endpoint format (http://host:4317)",
+            "All three services (Api, Evaluation-Server, Data Analytic)"
+          ],
+          "should_include": [
+            "Explanation of each variable purpose",
+            "Example values for each service",
+            "gRPC endpoint clarification",
+            "Links to official OpenTelemetry docs",
+            ".NET instrumentation link",
+            "Python instrumentation link"
+          ],
+          "must_not_include": [
+            "Incorrect variable names",
+            "Missing service name examples",
+            "Wrong endpoint format"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Check if all 3 required environment variables present",
+          "step_2": "Verify service names for all 3 services shown",
+          "step_3": "Validate endpoint format is gRPC (port 4317)",
+          "step_4": "Assess if purpose/explanation provided",
+          "step_5": "Check for official documentation references"
+        },
+        "pass_criteria": [
+          "All 6 'must_include' items present",
+          "All three FeatBit services covered",
+          "Environment variable format correct",
+          "At least 3 'should_include' items present",
+          "Clear explanations provided"
+        ],
+        "fail_criteria": [
+          "Missing required environment variables",
+          "Incorrect variable names or formats",
+          "Missing service-specific configuration",
+          "No explanations provided",
+          "Wrong endpoint format"
+        ]
+      },
+      "prerequisites": [
+        "FeatBit deployment (Docker or Kubernetes)",
+        "OpenTelemetry collector deployment planned",
+        "Basic understanding of environment variables"
+      ],
+      "expected_duration": "4-5 minutes",
+      "tags": ["opentelemetry", "observability", "configuration", "environment-variables", "intermediate"]
+    },
+    {
+      "id": "otel-002",
+      "name": "otel-ready-to-run-example-usage",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates AI can guide users through using the ready-to-run OpenTelemetry example with Seq, Jaeger, and Prometheus.",
+      "complexity_level": "intermediate",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "I want to quickly test OpenTelemetry observability with FeatBit using the ready-made example. Walk me through the complete setup process step by step.",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "Clone FeatBit repository command",
+            "Build test images command (docker-compose-dev.yml)",
+            "Start OTEL collector command (docker-compose-otel-collector-contrib.yml)",
+            "Start FeatBit with OTEL command (docker-compose-otel.yml)",
+            "Seq access URL (localhost:8082)",
+            "Jaeger access URL (localhost:16686)",
+            "Prometheus access URL (localhost:9090)",
+            "All steps in correct order"
+          ],
+          "should_include": [
+            "git clone command with correct repo URL",
+            "cd command to navigate to directory",
+            "Wait time explanation between steps",
+            "What to expect in each observability tool",
+            "Troubleshooting tips"
+          ],
+          "must_not_include": [
+            "Incorrect repository URL",
+            "Steps out of order",
+            "Missing docker compose commands",
+            "Wrong access URLs or ports"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Count distinct steps (should be at least 4)",
+          "step_2": "Verify steps are in executable order",
+          "step_3": "Check all docker compose commands present",
+          "step_4": "Validate all 3 observability tool URLs",
+          "step_5": "Assess if prerequisites mentioned",
+          "step_6": "Check if verification steps included"
+        },
+        "pass_criteria": [
+          "All 8 'must_include' items present",
+          "Steps in correct sequential order",
+          "All docker compose commands correct",
+          "All access URLs correct",
+          "At least 3 'should_include' items present",
+          "Steps can be executed without gaps"
+        ],
+        "fail_criteria": [
+          "Missing any major step",
+          "Steps out of order",
+          "Incorrect commands or file names",
+          "Wrong URLs or ports",
+          "Cannot be executed as-is"
+        ]
+      },
+      "prerequisites": [
+        "Docker and Docker Compose installed",
+        "Git installed",
+        "Ports 8082, 16686, 9090 available",
+        "At least 8GB RAM available"
+      ],
+      "expected_duration": "6-8 minutes",
+      "tags": ["opentelemetry", "observability", "docker", "workflow", "example", "intermediate"]
+    },
+    {
+      "id": "otel-003",
+      "name": "otel-backend-integration-guidance",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates AI can provide guidance on integrating FeatBit OpenTelemetry with various observability backends.",
+      "complexity_level": "advanced",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "We already use Datadog for monitoring our infrastructure. How can I send FeatBit's OpenTelemetry data to Datadog? What are my options?",
+      "evaluation_prompt": {
+        "expected_result": {
+          "must_include": [
+            "OpenTelemetry collector as intermediary",
+            "OTEL_EXPORTER_OTLP_ENDPOINT pointing to collector",
+            "Collector configuration for Datadog exporter",
+            "Datadog-specific requirements (API key)",
+            "Compatibility confirmation (OpenTelemetry standard)"
+          ],
+          "should_include": [
+            "Alternative: Direct Datadog agent integration",
+            "Collector configuration example",
+            "Datadog exporter documentation link",
+            "Other backend options (New Relic, Grafana)",
+            "Benefits of using collector vs direct",
+            "Troubleshooting tips"
+          ],
+          "must_not_include": [
+            "Suggesting incompatible approaches",
+            "Missing collector requirement",
+            "Incorrect integration architecture"
+          ]
+        },
+        "evaluation_method": {
+          "step_1": "Check if collector intermediary is explained",
+          "step_2": "Verify Datadog-specific configuration mentioned",
+          "step_3": "Assess if architecture is correctly described",
+          "step_4": "Check for API key or auth requirements",
+          "step_5": "Evaluate completeness of solution"
+        },
+        "pass_criteria": [
+          "All 5 'must_include' items present",
+          "Collector architecture clearly explained",
+          "Datadog integration steps provided",
+          "At least 3 'should_include' items present",
+          "Architecture is technically correct"
+        ],
+        "fail_criteria": [
+          "Missing collector explanation",
+          "Incorrect integration architecture",
+          "No Datadog-specific guidance",
+          "Missing authentication requirements",
+          "Technically incorrect approach"
+        ]
+      },
+      "prerequisites": [
+        "FeatBit deployed with OpenTelemetry enabled",
+        "Datadog account with API access",
+        "Understanding of observability concepts",
+        "OpenTelemetry collector knowledge"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["opentelemetry", "observability", "integration", "datadog", "backends", "advanced"]
+    }
+  ],
+  "statistics": {
+    "by_complexity": {
+      "basic": 0,
+      "intermediate": 2,
+      "advanced": 1
+    },
+    "by_task_type": {
+      "text-comparison": 1,
+      "multi-step-workflow": 1,
+      "contextual-reasoning": 1
+    }
+  }
+}
