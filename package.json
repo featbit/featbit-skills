@@ -1,7 +1,7 @@
 {
   "name": "@featbit/claude-skills",
-  "version": "1.1.2",
-  "description": "Official Claude Code skills plugin for FeatBit - comprehensive feature flag and A/B testing platform integration with 13 specialized skills",
+  "version": "1.2.0",
+  "description": "Official Claude Code skills plugin for FeatBit - comprehensive feature flag and A/B testing platform integration with 14 specialized skills including observability",
   "main": "package.json",
   "author": {
     "name": "FeatBit Team",
@@ -51,6 +51,11 @@
       "name": "featbit-documentation",
       "path": "skills/featbit-documentation",
       "description": "Expert knowledge of FeatBit's complete documentation"
+    },
+    {
+      "name": "featbit-opentelemetry",
+      "path": "skills/featbit-opentelemetry",
+      "description": "Expert guidance for FeatBit OpenTelemetry observability integration"
     },
     {
       "name": "featbit-deployment",

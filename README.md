@@ -1,7 +1,7 @@
 # FeatBit Skills for AI Coding Agents
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.1.2-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](CHANGELOG.md)
 
 > **✨ Universal Compatibility**: These skills work with **all AI coding agents that support the skills protocol**, including **Claude Code**, **VSCode Copilot**, **Cursor**, and other compatible agents. Install once, use everywhere!
 
