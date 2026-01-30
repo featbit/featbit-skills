@@ -1,0 +1,53 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit featbit-deployment Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-deployment",
+    "total_tests": 2,
+    "description": "Evaluation test collection for featbit-deployment skill"
+  },
+  "test_items": [
+    {
+      "id": "deployment-001",
+      "name": "deployment-tier-selection",
+      "skill": "featbit-deployment",
+      "description": "Validates contextual reasoning for recommending appropriate deployment tier based on team size and requirements",
+      "complexity_level": "basic",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "I'm a solo developer building a side project. What's the best way to deploy FeatBit? I want something simple and low-cost.",
+      "evaluation_prompt": "Expected Result:\n- Recommends Standalone tier\n- Explains minimal infrastructure requirements\n- Mentions Docker Compose option\n- Notes it's suitable for development/small teams\n- Explains upgrade path to Standard later\n- Mentions resource requirements (2GB RAM)\n\nEvaluation Method:\n1. Verify Standalone recommended\n2. Check rationale matches context\n3. Confirm Docker Compose mentioned\n4. Check resource requirements stated\n5. Verify upgrade path discussed\n\nPass Criteria:\n- Appropriate tier recommended\n- Rationale matches user context\n- Deployment method suggested\n- Resource requirements clear\n- Upgrade path mentioned\n\nFail Criteria:\n- Recommends Professional tier\n- No rationale for recommendation\n- Ignores user context\n- Missing resource info",
+      "prerequisites": [
+        "None"
+      ],
+      "expected_duration": "3-4 minutes",
+      "tags": [
+        "deployment",
+        "tier-selection",
+        "basic",
+        "contextual"
+      ]
+    },
+    {
+      "id": "deployment-002",
+      "name": "deployment-enterprise-requirements",
+      "skill": "featbit-deployment",
+      "description": "Validates guidance for enterprise-scale deployment with high availability and analytics",
+      "complexity_level": "advanced",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "We're a large enterprise with 1000+ developers and need advanced analytics and event streaming. We also need high availability. What FeatBit deployment should we use?",
+      "evaluation_prompt": "Expected Result:\n- Recommends Professional tier\n- Explains ClickHouse for analytics\n- Mentions Kafka for event streaming\n- Discusses Kubernetes deployment for HA\n- Notes scalability benefits\n- May mention infrastructure requirements\n\nEvaluation Method:\n1. Verify Professional tier recommended\n2. Check ClickHouse mentioned for analytics\n3. Confirm Kafka for streaming\n4. Check HA strategy mentioned\n5. Verify enterprise benefits explained\n\nPass Criteria:\n- Professional tier recommended\n- ClickHouse and Kafka mentioned\n- HA considerations addressed\n- Scalability discussed\n- Enterprise context understood\n\nFail Criteria:\n- Recommends Standalone\n- Missing analytics/streaming components\n- No HA discussion\n- Doesn't match enterprise scale",
+      "prerequisites": [
+        "Understanding of enterprise requirements"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": [
+        "deployment",
+        "enterprise",
+        "professional",
+        "advanced",
+        "ha"
+      ]
+    }
+  ]
+}

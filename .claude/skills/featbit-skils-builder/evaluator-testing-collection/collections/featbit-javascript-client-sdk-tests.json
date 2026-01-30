@@ -1,0 +1,57 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit featbit-javascript-client-sdk Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-javascript-client-sdk",
+    "total_tests": 2,
+    "description": "Evaluation test collection for featbit-javascript-client-sdk skill"
+  },
+  "test_items": [
+    {
+      "id": "js-client-sdk-001",
+      "name": "js-client-sdk-browser-setup",
+      "skill": "featbit-javascript-client-sdk",
+      "description": "Validates basic browser integration with FeatBit JavaScript Client SDK including initialization and flag evaluation",
+      "complexity_level": "basic",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I use FeatBit SDK in my vanilla JavaScript web application? Show me how to initialize it, identify a user, and evaluate feature flags.",
+      "evaluation_prompt": "Expected Result:\n- NPM package or CDN import\n- FbClient.initialize() with config\n- envSecret, streamingUrl, eventsUrl configured\n- waitForInitialization() pattern\n- User object with keyId and properties\n- boolVariation() or variation() method\n- Bootstrap data option mentioned\n\nEvaluation Method:\n1. Check proper SDK import method\n2. Verify initialize() called with config\n3. Confirm waitForInitialization() used\n4. Check user object structure\n5. Verify flag evaluation method\n\nPass Criteria:\n- Correct import/CDN usage\n- Proper async initialization\n- User context properly defined\n- Flag evaluation demonstrated\n- Browser-appropriate patterns\n\nFail Criteria:\n- Using server-side SDK\n- No async initialization\n- Missing user context\n- Incorrect method names",
+      "prerequisites": [
+        "HTML/JavaScript application",
+        "FeatBit client environment secret"
+      ],
+      "expected_duration": "3-5 minutes",
+      "tags": [
+        "sdk",
+        "javascript",
+        "browser",
+        "client-side",
+        "basic"
+      ]
+    },
+    {
+      "id": "js-client-sdk-002",
+      "name": "js-client-sdk-spa-integration",
+      "skill": "featbit-javascript-client-sdk",
+      "description": "Validates integration patterns for Single Page Applications with user context updates",
+      "complexity_level": "intermediate",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "I'm building a SPA where users log in after the page loads. How do I initialize FeatBit SDK before login, then update the user context after authentication? Also, how do I listen for flag changes?",
+      "evaluation_prompt": "Expected Result:\n- Initialize with anonymous user first\n- identify() method to update user post-login\n- Flag change event listener\n- Bootstrap optimization mentioned\n- Proper cleanup on logout\n- React/Vue integration hints\n\nEvaluation Method:\n1. Check anonymous user initialization\n2. Verify identify() method usage\n3. Confirm event listener pattern\n4. Check user context update flow\n5. Verify cleanup handling\n\nPass Criteria:\n- Two-phase initialization shown\n- identify() properly demonstrated\n- Event listeners explained\n- SPA lifecycle handled\n- Complete workflow provided\n\nFail Criteria:\n- Page reload required for user change\n- No identify() method shown\n- Missing event listeners\n- No SPA considerations",
+      "prerequisites": [
+        "SPA framework (vanilla JS, Vue, etc.)",
+        "Authentication flow",
+        "Understanding of SPA lifecycle"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": [
+        "sdk",
+        "javascript",
+        "spa",
+        "authentication",
+        "intermediate"
+      ]
+    }
+  ]
+}

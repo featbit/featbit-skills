@@ -1,0 +1,81 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit featbit-deployment-kubernetes Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-deployment-kubernetes",
+    "total_tests": 3,
+    "description": "Evaluation test collection for featbit-deployment-kubernetes skill"
+  },
+  "test_items": [
+    {
+      "id": "deployment-k8s-001",
+      "name": "k8s-helm-basic-installation",
+      "skill": "featbit-deployment-kubernetes",
+      "description": "Validates basic Kubernetes deployment using Helm charts with default configuration",
+      "complexity_level": "basic",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "How do I deploy FeatBit to my Kubernetes cluster? I want to use Helm and start with a basic setup.",
+      "evaluation_prompt": "Expected Result:\n- helm repo add command\n- helm repo update\n- kubectl create namespace\n- helm install command\n- Verification steps: kubectl get pods, kubectl get svc\n- How to access UI (port-forward or LoadBalancer)\n- Mentions default Standalone architecture\n\nEvaluation Method:\n1. Verify all Helm commands correct\n2. Check namespace creation shown\n3. Confirm installation command proper\n4. Check verification steps included\n5. Verify access method explained\n\nPass Criteria:\n- Complete Helm workflow\n- All commands syntactically correct\n- Verification steps included\n- Access method shown\n- Beginner-friendly explanation\n\nFail Criteria:\n- Missing Helm repo setup\n- Incorrect install command\n- No verification steps\n- No access guidance",
+      "prerequisites": [
+        "Kubernetes cluster",
+        "Helm 3.7+",
+        "kubectl configured"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": [
+        "deployment",
+        "kubernetes",
+        "helm",
+        "basic",
+        "installation"
+      ]
+    },
+    {
+      "id": "deployment-k8s-002",
+      "name": "k8s-ingress-configuration",
+      "skill": "featbit-deployment-kubernetes",
+      "description": "Validates Ingress configuration for exposing FeatBit services with TLS in production",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "I need to expose FeatBit services (UI, API, Evaluation Server) through Ingress with HTTPS. How do I configure this in Helm values?",
+      "evaluation_prompt": "Expected Result:\n- values.yaml with ingress configuration\n- ingressClassName specified\n- All three services configured (ui, api, evaluation)\n- TLS configuration\n- Host/domain configuration\n- annotations for cert-manager or SSL\n- WebSocket support for evaluation server\n\nEvaluation Method:\n1. Check values.yaml structure\n2. Verify all 3 services have ingress\n3. Confirm TLS configured\n4. Check WebSocket annotations for eval server\n5. Verify cert-manager integration if used\n\nPass Criteria:\n- Complete ingress configuration\n- All services properly exposed\n- TLS/HTTPS configured\n- WebSocket support noted\n- Production-ready setup\n\nFail Criteria:\n- Incomplete ingress config\n- Missing TLS\n- No WebSocket support\n- Only HTTP shown",
+      "prerequisites": [
+        "Kubernetes with Ingress controller",
+        "Helm deployment",
+        "Domain names configured"
+      ],
+      "expected_duration": "6-8 minutes",
+      "tags": [
+        "deployment",
+        "kubernetes",
+        "ingress",
+        "tls",
+        "intermediate"
+      ]
+    },
+    {
+      "id": "deployment-k8s-003",
+      "name": "k8s-scaling-configuration",
+      "skill": "featbit-deployment-kubernetes",
+      "description": "Validates horizontal scaling configuration for FeatBit services in Kubernetes",
+      "complexity_level": "advanced",
+      "task_type": "text-comparison",
+      "input_task_prompt": "Our FeatBit deployment needs to handle more traffic. How do I scale the API and Evaluation Server horizontally? What about autoscaling?",
+      "evaluation_prompt": "Expected Result:\n- replicaCount configuration in values.yaml\n- Which services can scale (api, evaluation)\n- Which cannot (database)\n- HPA (HorizontalPodAutoscaler) configuration\n- Resource requests/limits\n- Session affinity considerations\n- Database connection pooling\n\nEvaluation Method:\n1. Verify replica configuration shown\n2. Check HPA example provided\n3. Confirm resource limits explained\n4. Check stateful vs stateless discussed\n5. Verify database scaling separately\n\nPass Criteria:\n- Horizontal scaling properly explained\n- HPA configuration provided\n- Resource management addressed\n- Scaling limitations noted\n- Best practices included\n\nFail Criteria:\n- Suggests scaling database same way\n- No resource configuration\n- Missing HPA\n- No scaling limitations mentioned",
+      "prerequisites": [
+        "Kubernetes cluster",
+        "Metrics server installed",
+        "Understanding of HPA"
+      ],
+      "expected_duration": "7-10 minutes",
+      "tags": [
+        "deployment",
+        "kubernetes",
+        "scaling",
+        "hpa",
+        "advanced"
+      ]
+    }
+  ]
+}

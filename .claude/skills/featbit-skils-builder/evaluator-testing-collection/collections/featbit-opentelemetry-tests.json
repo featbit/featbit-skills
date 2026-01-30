@@ -1,0 +1,80 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit featbit-opentelemetry Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-opentelemetry",
+    "total_tests": 3,
+    "description": "Evaluation test collection for featbit-opentelemetry skill"
+  },
+  "test_items": [
+    {
+      "id": "opentelemetry-001",
+      "name": "opentelemetry-basic-setup",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates setup of OpenTelemetry observability for FeatBit services with ready-to-run example",
+      "complexity_level": "basic",
+      "task_type": "integration-test-validation",
+      "input_task_prompt": "I want to monitor my FeatBit services with OpenTelemetry. Show me how to enable observability and see metrics, traces, and logs.",
+      "evaluation_prompt": "Expected Result:\n- ENABLE_OPENTELEMETRY=true environment variable\n- OTEL_SERVICE_NAME for each service\n- OTEL_EXPORTER_OTLP_ENDPOINT configuration\n- Mentions ready-to-run example with Seq, Jaeger, Prometheus\n- Git clone and docker-compose commands\n- How to access each observability tool\n- All three services instrumented (api, els, das)\n\nEvaluation Method:\n1. Check required env vars explained\n2. Verify service names shown for each\n3. Confirm exporter endpoint configured\n4. Check ready-to-run example mentioned\n5. Verify access URLs provided\n\nPass Criteria:\n- All required env vars listed\n- Service-specific configuration shown\n- Ready-to-run example referenced\n- Complete setup workflow\n- Access information provided\n\nFail Criteria:\n- Missing env vars\n- Same service name for all\n- No practical example\n- No access instructions",
+      "prerequisites": [
+        "FeatBit Docker deployment",
+        "Docker Compose",
+        "Basic understanding of observability"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": [
+        "opentelemetry",
+        "observability",
+        "monitoring",
+        "basic",
+        "setup"
+      ]
+    },
+    {
+      "id": "opentelemetry-002",
+      "name": "opentelemetry-production-integration",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates integration with production observability backends like Datadog, New Relic, or Grafana",
+      "complexity_level": "intermediate",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "We use Datadog for monitoring. How do we send FeatBit's OpenTelemetry data to Datadog? What about other observability platforms?",
+      "evaluation_prompt": "Expected Result:\n- Explains OTLP endpoint flexibility\n- Datadog agent or collector setup\n- Environment variables for Datadog endpoint\n- Mentions compatibility with New Relic, Grafana, etc.\n- Any OpenTelemetry-compatible backend works\n- Collector vs direct export trade-offs\n- Documentation reference\n\nEvaluation Method:\n1. Verify flexibility explained\n2. Check Datadog integration shown\n3. Confirm other backends mentioned\n4. Check collector pattern explained\n5. Verify vendor-agnostic approach\n\nPass Criteria:\n- Multi-vendor compatibility explained\n- Datadog example provided\n- Collector pattern mentioned\n- Vendor-agnostic design emphasized\n- Documentation referenced\n\nFail Criteria:\n- Only works with specific vendor\n- No collector pattern mentioned\n- Missing flexibility explanation\n- Incomplete integration guidance",
+      "prerequisites": [
+        "FeatBit deployed",
+        "Access to observability platform",
+        "Understanding of OpenTelemetry"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": [
+        "opentelemetry",
+        "datadog",
+        "grafana",
+        "production",
+        "intermediate"
+      ]
+    },
+    {
+      "id": "opentelemetry-003",
+      "name": "opentelemetry-dotnet-python-differences",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates understanding of different instrumentation approaches for .NET vs Python services",
+      "complexity_level": "advanced",
+      "task_type": "text-comparison",
+      "input_task_prompt": "FeatBit has both .NET and Python services. Are they instrumented differently? Where can I find detailed configuration options for each?",
+      "evaluation_prompt": "Expected Result:\n- .NET services: Api and Evaluation-Server\n- Python service: Data Analytic\n- .NET uses automatic instrumentation\n- Python uses automatic instrumentation\n- Different config docs: .NET vs Python\n- Links to official OpenTelemetry docs\n- Language-specific env vars may differ\n\nEvaluation Method:\n1. Verify languages correctly identified\n2. Check instrumentation type for each\n3. Confirm separate documentation mentioned\n4. Check official docs referenced\n5. Verify language differences explained\n\nPass Criteria:\n- Languages correctly identified\n- Instrumentation approach explained\n- Separate documentation referenced\n- Official docs linked\n- Differences clearly explained\n\nFail Criteria:\n- Wrong language identification\n- Claims identical configuration\n- No documentation references\n- Missing language-specific details",
+      "prerequisites": [
+        "Understanding of FeatBit architecture",
+        "Familiarity with .NET and Python"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": [
+        "opentelemetry",
+        "dotnet",
+        "python",
+        "advanced",
+        "instrumentation"
+      ]
+    }
+  ]
+}

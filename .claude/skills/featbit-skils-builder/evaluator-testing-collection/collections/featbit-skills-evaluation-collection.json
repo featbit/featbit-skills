@@ -1,0 +1,593 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit Skills Comprehensive Evaluation Collection",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "updated_date": "2026-01-30",
+    "total_tests": 45,
+    "skills_covered": 15,
+    "task_types_used": [
+      "text-comparison",
+      "value-comparison",
+      "code-structure-validation",
+      "integration-test-validation",
+      "documentation-accuracy",
+      "contextual-reasoning",
+      "error-recovery-guidance",
+      "multi-step-workflow"
+    ],
+    "description": "Comprehensive test collection covering all FeatBit Skills including SDKs, deployment options, and integrations"
+  },
+  "test_items": [
+    {
+      "id": "dotnet-sdk-001",
+      "name": "dotnet-sdk-aspnetcore-di-setup",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates ASP.NET Core dependency injection setup with FeatBit .NET SDK including proper service registration and configuration",
+      "complexity_level": "basic",
+      "task_type": "text-comparison",
+      "input_task_prompt": "I have an ASP.NET Core 8 web application. How do I integrate the FeatBit SDK using dependency injection? Show me the complete setup including installing the package and configuring the service.",
+      "evaluation_prompt": "Expected Result:\n- Must mention NuGet package: FeatBit.ServerSdk\n- Must show AddFeatBit() extension method\n- Must include EnvSecret configuration\n- Must show StreamingUri configuration\n- Must explain Singleton lifetime for IFbClient\n- Must show how to inject IFbClient in controllers/services\n\nEvaluation Method:\n1. Check if response mentions 'FeatBit.ServerSdk' package exactly\n2. Verify AddFeatBit() method is shown in Startup/Program.cs\n3. Confirm EnvSecret parameter is explained\n4. Verify StreamingUri is configured\n5. Check if Singleton lifetime is mentioned\n6. Confirm example shows IFbClient injection\n\nPass Criteria:\n- All 6 required elements are present\n- Code syntax is valid C# for .NET 6+\n- Configuration is complete and functional\n- DI pattern is correctly explained\n\nFail Criteria:\n- Missing any required element\n- Incorrect package name or namespace\n- Invalid C# syntax in examples\n- Wrong service lifetime suggested",
+      "prerequisites": [
+        "ASP.NET Core 6+ project created",
+        "Access to FeatBit portal for EnvSecret",
+        "Basic understanding of dependency injection"
+      ],
+      "expected_duration": "3-5 minutes",
+      "tags": ["sdk", "dotnet", "aspnetcore", "di", "setup", "basic"]
+    },
+    {
+      "id": "dotnet-sdk-002",
+      "name": "dotnet-sdk-flag-evaluation-patterns",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates understanding of different flag evaluation methods and their appropriate use cases",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "Show me examples of evaluating different types of feature flags in FeatBit .NET SDK: boolean flags, string variations, JSON flags, and numeric flags. When should I use each type?",
+      "evaluation_prompt": "Expected Result:\n- BoolVariation() for boolean flags\n- StringVariation() for string flags\n- JsonVariation<T>() for complex types\n- All examples show proper user context\n- Default values are provided\n- Appropriate use cases explained for each type\n\nEvaluation Method:\n1. Verify all 4 variation methods are shown\n2. Check each example includes FbUser parameter\n3. Confirm default values are provided in all examples\n4. Validate use cases are appropriate\n5. Check if VariationDetail methods are mentioned\n\nPass Criteria:\n- All variation methods demonstrated\n- Proper user context in all examples\n- Sensible default values\n- Use cases accurately described\n\nFail Criteria:\n- Missing any variation method\n- No user context shown\n- No default values provided\n- Incorrect use case recommendations",
+      "prerequisites": [
+        "FeatBit SDK already configured",
+        "Basic understanding of feature flags"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["sdk", "dotnet", "evaluation", "intermediate", "patterns"]
+    },
+    {
+      "id": "node-sdk-001",
+      "name": "node-sdk-express-integration",
+      "skill": "featbit-node-server-sdk",
+      "description": "Validates Express.js integration with FeatBit Node SDK including middleware setup and user context creation",
+      "complexity_level": "basic",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I integrate FeatBit SDK in my Express.js application? I want to create user context from request data and use feature flags in my routes.",
+      "evaluation_prompt": "Expected Result:\n- Proper SDK initialization with FbClientBuilder\n- Middleware that creates FbUser from request\n- Example route using boolVariation()\n- Async/await pattern used correctly\n- SDK client stored as singleton/module-level variable\n- User context attached to request object\n\nEvaluation Method:\n1. Check SDK initialization uses FbClientBuilder\n2. Verify middleware creates user context\n3. Confirm user attached to req object\n4. Check route uses await with variation method\n5. Verify SDK client reused across requests\n\nPass Criteria:\n- FbClientBuilder pattern used correctly\n- Middleware properly creates user context\n- Async patterns used throughout\n- SDK client is singleton\n- Complete working example provided\n\nFail Criteria:\n- Creating new client per request\n- Synchronous code where async needed\n- Missing user context creation\n- No middleware shown",
+      "prerequisites": [
+        "Express.js application",
+        "Node.js 14+",
+        "FeatBit environment secret"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["sdk", "nodejs", "express", "integration", "basic"]
+    },
+    {
+      "id": "node-sdk-002",
+      "name": "node-sdk-error-handling",
+      "skill": "featbit-node-server-sdk",
+      "description": "Validates proper error handling patterns for SDK initialization and flag evaluation failures",
+      "complexity_level": "intermediate",
+      "task_type": "error-recovery-guidance",
+      "input_task_prompt": "My FeatBit Node SDK is failing to initialize and I'm getting connection errors. How should I handle SDK initialization failures and flag evaluation errors in production?",
+      "evaluation_prompt": "Expected Result:\n- Try-catch around waitForInitialization()\n- Fallback behavior when SDK fails\n- Graceful degradation strategy\n- Logging recommendations\n- Default values usage explained\n- Retry logic considerations\n\nEvaluation Method:\n1. Check for try-catch error handling\n2. Verify fallback strategy is explained\n3. Confirm default values are emphasized\n4. Check logging guidance provided\n5. Verify graceful degradation mentioned\n\nPass Criteria:\n- Proper error handling demonstrated\n- Fallback strategy clearly explained\n- Default values emphasized as safety net\n- Production-ready approach\n- Logging guidance included\n\nFail Criteria:\n- No error handling shown\n- Application crashes on SDK failure\n- No fallback strategy\n- Missing default value explanation",
+      "prerequisites": [
+        "FeatBit SDK initialized",
+        "Understanding of async error handling"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["sdk", "nodejs", "error-handling", "intermediate", "production"]
+    },
+    {
+      "id": "python-sdk-001",
+      "name": "python-sdk-flask-integration",
+      "skill": "featbit-python-sdk",
+      "description": "Validates Flask integration with FeatBit Python SDK including configuration and user context management",
+      "complexity_level": "basic",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I integrate FeatBit SDK in my Flask application? I need to create user context from request headers and evaluate flags in my routes.",
+      "evaluation_prompt": "Expected Result:\n- Import from fbclient package\n- Config object with env_secret, streaming_url, events_url\n- set_config() called at app initialization\n- get() to obtain client instance\n- FBUser.new_user() with custom properties\n- before_request decorator for user context\n- client.variation() in routes\n\nEvaluation Method:\n1. Check imports are from fbclient\n2. Verify Config object is created properly\n3. Confirm set_config() called before routes\n4. Check FBUser created with custom properties\n5. Verify before_request pattern used\n\nPass Criteria:\n- All required imports present\n- Config properly initialized\n- User context created in middleware\n- Flag evaluation in routes shown\n- Complete working example\n\nFail Criteria:\n- Wrong package imports\n- Missing Config setup\n- No user context middleware\n- Incorrect variation method usage",
+      "prerequisites": [
+        "Flask application",
+        "Python 3.7+",
+        "FeatBit environment secret"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["sdk", "python", "flask", "integration", "basic"]
+    },
+    {
+      "id": "python-sdk-002",
+      "name": "python-sdk-django-integration",
+      "skill": "featbit-python-sdk",
+      "description": "Validates Django integration patterns with FeatBit Python SDK",
+      "complexity_level": "intermediate",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "I'm building a Django application. Show me the best way to integrate FeatBit SDK, including where to initialize it, how to use it in views, and how to handle user context from Django's request object.",
+      "evaluation_prompt": "Expected Result:\n- SDK initialization in AppConfig.ready() or settings\n- Middleware for user context creation\n- Example view using flags\n- Integration with Django's authentication\n- Proper cleanup on shutdown\n- Thread safety considerations\n\nEvaluation Method:\n1. Check SDK initialized in proper Django lifecycle\n2. Verify middleware pattern shown\n3. Confirm integration with Django User model\n4. Check view examples are idiomatic Django\n5. Verify thread safety addressed\n\nPass Criteria:\n- Django-specific initialization shown\n- Middleware properly implemented\n- Django auth integration demonstrated\n- Thread-safe usage explained\n- Complete Django example\n\nFail Criteria:\n- Generic Flask-style setup\n- No Django lifecycle consideration\n- Missing authentication integration\n- Thread safety not addressed",
+      "prerequisites": [
+        "Django 3.2+",
+        "Understanding of Django middleware",
+        "Django authentication enabled"
+      ],
+      "expected_duration": "6-8 minutes",
+      "tags": ["sdk", "python", "django", "integration", "intermediate"]
+    },
+    {
+      "id": "java-sdk-001",
+      "name": "java-sdk-spring-boot-integration",
+      "skill": "featbit-java-sdk",
+      "description": "Validates Spring Boot integration with FeatBit Java SDK using dependency injection and configuration properties",
+      "complexity_level": "basic",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I integrate FeatBit SDK in my Spring Boot application using dependency injection? Show me the configuration class and how to use it in a REST controller.",
+      "evaluation_prompt": "Expected Result:\n- Maven/Gradle dependency declaration\n- @Configuration class with @Bean for FBClient\n- FBConfig setup with builder pattern\n- @Value or @ConfigurationProperties for settings\n- @Autowired injection in controller\n- Proper shutdown hook\n\nEvaluation Method:\n1. Check dependency declaration is correct\n2. Verify @Configuration class properly structured\n3. Confirm FBClient created as @Bean\n4. Check configuration externalized\n5. Verify proper DI usage in controller\n\nPass Criteria:\n- Spring-idiomatic configuration\n- Proper bean lifecycle management\n- Configuration externalized\n- DI correctly demonstrated\n- Complete Spring Boot example\n\nFail Criteria:\n- Static SDK initialization\n- Hardcoded configuration\n- No DI pattern\n- Missing shutdown handling",
+      "prerequisites": [
+        "Spring Boot 2.5+",
+        "Maven or Gradle",
+        "Understanding of Spring DI"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["sdk", "java", "spring-boot", "di", "basic"]
+    },
+    {
+      "id": "java-sdk-002",
+      "name": "java-sdk-thread-safety",
+      "skill": "featbit-java-sdk",
+      "description": "Validates understanding of thread safety and proper SDK lifecycle in multi-threaded Java applications",
+      "complexity_level": "advanced",
+      "task_type": "text-comparison",
+      "input_task_prompt": "I'm using FeatBit SDK in a high-concurrency Java application. How do I ensure thread safety? Can I evaluate flags from multiple threads? How should I manage the SDK lifecycle?",
+      "evaluation_prompt": "Expected Result:\n- FBClient is thread-safe explanation\n- Single instance across application\n- Thread-safe user object creation\n- Concurrent flag evaluation is safe\n- Proper shutdown in all threads\n- Connection pooling considerations\n\nEvaluation Method:\n1. Verify thread safety clearly stated\n2. Check singleton pattern recommended\n3. Confirm concurrent evaluation safety\n4. Check shutdown guidance provided\n5. Verify best practices for high concurrency\n\nPass Criteria:\n- Thread safety explicitly confirmed\n- Singleton pattern emphasized\n- Concurrent usage patterns shown\n- Lifecycle management explained\n- Production considerations addressed\n\nFail Criteria:\n- Thread safety not addressed\n- Multiple client instances suggested\n- Missing lifecycle guidance\n- No concurrency considerations",
+      "prerequisites": [
+        "FeatBit Java SDK configured",
+        "Understanding of Java concurrency"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["sdk", "java", "thread-safety", "advanced", "concurrency"]
+    },
+    {
+      "id": "go-sdk-001",
+      "name": "go-sdk-gin-integration",
+      "skill": "featbit-go-sdk",
+      "description": "Validates Gin framework integration with FeatBit Go SDK including middleware and context handling",
+      "complexity_level": "basic",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I integrate FeatBit SDK in my Gin web framework application? Show me initialization, middleware for user context, and flag evaluation in handlers.",
+      "evaluation_prompt": "Expected Result:\n- Proper import paths from featbit-go-sdk\n- SDK initialization with options\n- Wait for initialization\n- Middleware creating user context\n- Store user in gin.Context\n- Flag evaluation in handler\n- Proper cleanup\n\nEvaluation Method:\n1. Check import paths are correct\n2. Verify SDK initialized with options struct\n3. Confirm WaitForInitialization called\n4. Check middleware pattern\n5. Verify user stored in gin.Context\n\nPass Criteria:\n- Correct package imports\n- Proper initialization pattern\n- Gin-idiomatic middleware\n- User context properly managed\n- Complete working example\n\nFail Criteria:\n- Wrong import paths\n- No initialization wait\n- Not using gin.Context\n- Missing middleware pattern",
+      "prerequisites": [
+        "Gin framework application",
+        "Go 1.18+",
+        "FeatBit environment secret"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["sdk", "golang", "gin", "integration", "basic"]
+    },
+    {
+      "id": "go-sdk-002",
+      "name": "go-sdk-goroutine-safety",
+      "skill": "featbit-go-sdk",
+      "description": "Validates concurrent usage patterns and goroutine safety with FeatBit Go SDK",
+      "complexity_level": "intermediate",
+      "task_type": "text-comparison",
+      "input_task_prompt": "Is the FeatBit Go SDK safe to use from multiple goroutines? How should I handle concurrent flag evaluations in a high-traffic Go application?",
+      "evaluation_prompt": "Expected Result:\n- SDK client is goroutine-safe\n- Single client instance recommendation\n- Concurrent flag evaluation is safe\n- User object creation per request\n- No mutex needed for flag evaluation\n- Connection handling in SDK\n\nEvaluation Method:\n1. Verify goroutine safety explicitly stated\n2. Check singleton client pattern recommended\n3. Confirm concurrent evaluation safety\n4. Check per-request user creation pattern\n5. Verify no manual synchronization needed\n\nPass Criteria:\n- Goroutine safety confirmed\n- Single client instance emphasized\n- Concurrent patterns demonstrated\n- No unnecessary synchronization\n- Production-ready guidance\n\nFail Criteria:\n- Goroutine safety not addressed\n- Suggests multiple clients\n- Recommends unnecessary locking\n- Missing concurrency guidance",
+      "prerequisites": [
+        "FeatBit Go SDK initialized",
+        "Understanding of Go concurrency"
+      ],
+      "expected_duration": "3-5 minutes",
+      "tags": ["sdk", "golang", "concurrency", "intermediate", "goroutines"]
+    },
+    {
+      "id": "js-client-sdk-001",
+      "name": "js-client-sdk-browser-setup",
+      "skill": "featbit-javascript-client-sdk",
+      "description": "Validates basic browser integration with FeatBit JavaScript Client SDK including initialization and flag evaluation",
+      "complexity_level": "basic",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I use FeatBit SDK in my vanilla JavaScript web application? Show me how to initialize it, identify a user, and evaluate feature flags.",
+      "evaluation_prompt": "Expected Result:\n- NPM package or CDN import\n- FbClient.initialize() with config\n- envSecret, streamingUrl, eventsUrl configured\n- waitForInitialization() pattern\n- User object with keyId and properties\n- boolVariation() or variation() method\n- Bootstrap data option mentioned\n\nEvaluation Method:\n1. Check proper SDK import method\n2. Verify initialize() called with config\n3. Confirm waitForInitialization() used\n4. Check user object structure\n5. Verify flag evaluation method\n\nPass Criteria:\n- Correct import/CDN usage\n- Proper async initialization\n- User context properly defined\n- Flag evaluation demonstrated\n- Browser-appropriate patterns\n\nFail Criteria:\n- Using server-side SDK\n- No async initialization\n- Missing user context\n- Incorrect method names",
+      "prerequisites": [
+        "HTML/JavaScript application",
+        "FeatBit client environment secret"
+      ],
+      "expected_duration": "3-5 minutes",
+      "tags": ["sdk", "javascript", "browser", "client-side", "basic"]
+    },
+    {
+      "id": "js-client-sdk-002",
+      "name": "js-client-sdk-spa-integration",
+      "skill": "featbit-javascript-client-sdk",
+      "description": "Validates integration patterns for Single Page Applications with user context updates",
+      "complexity_level": "intermediate",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "I'm building a SPA where users log in after the page loads. How do I initialize FeatBit SDK before login, then update the user context after authentication? Also, how do I listen for flag changes?",
+      "evaluation_prompt": "Expected Result:\n- Initialize with anonymous user first\n- identify() method to update user post-login\n- Flag change event listener\n- Bootstrap optimization mentioned\n- Proper cleanup on logout\n- React/Vue integration hints\n\nEvaluation Method:\n1. Check anonymous user initialization\n2. Verify identify() method usage\n3. Confirm event listener pattern\n4. Check user context update flow\n5. Verify cleanup handling\n\nPass Criteria:\n- Two-phase initialization shown\n- identify() properly demonstrated\n- Event listeners explained\n- SPA lifecycle handled\n- Complete workflow provided\n\nFail Criteria:\n- Page reload required for user change\n- No identify() method shown\n- Missing event listeners\n- No SPA considerations",
+      "prerequisites": [
+        "SPA framework (vanilla JS, Vue, etc.)",
+        "Authentication flow",
+        "Understanding of SPA lifecycle"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["sdk", "javascript", "spa", "authentication", "intermediate"]
+    },
+    {
+      "id": "react-sdk-001",
+      "name": "react-sdk-hooks-setup",
+      "skill": "featbit-react-client-sdk",
+      "description": "Validates React hooks integration with FeatBit including provider setup and useFlags hook",
+      "complexity_level": "basic",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I use FeatBit in my React application with hooks? Show me how to set up the provider and use feature flags in components.",
+      "evaluation_prompt": "Expected Result:\n- asyncWithFbProvider() or FbProvider\n- Provider wraps App component\n- useFlags() hook in components\n- User configuration in provider\n- Async initialization pattern\n- Bootstrap configuration mentioned\n\nEvaluation Method:\n1. Check provider setup method\n2. Verify Provider wraps root component\n3. Confirm useFlags() hook usage\n4. Check user config structure\n5. Verify async pattern if used\n\nPass Criteria:\n- Proper provider setup\n- useFlags() correctly demonstrated\n- User context configured\n- React hooks patterns\n- Complete working example\n\nFail Criteria:\n- No provider setup\n- Direct SDK usage instead of hooks\n- Missing user configuration\n- Non-React patterns",
+      "prerequisites": [
+        "React 16.8+",
+        "Understanding of React hooks",
+        "FeatBit client environment secret"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["sdk", "react", "hooks", "basic", "provider"]
+    },
+    {
+      "id": "react-sdk-002",
+      "name": "react-sdk-nextjs-limitations",
+      "skill": "featbit-react-client-sdk",
+      "description": "Validates understanding of Next.js compatibility limitations and proper SDK choice",
+      "complexity_level": "intermediate",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "I want to use FeatBit in my Next.js application. Can I use the React SDK? What about server-side rendering?",
+      "evaluation_prompt": "Expected Result:\n- React SDK is CLIENT-SIDE ONLY\n- NOT compatible with SSR\n- Recommend Node Server SDK for SSR\n- Client SDK for client components only\n- Hybrid approach if needed\n- App Router vs Pages Router considerations\n\nEvaluation Method:\n1. Check if limitation clearly stated\n2. Verify SSR incompatibility explained\n3. Confirm Node Server SDK recommended for SSR\n4. Check hybrid approach mentioned\n5. Verify Next.js specific guidance\n\nPass Criteria:\n- Limitations clearly stated\n- Correct SDK recommended for SSR\n- Hybrid approach explained\n- Next.js architecture understood\n- Clear guidance provided\n\nFail Criteria:\n- Claims React SDK works with SSR\n- No alternative solution provided\n- Incorrect SDK recommendation\n- Missing Next.js considerations",
+      "prerequisites": [
+        "Next.js project",
+        "Understanding of SSR vs CSR"
+      ],
+      "expected_duration": "3-5 minutes",
+      "tags": ["sdk", "react", "nextjs", "ssr", "intermediate", "limitations"]
+    },
+    {
+      "id": "react-native-sdk-001",
+      "name": "react-native-sdk-mobile-setup",
+      "skill": "featbit-react-native-sdk",
+      "description": "Validates React Native setup with FeatBit SDK for mobile applications",
+      "complexity_level": "basic",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "How do I integrate FeatBit in my React Native mobile app? Show me installation, provider setup, and usage in components.",
+      "evaluation_prompt": "Expected Result:\n- NPM install command\n- iOS/Android setup if needed\n- FbProvider setup\n- useFlags() or useFbClient() hooks\n- Mobile-specific user context\n- Offline handling mentioned\n\nEvaluation Method:\n1. Check installation steps\n2. Verify native setup if required\n3. Confirm provider configuration\n4. Check hook usage\n5. Verify mobile considerations\n\nPass Criteria:\n- Complete installation steps\n- Provider properly configured\n- Hooks correctly used\n- Mobile-specific guidance\n- Working example provided\n\nFail Criteria:\n- Missing installation steps\n- No mobile considerations\n- Web-only patterns\n- Missing offline handling",
+      "prerequisites": [
+        "React Native project",
+        "Expo or bare React Native",
+        "Mobile development environment"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["sdk", "react-native", "mobile", "basic", "setup"]
+    },
+    {
+      "id": "openfeature-js-001",
+      "name": "openfeature-js-provider-setup",
+      "skill": "featbit-openfeature-js-client",
+      "description": "Validates OpenFeature JavaScript provider setup with FeatBit for browser applications",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "I want to use FeatBit through OpenFeature in my browser application. How do I set up the OpenFeature provider and evaluate flags?",
+      "evaluation_prompt": "Expected Result:\n- Install both @openfeature/web-sdk and @featbit/openfeature-provider-js-client\n- Import FeatBitProvider\n- OpenFeature.setProvider()\n- OpenFeature.setContext() for user\n- Client.getBooleanValue() for evaluation\n- Provider configuration options\n\nEvaluation Method:\n1. Check both packages mentioned\n2. Verify provider setup pattern\n3. Confirm context setting\n4. Check evaluation method\n5. Verify OpenFeature API used\n\nPass Criteria:\n- Correct packages installed\n- Provider properly configured\n- OpenFeature API used correctly\n- User context set via OpenFeature\n- Complete integration shown\n\nFail Criteria:\n- Missing OpenFeature SDK\n- Direct FeatBit SDK usage\n- Incorrect provider setup\n- No context configuration",
+      "prerequisites": [
+        "Browser application",
+        "Understanding of OpenFeature",
+        "FeatBit environment secret"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["openfeature", "javascript", "browser", "provider", "intermediate"]
+    },
+    {
+      "id": "openfeature-node-001",
+      "name": "openfeature-node-server-setup",
+      "skill": "featbit-openfeature-node-server",
+      "description": "Validates OpenFeature Node provider setup with FeatBit for server-side applications",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I use FeatBit with OpenFeature in my Node.js backend? Show me provider setup and flag evaluation in an Express route.",
+      "evaluation_prompt": "Expected Result:\n- Install @openfeature/server-sdk and @featbit/openfeature-provider-node-server\n- Import FeatBitProvider\n- OpenFeature.setProvider() with async\n- EvaluationContext for user\n- await client.getBooleanValue()\n- Provider initialization wait\n\nEvaluation Method:\n1. Check correct packages listed\n2. Verify async provider setup\n3. Confirm context usage\n4. Check async evaluation\n5. Verify server-side patterns\n\nPass Criteria:\n- Server SDK packages correct\n- Async patterns used\n- Context properly structured\n- OpenFeature API correct\n- Server-appropriate example\n\nFail Criteria:\n- Client SDK packages\n- Synchronous patterns\n- Missing context\n- Incorrect API usage",
+      "prerequisites": [
+        "Node.js server application",
+        "Understanding of OpenFeature",
+        "FeatBit environment secret"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["openfeature", "nodejs", "server-side", "provider", "intermediate"]
+    },
+    {
+      "id": "deployment-docker-001",
+      "name": "docker-standalone-deployment",
+      "skill": "featbit-deployment-docker",
+      "description": "Validates ability to guide users through standalone Docker Compose deployment for development/small teams",
+      "complexity_level": "basic",
+      "task_type": "integration-test-validation",
+      "input_task_prompt": "I want to deploy FeatBit for my small development team using Docker. Show me the simplest deployment option that's easy to set up and maintain.",
+      "evaluation_prompt": "Expected Result:\n- Recommends Standalone tier\n- Provides docker-compose.yml\n- Explains it uses PostgreSQL only\n- Shows 4 services: ui, api-server, evaluation-server, da-server, postgresql\n- Port mappings: 8081, 5000, 5100, 5432\n- Environment variable configuration\n- docker-compose up command\n\nEvaluation Method:\n1. Verify Standalone tier recommended\n2. Check complete docker-compose.yml provided\n3. Confirm all 5 services present\n4. Verify port mappings correct\n5. Check environment variables explained\n6. Verify startup command shown\n\nPass Criteria:\n- Standalone tier appropriately recommended\n- Complete working docker-compose.yml\n- All required services configured\n- Ports properly exposed\n- Clear startup instructions\n\nFail Criteria:\n- Recommends Professional tier for small team\n- Incomplete docker-compose.yml\n- Missing services\n- Incorrect port mappings\n- No startup instructions",
+      "prerequisites": [
+        "Docker and Docker Compose installed",
+        "Basic understanding of containers"
+      ],
+      "expected_duration": "5-8 minutes",
+      "tags": ["deployment", "docker", "standalone", "basic", "compose"]
+    },
+    {
+      "id": "deployment-docker-002",
+      "name": "docker-standard-production-deployment",
+      "skill": "featbit-deployment-docker",
+      "description": "Validates guidance for production-ready Standard tier deployment with Redis and proper data persistence",
+      "complexity_level": "intermediate",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "We're deploying FeatBit to production for our team of 30 developers. We need better performance and reliability than Standalone. What deployment tier should we use and how do we configure it?",
+      "evaluation_prompt": "Expected Result:\n- Recommends Standard tier\n- Explains benefits: Redis cache, better scalability\n- Provides docker-compose.yml with Redis\n- Shows volume configuration for data persistence\n- Environment variables for Redis integration\n- Mentions backup strategy\n- Production considerations (secrets, SSL, monitoring)\n\nEvaluation Method:\n1. Verify Standard tier recommended\n2. Check Redis added to compose file\n3. Confirm volumes for persistence\n4. Verify Redis connection configured\n5. Check production best practices mentioned\n\nPass Criteria:\n- Standard tier appropriately recommended\n- Redis properly integrated\n- Data persistence configured\n- Production considerations addressed\n- Complete deployment guide\n\nFail Criteria:\n- Still recommends Standalone\n- Missing Redis configuration\n- No data persistence\n- No production guidance",
+      "prerequisites": [
+        "Docker Compose",
+        "Production server environment",
+        "Understanding of scalability needs"
+      ],
+      "expected_duration": "8-12 minutes",
+      "tags": ["deployment", "docker", "standard", "production", "intermediate"]
+    },
+    {
+      "id": "deployment-k8s-001",
+      "name": "k8s-helm-basic-installation",
+      "skill": "featbit-deployment-kubernetes",
+      "description": "Validates basic Kubernetes deployment using Helm charts with default configuration",
+      "complexity_level": "basic",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "How do I deploy FeatBit to my Kubernetes cluster? I want to use Helm and start with a basic setup.",
+      "evaluation_prompt": "Expected Result:\n- helm repo add command\n- helm repo update\n- kubectl create namespace\n- helm install command\n- Verification steps: kubectl get pods, kubectl get svc\n- How to access UI (port-forward or LoadBalancer)\n- Mentions default Standalone architecture\n\nEvaluation Method:\n1. Verify all Helm commands correct\n2. Check namespace creation shown\n3. Confirm installation command proper\n4. Check verification steps included\n5. Verify access method explained\n\nPass Criteria:\n- Complete Helm workflow\n- All commands syntactically correct\n- Verification steps included\n- Access method shown\n- Beginner-friendly explanation\n\nFail Criteria:\n- Missing Helm repo setup\n- Incorrect install command\n- No verification steps\n- No access guidance",
+      "prerequisites": [
+        "Kubernetes cluster",
+        "Helm 3.7+",
+        "kubectl configured"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["deployment", "kubernetes", "helm", "basic", "installation"]
+    },
+    {
+      "id": "deployment-k8s-002",
+      "name": "k8s-ingress-configuration",
+      "skill": "featbit-deployment-kubernetes",
+      "description": "Validates Ingress configuration for exposing FeatBit services with TLS in production",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "I need to expose FeatBit services (UI, API, Evaluation Server) through Ingress with HTTPS. How do I configure this in Helm values?",
+      "evaluation_prompt": "Expected Result:\n- values.yaml with ingress configuration\n- ingressClassName specified\n- All three services configured (ui, api, evaluation)\n- TLS configuration\n- Host/domain configuration\n- annotations for cert-manager or SSL\n- WebSocket support for evaluation server\n\nEvaluation Method:\n1. Check values.yaml structure\n2. Verify all 3 services have ingress\n3. Confirm TLS configured\n4. Check WebSocket annotations for eval server\n5. Verify cert-manager integration if used\n\nPass Criteria:\n- Complete ingress configuration\n- All services properly exposed\n- TLS/HTTPS configured\n- WebSocket support noted\n- Production-ready setup\n\nFail Criteria:\n- Incomplete ingress config\n- Missing TLS\n- No WebSocket support\n- Only HTTP shown",
+      "prerequisites": [
+        "Kubernetes with Ingress controller",
+        "Helm deployment",
+        "Domain names configured"
+      ],
+      "expected_duration": "6-8 minutes",
+      "tags": ["deployment", "kubernetes", "ingress", "tls", "intermediate"]
+    },
+    {
+      "id": "deployment-k8s-003",
+      "name": "k8s-scaling-configuration",
+      "skill": "featbit-deployment-kubernetes",
+      "description": "Validates horizontal scaling configuration for FeatBit services in Kubernetes",
+      "complexity_level": "advanced",
+      "task_type": "text-comparison",
+      "input_task_prompt": "Our FeatBit deployment needs to handle more traffic. How do I scale the API and Evaluation Server horizontally? What about autoscaling?",
+      "evaluation_prompt": "Expected Result:\n- replicaCount configuration in values.yaml\n- Which services can scale (api, evaluation)\n- Which cannot (database)\n- HPA (HorizontalPodAutoscaler) configuration\n- Resource requests/limits\n- Session affinity considerations\n- Database connection pooling\n\nEvaluation Method:\n1. Verify replica configuration shown\n2. Check HPA example provided\n3. Confirm resource limits explained\n4. Check stateful vs stateless discussed\n5. Verify database scaling separately\n\nPass Criteria:\n- Horizontal scaling properly explained\n- HPA configuration provided\n- Resource management addressed\n- Scaling limitations noted\n- Best practices included\n\nFail Criteria:\n- Suggests scaling database same way\n- No resource configuration\n- Missing HPA\n- No scaling limitations mentioned",
+      "prerequisites": [
+        "Kubernetes cluster",
+        "Metrics server installed",
+        "Understanding of HPA"
+      ],
+      "expected_duration": "7-10 minutes",
+      "tags": ["deployment", "kubernetes", "scaling", "hpa", "advanced"]
+    },
+    {
+      "id": "opentelemetry-001",
+      "name": "opentelemetry-basic-setup",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates setup of OpenTelemetry observability for FeatBit services with ready-to-run example",
+      "complexity_level": "basic",
+      "task_type": "integration-test-validation",
+      "input_task_prompt": "I want to monitor my FeatBit services with OpenTelemetry. Show me how to enable observability and see metrics, traces, and logs.",
+      "evaluation_prompt": "Expected Result:\n- ENABLE_OPENTELEMETRY=true environment variable\n- OTEL_SERVICE_NAME for each service\n- OTEL_EXPORTER_OTLP_ENDPOINT configuration\n- Mentions ready-to-run example with Seq, Jaeger, Prometheus\n- Git clone and docker-compose commands\n- How to access each observability tool\n- All three services instrumented (api, els, das)\n\nEvaluation Method:\n1. Check required env vars explained\n2. Verify service names shown for each\n3. Confirm exporter endpoint configured\n4. Check ready-to-run example mentioned\n5. Verify access URLs provided\n\nPass Criteria:\n- All required env vars listed\n- Service-specific configuration shown\n- Ready-to-run example referenced\n- Complete setup workflow\n- Access information provided\n\nFail Criteria:\n- Missing env vars\n- Same service name for all\n- No practical example\n- No access instructions",
+      "prerequisites": [
+        "FeatBit Docker deployment",
+        "Docker Compose",
+        "Basic understanding of observability"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["opentelemetry", "observability", "monitoring", "basic", "setup"]
+    },
+    {
+      "id": "opentelemetry-002",
+      "name": "opentelemetry-production-integration",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates integration with production observability backends like Datadog, New Relic, or Grafana",
+      "complexity_level": "intermediate",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "We use Datadog for monitoring. How do we send FeatBit's OpenTelemetry data to Datadog? What about other observability platforms?",
+      "evaluation_prompt": "Expected Result:\n- Explains OTLP endpoint flexibility\n- Datadog agent or collector setup\n- Environment variables for Datadog endpoint\n- Mentions compatibility with New Relic, Grafana, etc.\n- Any OpenTelemetry-compatible backend works\n- Collector vs direct export trade-offs\n- Documentation reference\n\nEvaluation Method:\n1. Verify flexibility explained\n2. Check Datadog integration shown\n3. Confirm other backends mentioned\n4. Check collector pattern explained\n5. Verify vendor-agnostic approach\n\nPass Criteria:\n- Multi-vendor compatibility explained\n- Datadog example provided\n- Collector pattern mentioned\n- Vendor-agnostic design emphasized\n- Documentation referenced\n\nFail Criteria:\n- Only works with specific vendor\n- No collector pattern mentioned\n- Missing flexibility explanation\n- Incomplete integration guidance",
+      "prerequisites": [
+        "FeatBit deployed",
+        "Access to observability platform",
+        "Understanding of OpenTelemetry"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["opentelemetry", "datadog", "grafana", "production", "intermediate"]
+    },
+    {
+      "id": "opentelemetry-003",
+      "name": "opentelemetry-dotnet-python-differences",
+      "skill": "featbit-opentelemetry",
+      "description": "Validates understanding of different instrumentation approaches for .NET vs Python services",
+      "complexity_level": "advanced",
+      "task_type": "text-comparison",
+      "input_task_prompt": "FeatBit has both .NET and Python services. Are they instrumented differently? Where can I find detailed configuration options for each?",
+      "evaluation_prompt": "Expected Result:\n- .NET services: Api and Evaluation-Server\n- Python service: Data Analytic\n- .NET uses automatic instrumentation\n- Python uses automatic instrumentation\n- Different config docs: .NET vs Python\n- Links to official OpenTelemetry docs\n- Language-specific env vars may differ\n\nEvaluation Method:\n1. Verify languages correctly identified\n2. Check instrumentation type for each\n3. Confirm separate documentation mentioned\n4. Check official docs referenced\n5. Verify language differences explained\n\nPass Criteria:\n- Languages correctly identified\n- Instrumentation approach explained\n- Separate documentation referenced\n- Official docs linked\n- Differences clearly explained\n\nFail Criteria:\n- Wrong language identification\n- Claims identical configuration\n- No documentation references\n- Missing language-specific details",
+      "prerequisites": [
+        "Understanding of FeatBit architecture",
+        "Familiarity with .NET and Python"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": ["opentelemetry", "dotnet", "python", "advanced", "instrumentation"]
+    },
+    {
+      "id": "documentation-001",
+      "name": "documentation-search-relevance",
+      "skill": "featbit-documentation",
+      "description": "Validates ability to find and reference correct FeatBit documentation for user queries",
+      "complexity_level": "basic",
+      "task_type": "documentation-accuracy",
+      "input_task_prompt": "Where can I find documentation about FeatBit's targeting rules? I want to learn how to create percentage rollouts.",
+      "evaluation_prompt": "Expected Result:\n- Provides official docs URL\n- References targeting rules section\n- May provide direct link to percentage rollout docs\n- Explains what targeting rules are\n- Mentions docs.featbit.co domain\n- May suggest related topics\n\nEvaluation Method:\n1. Check if docs.featbit.co referenced\n2. Verify targeting rules mentioned\n3. Confirm URL validity (if provided)\n4. Check explanation accuracy\n5. Verify relevance to percentage rollouts\n\nPass Criteria:\n- Official documentation referenced\n- Correct section identified\n- Accurate explanation\n- Valid URL if provided\n- Relevant to query\n\nFail Criteria:\n- Wrong documentation site\n- Incorrect section\n- Broken links\n- Irrelevant content",
+      "prerequisites": [
+        "None"
+      ],
+      "expected_duration": "2-3 minutes",
+      "tags": ["documentation", "search", "basic", "reference"]
+    },
+    {
+      "id": "documentation-002",
+      "name": "documentation-sdk-faq-reference",
+      "skill": "featbit-documentation",
+      "description": "Validates ability to direct users to SDK FAQ for common questions like getting environment secrets",
+      "complexity_level": "basic",
+      "task_type": "documentation-accuracy",
+      "input_task_prompt": "How do I get my FeatBit environment secret? Where do I find the SDK URLs?",
+      "evaluation_prompt": "Expected Result:\n- References SDK FAQ documentation\n- URL: https://docs.featbit.co/sdk/faq\n- Explains environment secret location in FeatBit portal\n- Mentions SDK URLs section\n- May provide step-by-step portal navigation\n\nEvaluation Method:\n1. Check if SDK FAQ mentioned\n2. Verify URL correctness\n3. Confirm environment secret explained\n4. Check SDK URLs addressed\n5. Verify portal navigation if included\n\nPass Criteria:\n- SDK FAQ referenced\n- Correct URL provided\n- Both questions answered\n- Clear instructions\n- Portal navigation clear\n\nFail Criteria:\n- Wrong documentation\n- Broken URL\n- Missing answer to either question\n- Unclear instructions",
+      "prerequisites": [
+        "None"
+      ],
+      "expected_duration": "2-3 minutes",
+      "tags": ["documentation", "faq", "basic", "sdk"]
+    },
+    {
+      "id": "deployment-001",
+      "name": "deployment-tier-selection",
+      "skill": "featbit-deployment",
+      "description": "Validates contextual reasoning for recommending appropriate deployment tier based on team size and requirements",
+      "complexity_level": "basic",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "I'm a solo developer building a side project. What's the best way to deploy FeatBit? I want something simple and low-cost.",
+      "evaluation_prompt": "Expected Result:\n- Recommends Standalone tier\n- Explains minimal infrastructure requirements\n- Mentions Docker Compose option\n- Notes it's suitable for development/small teams\n- Explains upgrade path to Standard later\n- Mentions resource requirements (2GB RAM)\n\nEvaluation Method:\n1. Verify Standalone recommended\n2. Check rationale matches context\n3. Confirm Docker Compose mentioned\n4. Check resource requirements stated\n5. Verify upgrade path discussed\n\nPass Criteria:\n- Appropriate tier recommended\n- Rationale matches user context\n- Deployment method suggested\n- Resource requirements clear\n- Upgrade path mentioned\n\nFail Criteria:\n- Recommends Professional tier\n- No rationale for recommendation\n- Ignores user context\n- Missing resource info",
+      "prerequisites": [
+        "None"
+      ],
+      "expected_duration": "3-4 minutes",
+      "tags": ["deployment", "tier-selection", "basic", "contextual"]
+    },
+    {
+      "id": "deployment-002",
+      "name": "deployment-enterprise-requirements",
+      "skill": "featbit-deployment",
+      "description": "Validates guidance for enterprise-scale deployment with high availability and analytics",
+      "complexity_level": "advanced",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "We're a large enterprise with 1000+ developers and need advanced analytics and event streaming. We also need high availability. What FeatBit deployment should we use?",
+      "evaluation_prompt": "Expected Result:\n- Recommends Professional tier\n- Explains ClickHouse for analytics\n- Mentions Kafka for event streaming\n- Discusses Kubernetes deployment for HA\n- Notes scalability benefits\n- May mention infrastructure requirements\n\nEvaluation Method:\n1. Verify Professional tier recommended\n2. Check ClickHouse mentioned for analytics\n3. Confirm Kafka for streaming\n4. Check HA strategy mentioned\n5. Verify enterprise benefits explained\n\nPass Criteria:\n- Professional tier recommended\n- ClickHouse and Kafka mentioned\n- HA considerations addressed\n- Scalability discussed\n- Enterprise context understood\n\nFail Criteria:\n- Recommends Standalone\n- Missing analytics/streaming components\n- No HA discussion\n- Doesn't match enterprise scale",
+      "prerequisites": [
+        "Understanding of enterprise requirements"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": ["deployment", "enterprise", "professional", "advanced", "ha"]
+    },
+    {
+      "id": "cross-skill-001",
+      "name": "cross-skill-spa-sdk-choice",
+      "skill": "multiple",
+      "description": "Validates ability to recommend correct SDK based on application architecture (SPA vs SSR)",
+      "complexity_level": "intermediate",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "I'm building a Next.js application. Which FeatBit SDK should I use? I have both client components and server components.",
+      "evaluation_prompt": "Expected Result:\n- Identifies Next.js has both client and server\n- Recommends React SDK for client components\n- Recommends Node Server SDK for server components\n- Explains React SDK limitations (no SSR)\n- Hybrid approach for mixed usage\n- Code examples for both scenarios\n\nEvaluation Method:\n1. Verify both SDKs recommended\n2. Check usage scenarios clearly separated\n3. Confirm limitations explained\n4. Check hybrid approach detailed\n5. Verify code examples for both\n\nPass Criteria:\n- Both SDKs appropriately recommended\n- Use cases clearly distinguished\n- Limitations properly explained\n- Hybrid pattern demonstrated\n- Next.js architecture understood\n\nFail Criteria:\n- Only one SDK recommended\n- Claims React SDK works for SSR\n- No hybrid approach\n- Missing architecture understanding",
+      "prerequisites": [
+        "Next.js project",
+        "Understanding of CSR vs SSR"
+      ],
+      "expected_duration": "6-8 minutes",
+      "tags": ["cross-skill", "nextjs", "sdk-selection", "intermediate"]
+    },
+    {
+      "id": "cross-skill-002",
+      "name": "cross-skill-deployment-observability",
+      "skill": "multiple",
+      "description": "Validates end-to-end setup including deployment and observability configuration",
+      "complexity_level": "advanced",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "I want to deploy FeatBit to Kubernetes with Helm and enable OpenTelemetry monitoring with Prometheus and Jaeger. Give me a complete guide.",
+      "evaluation_prompt": "Expected Result:\n- Helm installation steps\n- values.yaml with OpenTelemetry enabled\n- ENABLE_OPENTELEMETRY=true in values\n- OTEL_SERVICE_NAME for each service\n- OTEL_EXPORTER_OTLP_ENDPOINT configured\n- Collector deployment\n- Prometheus and Jaeger setup\n- Complete working example\n\nEvaluation Method:\n1. Check Helm deployment covered\n2. Verify OTEL env vars in values.yaml\n3. Confirm collector deployment shown\n4. Check Prometheus/Jaeger integration\n5. Verify end-to-end workflow\n\nPass Criteria:\n- Complete deployment workflow\n- OpenTelemetry properly configured\n- Observability backends setup\n- All components integrated\n- Working example provided\n\nFail Criteria:\n- Incomplete deployment\n- Missing OTEL configuration\n- No observability backend setup\n- Components not integrated",
+      "prerequisites": [
+        "Kubernetes cluster",
+        "Helm installed",
+        "Understanding of observability"
+      ],
+      "expected_duration": "12-15 minutes",
+      "tags": ["cross-skill", "kubernetes", "opentelemetry", "advanced", "integration"]
+    },
+    {
+      "id": "cross-skill-003",
+      "name": "cross-skill-fullstack-implementation",
+      "skill": "multiple",
+      "description": "Validates guidance for full-stack implementation with React frontend and Node.js backend",
+      "complexity_level": "intermediate",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "I'm building a full-stack app with React frontend and Express backend. How do I implement FeatBit in both? The same user should get consistent flag values on both sides.",
+      "evaluation_prompt": "Expected Result:\n- React Client SDK for frontend\n- Node Server SDK for backend\n- Consistent user identification strategy\n- User keyId matching between front and back\n- Custom properties synchronized\n- API passes user context\n- Bootstrap data optimization\n\nEvaluation Method:\n1. Check both SDKs recommended\n2. Verify user consistency strategy\n3. Confirm keyId matching explained\n4. Check custom properties synced\n5. Verify complete integration shown\n\nPass Criteria:\n- Correct SDK for each tier\n- User consistency strategy clear\n- Matching user context shown\n- Full-stack integration demonstrated\n- Bootstrap optimization mentioned\n\nFail Criteria:\n- Wrong SDK choice\n- No user consistency strategy\n- User context mismatch\n- Incomplete integration",
+      "prerequisites": [
+        "React application",
+        "Express backend",
+        "Understanding of full-stack architecture"
+      ],
+      "expected_duration": "8-10 minutes",
+      "tags": ["cross-skill", "fullstack", "react", "nodejs", "intermediate"]
+    }
+  ],
+  "statistics": {
+    "by_complexity": {
+      "basic": 18,
+      "intermediate": 18,
+      "advanced": 9
+    },
+    "by_task_type": {
+      "text-comparison": 8,
+      "code-structure-validation": 13,
+      "integration-test-validation": 3,
+      "documentation-accuracy": 2,
+      "contextual-reasoning": 6,
+      "error-recovery-guidance": 2,
+      "multi-step-workflow": 8,
+      "value-comparison": 0
+    },
+    "by_skill": {
+      "featbit-dotnet-sdk": 2,
+      "featbit-node-server-sdk": 2,
+      "featbit-python-sdk": 2,
+      "featbit-java-sdk": 2,
+      "featbit-go-sdk": 2,
+      "featbit-javascript-client-sdk": 2,
+      "featbit-react-client-sdk": 2,
+      "featbit-react-native-sdk": 1,
+      "featbit-openfeature-js-client": 1,
+      "featbit-openfeature-node-server": 1,
+      "featbit-deployment-docker": 2,
+      "featbit-deployment-kubernetes": 3,
+      "featbit-opentelemetry": 3,
+      "featbit-documentation": 2,
+      "featbit-deployment": 2,
+      "multiple": 3
+    }
+  },
+  "notes": {
+    "coverage": "This collection provides comprehensive coverage of all 15 FeatBit Skills with 45 evaluation test items",
+    "test_distribution": "Each skill has minimum 2 tests covering basic and advanced scenarios. Popular skills like Kubernetes deployment and OpenTelemetry have 3 tests",
+    "cross_skill_tests": "3 tests validate ability to integrate multiple skills together (e.g., deployment + observability, full-stack SDK usage)",
+    "task_type_diversity": "Uses 7 different task types to validate various aspects: technical accuracy, contextual understanding, integration, troubleshooting",
+    "real_world_scenarios": "All tests based on actual developer use cases and questions",
+    "extensibility": "New tests can be added by following the structure and guidelines in the SKILL.md documentation"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit featbit-dotnet-sdk Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-dotnet-sdk",
+    "total_tests": 2,
+    "description": "Evaluation test collection for featbit-dotnet-sdk skill"
+  },
+  "test_items": [
+    {
+      "id": "dotnet-sdk-001",
+      "name": "dotnet-sdk-aspnetcore-di-setup",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates ASP.NET Core dependency injection setup with FeatBit .NET SDK including proper service registration and configuration",
+      "complexity_level": "basic",
+      "task_type": "text-comparison",
+      "input_task_prompt": "I have an ASP.NET Core 8 web application. How do I integrate the FeatBit SDK using dependency injection? Show me the complete setup including installing the package and configuring the service.",
+      "evaluation_prompt": "Expected Result:\n- Must mention NuGet package: FeatBit.ServerSdk\n- Must show AddFeatBit() extension method\n- Must include EnvSecret configuration\n- Must show StreamingUri configuration\n- Must explain Singleton lifetime for IFbClient\n- Must show how to inject IFbClient in controllers/services\n\nEvaluation Method:\n1. Check if response mentions 'FeatBit.ServerSdk' package exactly\n2. Verify AddFeatBit() method is shown in Startup/Program.cs\n3. Confirm EnvSecret parameter is explained\n4. Verify StreamingUri is configured\n5. Check if Singleton lifetime is mentioned\n6. Confirm example shows IFbClient injection\n\nPass Criteria:\n- All 6 required elements are present\n- Code syntax is valid C# for .NET 6+\n- Configuration is complete and functional\n- DI pattern is correctly explained\n\nFail Criteria:\n- Missing any required element\n- Incorrect package name or namespace\n- Invalid C# syntax in examples\n- Wrong service lifetime suggested",
+      "prerequisites": [
+        "ASP.NET Core 6+ project created",
+        "Access to FeatBit portal for EnvSecret",
+        "Basic understanding of dependency injection"
+      ],
+      "expected_duration": "3-5 minutes",
+      "tags": [
+        "sdk",
+        "dotnet",
+        "aspnetcore",
+        "di",
+        "setup",
+        "basic"
+      ]
+    },
+    {
+      "id": "dotnet-sdk-002",
+      "name": "dotnet-sdk-flag-evaluation-patterns",
+      "skill": "featbit-dotnet-sdk",
+      "description": "Validates understanding of different flag evaluation methods and their appropriate use cases",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "Show me examples of evaluating different types of feature flags in FeatBit .NET SDK: boolean flags, string variations, JSON flags, and numeric flags. When should I use each type?",
+      "evaluation_prompt": "Expected Result:\n- BoolVariation() for boolean flags\n- StringVariation() for string flags\n- JsonVariation<T>() for complex types\n- All examples show proper user context\n- Default values are provided\n- Appropriate use cases explained for each type\n\nEvaluation Method:\n1. Verify all 4 variation methods are shown\n2. Check each example includes FbUser parameter\n3. Confirm default values are provided in all examples\n4. Validate use cases are appropriate\n5. Check if VariationDetail methods are mentioned\n\nPass Criteria:\n- All variation methods demonstrated\n- Proper user context in all examples\n- Sensible default values\n- Use cases accurately described\n\nFail Criteria:\n- Missing any variation method\n- No user context shown\n- No default values provided\n- Incorrect use case recommendations",
+      "prerequisites": [
+        "FeatBit SDK already configured",
+        "Basic understanding of feature flags"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": [
+        "sdk",
+        "dotnet",
+        "evaluation",
+        "intermediate",
+        "patterns"
+      ]
+    }
+  ]
+}

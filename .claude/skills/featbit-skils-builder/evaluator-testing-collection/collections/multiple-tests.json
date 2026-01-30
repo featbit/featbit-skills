@@ -1,0 +1,79 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit multiple Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "multiple",
+    "total_tests": 3,
+    "description": "Evaluation test collection for multiple skill"
+  },
+  "test_items": [
+    {
+      "id": "cross-skill-001",
+      "name": "cross-skill-spa-sdk-choice",
+      "skill": "multiple",
+      "description": "Validates ability to recommend correct SDK based on application architecture (SPA vs SSR)",
+      "complexity_level": "intermediate",
+      "task_type": "contextual-reasoning",
+      "input_task_prompt": "I'm building a Next.js application. Which FeatBit SDK should I use? I have both client components and server components.",
+      "evaluation_prompt": "Expected Result:\n- Identifies Next.js has both client and server\n- Recommends React SDK for client components\n- Recommends Node Server SDK for server components\n- Explains React SDK limitations (no SSR)\n- Hybrid approach for mixed usage\n- Code examples for both scenarios\n\nEvaluation Method:\n1. Verify both SDKs recommended\n2. Check usage scenarios clearly separated\n3. Confirm limitations explained\n4. Check hybrid approach detailed\n5. Verify code examples for both\n\nPass Criteria:\n- Both SDKs appropriately recommended\n- Use cases clearly distinguished\n- Limitations properly explained\n- Hybrid pattern demonstrated\n- Next.js architecture understood\n\nFail Criteria:\n- Only one SDK recommended\n- Claims React SDK works for SSR\n- No hybrid approach\n- Missing architecture understanding",
+      "prerequisites": [
+        "Next.js project",
+        "Understanding of CSR vs SSR"
+      ],
+      "expected_duration": "6-8 minutes",
+      "tags": [
+        "cross-skill",
+        "nextjs",
+        "sdk-selection",
+        "intermediate"
+      ]
+    },
+    {
+      "id": "cross-skill-002",
+      "name": "cross-skill-deployment-observability",
+      "skill": "multiple",
+      "description": "Validates end-to-end setup including deployment and observability configuration",
+      "complexity_level": "advanced",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "I want to deploy FeatBit to Kubernetes with Helm and enable OpenTelemetry monitoring with Prometheus and Jaeger. Give me a complete guide.",
+      "evaluation_prompt": "Expected Result:\n- Helm installation steps\n- values.yaml with OpenTelemetry enabled\n- ENABLE_OPENTELEMETRY=true in values\n- OTEL_SERVICE_NAME for each service\n- OTEL_EXPORTER_OTLP_ENDPOINT configured\n- Collector deployment\n- Prometheus and Jaeger setup\n- Complete working example\n\nEvaluation Method:\n1. Check Helm deployment covered\n2. Verify OTEL env vars in values.yaml\n3. Confirm collector deployment shown\n4. Check Prometheus/Jaeger integration\n5. Verify end-to-end workflow\n\nPass Criteria:\n- Complete deployment workflow\n- OpenTelemetry properly configured\n- Observability backends setup\n- All components integrated\n- Working example provided\n\nFail Criteria:\n- Incomplete deployment\n- Missing OTEL configuration\n- No observability backend setup\n- Components not integrated",
+      "prerequisites": [
+        "Kubernetes cluster",
+        "Helm installed",
+        "Understanding of observability"
+      ],
+      "expected_duration": "12-15 minutes",
+      "tags": [
+        "cross-skill",
+        "kubernetes",
+        "opentelemetry",
+        "advanced",
+        "integration"
+      ]
+    },
+    {
+      "id": "cross-skill-003",
+      "name": "cross-skill-fullstack-implementation",
+      "skill": "multiple",
+      "description": "Validates guidance for full-stack implementation with React frontend and Node.js backend",
+      "complexity_level": "intermediate",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "I'm building a full-stack app with React frontend and Express backend. How do I implement FeatBit in both? The same user should get consistent flag values on both sides.",
+      "evaluation_prompt": "Expected Result:\n- React Client SDK for frontend\n- Node Server SDK for backend\n- Consistent user identification strategy\n- User keyId matching between front and back\n- Custom properties synchronized\n- API passes user context\n- Bootstrap data optimization\n\nEvaluation Method:\n1. Check both SDKs recommended\n2. Verify user consistency strategy\n3. Confirm keyId matching explained\n4. Check custom properties synced\n5. Verify complete integration shown\n\nPass Criteria:\n- Correct SDK for each tier\n- User consistency strategy clear\n- Matching user context shown\n- Full-stack integration demonstrated\n- Bootstrap optimization mentioned\n\nFail Criteria:\n- Wrong SDK choice\n- No user consistency strategy\n- User context mismatch\n- Incomplete integration",
+      "prerequisites": [
+        "React application",
+        "Express backend",
+        "Understanding of full-stack architecture"
+      ],
+      "expected_duration": "8-10 minutes",
+      "tags": [
+        "cross-skill",
+        "fullstack",
+        "react",
+        "nodejs",
+        "intermediate"
+      ]
+    }
+  ]
+}

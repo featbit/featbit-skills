@@ -1,0 +1,35 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit featbit-openfeature-js-client Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-openfeature-js-client",
+    "total_tests": 1,
+    "description": "Evaluation test collection for featbit-openfeature-js-client skill"
+  },
+  "test_items": [
+    {
+      "id": "openfeature-js-001",
+      "name": "openfeature-js-provider-setup",
+      "skill": "featbit-openfeature-js-client",
+      "description": "Validates OpenFeature JavaScript provider setup with FeatBit for browser applications",
+      "complexity_level": "intermediate",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "I want to use FeatBit through OpenFeature in my browser application. How do I set up the OpenFeature provider and evaluate flags?",
+      "evaluation_prompt": "Expected Result:\n- Install both @openfeature/web-sdk and @featbit/openfeature-provider-js-client\n- Import FeatBitProvider\n- OpenFeature.setProvider()\n- OpenFeature.setContext() for user\n- Client.getBooleanValue() for evaluation\n- Provider configuration options\n\nEvaluation Method:\n1. Check both packages mentioned\n2. Verify provider setup pattern\n3. Confirm context setting\n4. Check evaluation method\n5. Verify OpenFeature API used\n\nPass Criteria:\n- Correct packages installed\n- Provider properly configured\n- OpenFeature API used correctly\n- User context set via OpenFeature\n- Complete integration shown\n\nFail Criteria:\n- Missing OpenFeature SDK\n- Direct FeatBit SDK usage\n- Incorrect provider setup\n- No context configuration",
+      "prerequisites": [
+        "Browser application",
+        "Understanding of OpenFeature",
+        "FeatBit environment secret"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": [
+        "openfeature",
+        "javascript",
+        "browser",
+        "provider",
+        "intermediate"
+      ]
+    }
+  ]
+}

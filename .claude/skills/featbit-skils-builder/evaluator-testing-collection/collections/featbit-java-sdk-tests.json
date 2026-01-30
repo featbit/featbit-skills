@@ -1,0 +1,57 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit featbit-java-sdk Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-java-sdk",
+    "total_tests": 2,
+    "description": "Evaluation test collection for featbit-java-sdk skill"
+  },
+  "test_items": [
+    {
+      "id": "java-sdk-001",
+      "name": "java-sdk-spring-boot-integration",
+      "skill": "featbit-java-sdk",
+      "description": "Validates Spring Boot integration with FeatBit Java SDK using dependency injection and configuration properties",
+      "complexity_level": "basic",
+      "task_type": "code-structure-validation",
+      "input_task_prompt": "How do I integrate FeatBit SDK in my Spring Boot application using dependency injection? Show me the configuration class and how to use it in a REST controller.",
+      "evaluation_prompt": "Expected Result:\n- Maven/Gradle dependency declaration\n- @Configuration class with @Bean for FBClient\n- FBConfig setup with builder pattern\n- @Value or @ConfigurationProperties for settings\n- @Autowired injection in controller\n- Proper shutdown hook\n\nEvaluation Method:\n1. Check dependency declaration is correct\n2. Verify @Configuration class properly structured\n3. Confirm FBClient created as @Bean\n4. Check configuration externalized\n5. Verify proper DI usage in controller\n\nPass Criteria:\n- Spring-idiomatic configuration\n- Proper bean lifecycle management\n- Configuration externalized\n- DI correctly demonstrated\n- Complete Spring Boot example\n\nFail Criteria:\n- Static SDK initialization\n- Hardcoded configuration\n- No DI pattern\n- Missing shutdown handling",
+      "prerequisites": [
+        "Spring Boot 2.5+",
+        "Maven or Gradle",
+        "Understanding of Spring DI"
+      ],
+      "expected_duration": "5-7 minutes",
+      "tags": [
+        "sdk",
+        "java",
+        "spring-boot",
+        "di",
+        "basic"
+      ]
+    },
+    {
+      "id": "java-sdk-002",
+      "name": "java-sdk-thread-safety",
+      "skill": "featbit-java-sdk",
+      "description": "Validates understanding of thread safety and proper SDK lifecycle in multi-threaded Java applications",
+      "complexity_level": "advanced",
+      "task_type": "text-comparison",
+      "input_task_prompt": "I'm using FeatBit SDK in a high-concurrency Java application. How do I ensure thread safety? Can I evaluate flags from multiple threads? How should I manage the SDK lifecycle?",
+      "evaluation_prompt": "Expected Result:\n- FBClient is thread-safe explanation\n- Single instance across application\n- Thread-safe user object creation\n- Concurrent flag evaluation is safe\n- Proper shutdown in all threads\n- Connection pooling considerations\n\nEvaluation Method:\n1. Verify thread safety clearly stated\n2. Check singleton pattern recommended\n3. Confirm concurrent evaluation safety\n4. Check shutdown guidance provided\n5. Verify best practices for high concurrency\n\nPass Criteria:\n- Thread safety explicitly confirmed\n- Singleton pattern emphasized\n- Concurrent usage patterns shown\n- Lifecycle management explained\n- Production considerations addressed\n\nFail Criteria:\n- Thread safety not addressed\n- Multiple client instances suggested\n- Missing lifecycle guidance\n- No concurrency considerations",
+      "prerequisites": [
+        "FeatBit Java SDK configured",
+        "Understanding of Java concurrency"
+      ],
+      "expected_duration": "4-6 minutes",
+      "tags": [
+        "sdk",
+        "java",
+        "thread-safety",
+        "advanced",
+        "concurrency"
+      ]
+    }
+  ]
+}

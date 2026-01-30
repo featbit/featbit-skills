@@ -1,0 +1,57 @@
+{
+  "collection_metadata": {
+    "name": "FeatBit featbit-deployment-docker Evaluation Tests",
+    "version": "1.0.0",
+    "created_date": "2026-01-30",
+    "skill": "featbit-deployment-docker",
+    "total_tests": 2,
+    "description": "Evaluation test collection for featbit-deployment-docker skill"
+  },
+  "test_items": [
+    {
+      "id": "deployment-docker-001",
+      "name": "docker-standalone-deployment",
+      "skill": "featbit-deployment-docker",
+      "description": "Validates ability to guide users through standalone Docker Compose deployment for development/small teams",
+      "complexity_level": "basic",
+      "task_type": "integration-test-validation",
+      "input_task_prompt": "I want to deploy FeatBit for my small development team using Docker. Show me the simplest deployment option that's easy to set up and maintain.",
+      "evaluation_prompt": "Expected Result:\n- Recommends Standalone tier\n- Provides docker-compose.yml\n- Explains it uses PostgreSQL only\n- Shows 4 services: ui, api-server, evaluation-server, da-server, postgresql\n- Port mappings: 8081, 5000, 5100, 5432\n- Environment variable configuration\n- docker-compose up command\n\nEvaluation Method:\n1. Verify Standalone tier recommended\n2. Check complete docker-compose.yml provided\n3. Confirm all 5 services present\n4. Verify port mappings correct\n5. Check environment variables explained\n6. Verify startup command shown\n\nPass Criteria:\n- Standalone tier appropriately recommended\n- Complete working docker-compose.yml\n- All required services configured\n- Ports properly exposed\n- Clear startup instructions\n\nFail Criteria:\n- Recommends Professional tier for small team\n- Incomplete docker-compose.yml\n- Missing services\n- Incorrect port mappings\n- No startup instructions",
+      "prerequisites": [
+        "Docker and Docker Compose installed",
+        "Basic understanding of containers"
+      ],
+      "expected_duration": "5-8 minutes",
+      "tags": [
+        "deployment",
+        "docker",
+        "standalone",
+        "basic",
+        "compose"
+      ]
+    },
+    {
+      "id": "deployment-docker-002",
+      "name": "docker-standard-production-deployment",
+      "skill": "featbit-deployment-docker",
+      "description": "Validates guidance for production-ready Standard tier deployment with Redis and proper data persistence",
+      "complexity_level": "intermediate",
+      "task_type": "multi-step-workflow",
+      "input_task_prompt": "We're deploying FeatBit to production for our team of 30 developers. We need better performance and reliability than Standalone. What deployment tier should we use and how do we configure it?",
+      "evaluation_prompt": "Expected Result:\n- Recommends Standard tier\n- Explains benefits: Redis cache, better scalability\n- Provides docker-compose.yml with Redis\n- Shows volume configuration for data persistence\n- Environment variables for Redis integration\n- Mentions backup strategy\n- Production considerations (secrets, SSL, monitoring)\n\nEvaluation Method:\n1. Verify Standard tier recommended\n2. Check Redis added to compose file\n3. Confirm volumes for persistence\n4. Verify Redis connection configured\n5. Check production best practices mentioned\n\nPass Criteria:\n- Standard tier appropriately recommended\n- Redis properly integrated\n- Data persistence configured\n- Production considerations addressed\n- Complete deployment guide\n\nFail Criteria:\n- Still recommends Standalone\n- Missing Redis configuration\n- No data persistence\n- No production guidance",
+      "prerequisites": [
+        "Docker Compose",
+        "Production server environment",
+        "Understanding of scalability needs"
+      ],
+      "expected_duration": "8-12 minutes",
+      "tags": [
+        "deployment",
+        "docker",
+        "standard",
+        "production",
+        "intermediate"
+      ]
+    }
+  ]
+}
