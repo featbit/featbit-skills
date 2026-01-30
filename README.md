@@ -9,7 +9,7 @@ Official skills plugin for [FeatBit](https://featbit.co) - an open-source, power
 
 ## 🎯 What is This?
 
-This plugin provides comprehensive knowledge and guidance for integrating FeatBit into your applications through **13 specialized skills** covering platform documentation, deployment strategies, and SDK implementations across multiple programming languages and frameworks.
+This plugin provides comprehensive knowledge and guidance for integrating FeatBit into your applications through **14 specialized skills** covering platform documentation, deployment strategies, SDK implementations, and observability across multiple programming languages and frameworks.
 
 **🔧 Works with Multiple AI Agents:**
 - ✅ **Claude Code** (Anthropic's AI assistant - inventor of the Skills protocol)
@@ -94,7 +94,7 @@ For troubleshooting, enterprise setup, or manual installation, see the [complete
 
 ## 🎓 Available Skills
 
-This plugin includes **13 specialized skills** organized by category:
+This plugin includes **14 specialized skills** organized by category:
 
 ### Platform & Infrastructure
 
@@ -111,7 +111,22 @@ Complete knowledge of FeatBit's official documentation covering 75+ topics:
 
 **Activates when**: You ask about FeatBit features, concepts, best practices, or general "how-to" questions.
 
-#### **2. FeatBit Docker Deployment** (`featbit-deployment-docker`)
+#### **2. FeatBit OpenTelemetry** (`featbit-opentelemetry`)
+Expert knowledge of FeatBit's OpenTelemetry integration for comprehensive observability:
+- 📊 Metrics, traces, and logs instrumentation
+- 🔧 Configuration for Api, Evaluation-Server, and Data Analytic services
+- 🐳 Ready-to-run examples with Seq, Jaeger, and Prometheus
+- 🔌 Integration with observability backends (Datadog, New Relic, Grafana)
+- ⚙️ Environment variables and collector setup
+- 📈 Performance monitoring and troubleshooting
+
+**Activates when**: You ask about monitoring FeatBit, setting up observability, OpenTelemetry, or troubleshooting performance.
+
+**Documentation**: https://docs.featbit.co/integrations/observability/opentelemetry
+
+**Example**: "How do I set up OpenTelemetry for FeatBit services?"
+
+#### **3. FeatBit Docker Deployment** (`featbit-deployment-docker`)
 Expert guidance for Docker Compose deployments:
 - 🐳 Docker Compose configurations (Standalone, Standard, Professional)
 - 🔧 Environment variables and container orchestration
@@ -125,7 +140,7 @@ Expert guidance for Docker Compose deployments:
 
 **Example**: "How do I deploy FeatBit with Docker Compose using MongoDB and Redis?"
 
-#### **3. FeatBit Kubernetes Deployment** (`featbit-deployment-kubernetes`)
+#### **4. FeatBit Kubernetes Deployment** (`featbit-deployment-kubernetes`)
 Expert guidance for Kubernetes/Helm deployments:
 - ☸️ Helm Charts installation and configuration
 - 🌐 Service exposure (Ingress, LoadBalancer, NodePort)
@@ -143,7 +158,7 @@ Expert guidance for Kubernetes/Helm deployments:
 
 ### Server-Side SDKs
 
-#### **4. FeatBit .NET SDK** (`featbit-dotnet-sdk`)
+#### **5. FeatBit .NET SDK** (`featbit-dotnet-sdk`)
 Expert guidance for .NET Server SDK integration:
 - 🏗️ ASP.NET Core with dependency injection
 - 🖥️ Console applications and worker services
@@ -156,7 +171,7 @@ Expert guidance for .NET Server SDK integration:
 
 **Example**: "How do I integrate FeatBit in my ASP.NET Core API?"
 
-#### **5. FeatBit Node.js Server SDK** (`featbit-node-server-sdk`)
+#### **6. FeatBit Node.js Server SDK** (`featbit-node-server-sdk`)
 Expert guidance for Node.js Server SDK:
 - ⚡ Express, Koa, NestJS framework integration
 - 👥 Multi-user server applications
@@ -168,7 +183,7 @@ Expert guidance for Node.js Server SDK:
 
 **Example**: "Set up FeatBit in my Express API"
 
-#### **6. FeatBit Python SDK** (`featbit-python-sdk`)
+#### **7. FeatBit Python SDK** (`featbit-python-sdk`)
 Expert guidance for Python Server SDK:
 - 🌶️ Flask and Django framework integration
 - ⚡ FastAPI support
@@ -180,7 +195,7 @@ Expert guidance for Python Server SDK:
 
 **Example**: "Integrate FeatBit with my Flask application"
 
-#### **7. FeatBit Java SDK** (`featbit-java-sdk`)
+#### **8. FeatBit Java SDK** (`featbit-java-sdk`)
 Expert guidance for Java Server SDK:
 - Spring Boot integration
 - Maven and Gradle setup
@@ -196,7 +211,7 @@ Expert guidance for Java Server SDK:
 
 **Example**: "How to use FeatBit in Spring Boot?"
 
-#### **8. FeatBit Go SDK** (`featbit-go-sdk`)
+#### **9. FeatBit Go SDK** (`featbit-go-sdk`)
 Expert guidance for Go Server SDK:
 - 🍸 Gin and Echo framework integration
 - 🌐 Standard HTTP server support
@@ -212,7 +227,7 @@ Expert guidance for Go Server SDK:
 
 ### Client-Side SDKs
 
-#### **9. FeatBit JavaScript Client SDK** (`featbit-javascript-client-sdk`)
+#### **10. FeatBit JavaScript Client SDK** (`featbit-javascript-client-sdk`)
 Expert guidance for browser JavaScript SDK:
 - 🌐 Vanilla JavaScript integration
 - 🖥️ Browser applications (SPA, MPA)
@@ -224,7 +239,7 @@ Expert guidance for browser JavaScript SDK:
 
 **Example**: "Add feature flags to my vanilla JS app"
 
-#### **10. FeatBit React Client SDK** (`featbit-react-client-sdk`)
+#### **11. FeatBit React Client SDK** (`featbit-react-client-sdk`)
 Expert guidance for React SDK:
 - ⚛️ React hooks: `useFlags()`, `useFbClient()`
 - 🎯 Provider pattern with `FbProvider`
@@ -237,7 +252,7 @@ Expert guidance for React SDK:
 
 **Example**: "Use feature flags in my React components"
 
-#### **11. FeatBit React Native SDK** (`featbit-react-native-sdk`)
+#### **12. FeatBit React Native SDK** (`featbit-react-native-sdk`)
 Expert guidance for React Native mobile SDK:
 - 📱 iOS and Android platform support
 - 📲 Device information integration
@@ -253,7 +268,7 @@ Expert guidance for React Native mobile SDK:
 
 ### OpenFeature Providers
 
-#### **12. FeatBit OpenFeature Node.js Provider** (`featbit-openfeature-node-server`)
+#### **13. FeatBit OpenFeature Node.js Provider** (`featbit-openfeature-node-server`)
 Expert guidance for vendor-neutral feature flagging:
 - 🌐 OpenFeature standard API compliance
 - ⚡ Express, Koa, NestJS integration
@@ -265,7 +280,7 @@ Expert guidance for vendor-neutral feature flagging:
 
 **Example**: "Use OpenFeature with FeatBit in my Express API"
 
-#### **13. FeatBit OpenFeature JavaScript Provider** (`featbit-openfeature-js-client`)
+#### **14. FeatBit OpenFeature JavaScript Provider** (`featbit-openfeature-js-client`)
 Expert guidance for browser OpenFeature integration:
 - 🌐 Vendor-neutral browser feature flags
 - ⚛️ React, Vue, Angular integration
