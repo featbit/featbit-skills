@@ -220,29 +220,6 @@ da-server:
 - Better security and compliance
 - Scalability
 
-## Limitations of Standalone Mode
-
-⚠️ **Not Recommended for Production** because:
-
-1. **No caching**: All data is queried from PostgreSQL every time
-2. **Single point of failure**: If PostgreSQL goes down, entire system fails
-3. **Limited scalability**: Cannot scale services independently
-4. **Message queue through database**: PostgreSQL is not optimized for message queuing
-5. **Performance**: Slower response times under high load
-
-**When to Use**:
-- Development and testing environments
-- Small teams (<10 users)
-- Low-traffic applications
-- Proof of concept / evaluation
-- Learning and experimentation
-
-**When to Upgrade to Standard**:
-- Moving to production
-- Team size >10 users
-- Need better performance and reliability
-- Expect moderate to high traffic
-
 ## Reference
 
 - **Official Documentation**: https://docs.featbit.co/installation/docker-compose

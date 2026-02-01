@@ -12,7 +12,9 @@ Standard deployment adds Redis for caching and message queuing, providing:
 
 ## Option A: Standard with PostgreSQL + Redis
 
-### Complete docker-compose.yml
+### Complete Configuration (docker-compose-standard.yml)
+
+**Note**: This configuration is from `docker-compose-standard.yml` in the FeatBit repository.
 
 ```yaml
 name: featbit
@@ -105,6 +107,7 @@ services:
       POSTGRES_PASSWORD: please_change_me
     volumes:
       - postgres:/var/lib/postgresql/data
+      - ./infra/postgresql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
     networks:
       - featbit-network
     healthcheck:
@@ -145,9 +148,32 @@ networks:
     driver: bridge
 ```
 
+### PostgreSQL Initialization
+
+**Automatic Initialization**: PostgreSQL initialization scripts are automatically executed from the cloned repository.
+
+The volume mapping in the configuration:
+```yaml
+volumes:
+  - ./infra/postgresql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+```
+
+This automatically mounts all initialization scripts from the repository to the PostgreSQL container. Scripts are executed in alphabetical order (v0.0.0.sql, v1.0.0.sql, etc.) on first container startup.
+
+**Scripts Location**: https://github.com/featbit/featbit/tree/main/infra/postgresql/docker-entrypoint-initdb.d
+
+**Important**: The scripts will only run on the **first startup** when the database is empty. If you need to re-initialize, remove the PostgreSQL volume:
+```bash
+docker compose down -v  # This removes all volumes
+# or
+docker volume rm <volume_name>  # Remove specific volume
+```
+
 ## Option B: Standard with MongoDB + Redis
 
-### Complete docker-compose.yml
+### Complete Configuration (docker-compose-mongodb.yml)
+
+**Note**: This configuration is from `docker-compose-mongodb.yml` in the FeatBit repository.
 
 ```yaml
 name: featbit
@@ -233,9 +259,10 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: please_change_me
+      MONGO_INITDB_DATABASE: featbit
     volumes:
       - mongodb:/data/db
-      - ./infra/mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+      - ./infra/mongodb/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
     networks:
       - featbit-network
     healthcheck:
@@ -278,26 +305,39 @@ networks:
 
 ### MongoDB Initialization
 
-**Important**: MongoDB requires initialization script for default data.
+**Automatic Initialization**: MongoDB initialization scripts are automatically executed from the cloned repository.
 
-```bash
-# Create directory structure
-mkdir -p infra/mongodb/docker-entrypoint-initdb.d
-
-# Download initialization script
-curl -o infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js \
-  https://raw.githubusercontent.com/featbit/featbit/main/infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js
+The volume mapping in the configuration:
+```yaml
+volumes:
+  - ./infra/mongodb/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
 ```
 
-**Script Reference**: https://github.com/featbit/featbit/blob/main/infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js
+This automatically mounts all initialization scripts (*.js files) from the repository to the MongoDB container. All scripts are executed in alphabetical order (v0.0.0.js, v1.0.0.js, etc.) on first container startup.
+
+**Scripts Location**: https://github.com/featbit/featbit/tree/main/infra/mongodb/docker-entrypoint-initdb.d
+
+**Important**: The scripts will only run on the **first startup** when the database is empty. If you need to re-initialize, remove the MongoDB volume:
+```bash
+docker compose down -v  # This removes all volumes
+# or
+docker volume rm <volume_name>  # Remove specific volume
+```
 
 ## Deployment Steps
 
-### Download Official Configuration
+### Prerequisites
 
+1. Clone the FeatBit repository (contains all configuration files and initialization scripts):
 ```bash
-# For MongoDB + Redis configuration
-curl -O https://raw.githubusercontent.com/featbit/featbit/main/docker-compose-mongodb.yml
+git clone https://github.com/featbit/featbit.git
+cd featbit
+```
+
+2. Docker 20.10+ and Docker Compose 2.0+ installed
+3. 4GB RAM minimum (8GB recommended)
+
+### Start Services
 mv docker-compose-mongodb.yml docker-compose.yml
 
 # For PostgreSQL + Redis
@@ -370,23 +410,6 @@ api-server:
     # Azure Cache for Redis
     - Redis__ConnectionString=featbit.redis.cache.windows.net:6380,password=${REDIS_PASSWORD},ssl=True
 ```
-
-## When to Choose Standard
-
-✅ **Use Standard When**:
-- Moving to production
-- Team size: 10-50 users
-- Expected traffic: moderate to high
-- Need better performance than Standalone
-- Require production-level reliability
-- Need caching for faster responses
-
-⚠️ **Consider Professional When**:
-- Team size: >50 users
-- Very high traffic (millions of requests/day)
-- Need advanced analytics with ClickHouse
-- Require event streaming capabilities
-- Need massive horizontal scalability
 
 ## Reference
 

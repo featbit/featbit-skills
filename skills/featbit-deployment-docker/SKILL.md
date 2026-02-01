@@ -21,31 +21,44 @@ FeatBit offers three deployment architectures optimized for different scales:
 
 | Tier | Database | Cache | Message Queue | Analytics | Best For |
 |------|----------|-------|---------------|-----------|----------|
-| **Standalone** | PostgreSQL | None | PostgreSQL | PostgreSQL | Development, testing, teams <10 users |
-| **Standard** | PostgreSQL/MongoDB | Redis | Redis | MongoDB | Production, teams 10-50 users |
-| **Professional** | PostgreSQL/MongoDB | Redis | Kafka | ClickHouse | Enterprise, 50+ users, millions of requests |
+| **Standalone** | PostgreSQL | None | PostgreSQL | PostgreSQL | Low to moderate concurrent connections, moderate API calls, limited event volume |
+| **Standard** | PostgreSQL/MongoDB | Redis | Redis | MongoDB | Moderate to high concurrent connections & API calls, moderate event volume |
+| **Professional** | PostgreSQL/MongoDB | Redis | Kafka | ClickHouse | Moderate to high concurrent connections & API calls, high event volume |
 
 **Quick Selection Guide**:
-- **Standalone**: Minimal setup, single server, good for dev/test
-- **Standard**: Production-ready with caching, good performance
-- **Professional**: Maximum scale, advanced analytics, requires DevOps expertise
+- **Standalone**: Minimal setup, single server, handles low to moderate concurrent WebSocket connections
+- **Standard**: Production-ready with caching, handles high concurrent connections with moderate event volume
+- **Professional**: Maximum scale for high connections AND high event volume, requires DevOps expertise
+
+**Note**: Traffic includes both concurrent WebSocket connections from frontend clients and API calls to clients - these have different scales.
 
 📚 **Architecture Details**: https://docs.featbit.co/installation/deployment-options
 
 ## Deployment Guides
 
+**⚠️ Important**: Before starting any deployment, clone the FeatBit repository as it contains required scripts:
+
+```bash
+git clone https://github.com/featbit/featbit.git
+cd featbit
+```
+
+These scripts are accessed during Docker execution.
+
+**📍 Access Information** (applies to all deployment tiers):
+- **URL**: http://localhost:8081
+- **Default Login**: test@featbit.com / 123456
+
 ### Standalone Deployment
 
 **Quick Start**:
 ```bash
-# Download official configuration
-curl -O https://raw.githubusercontent.com/featbit/featbit/main/docker-compose.yml
+# Clone repository (if not already done)
+git clone https://github.com/featbit/featbit.git
+cd featbit
 
-# Start services
+# Start services using the included docker-compose.yml
 docker compose up -d
-
-# Access at http://localhost:8081
-# Default login: test@featbit.com / 123456
 ```
 
 **Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 2GB RAM
@@ -65,22 +78,26 @@ docker compose up -d
 - Best for teams familiar with PostgreSQL
 - Simpler than MongoDB option
 
+```bash
+# Clone repository (if not already done)
+git clone https://github.com/featbit/featbit.git
+cd featbit
+
+# Start services with PostgreSQL Standard configuration
+docker compose -f docker-compose-standard.yml up -d
+```
+
 **Option B: MongoDB + Redis** 
 - Better for document-oriented workloads
-- Requires initialization script
+- Includes initialization script
 
 ```bash
-# Download MongoDB configuration
-curl -O https://raw.githubusercontent.com/featbit/featbit/main/docker-compose-mongodb.yml
-mv docker-compose-mongodb.yml docker-compose.yml
+# Clone repository (if not already done)
+git clone https://github.com/featbit/featbit.git
+cd featbit
 
-# Get MongoDB init script
-mkdir -p infra/mongodb/docker-entrypoint-initdb.d
-curl -o infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js \
-  https://raw.githubusercontent.com/featbit/featbit/main/infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js
-
-# Start services  
-docker compose up -d
+# Start services with MongoDB configuration
+docker compose -f docker-compose-mongodb.yml up -d
 ```
 
 **Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 4GB RAM (8GB recommended)
@@ -100,16 +117,12 @@ docker compose up -d
 - Handles millions of events per day
 
 ```bash
-# Download Professional configuration
-curl -O https://raw.githubusercontent.com/featbit/featbit/main/docker-compose-pro.yml
-mv docker-compose-pro.yml docker-compose.yml
+# Clone repository (if not already done)
+git clone https://github.com/featbit/featbit.git
+cd featbit
 
-# Start infrastructure first
-docker compose up -d zookeeper kafka clickhouse-server postgresql redis
-sleep 30
-
-# Start application services
-docker compose up -d
+# Start all services (Docker Compose handles startup order via depends_on)
+docker compose -f docker-compose-pro.yml up -d
 ```
 
 **Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 8GB+ RAM, 4+ CPU cores
@@ -137,18 +150,7 @@ Complete reference for all configuration options:
 - Service-specific variables
 - Using .env files for secrets
 - Environment-specific configurations
-
-### Production Best Practices
-
-Security, high availability, backup, and monitoring:
-
-📄 **[references/production-best-practices.md](references/production-best-practices.md)**
-- Security (passwords, secrets, SSL/TLS, firewalls, network isolation)
-- High availability (health checks, resource limits, managed services)
-- Backup and recovery (automated backups, volume snapshots, disaster recovery)
-- Monitoring (Prometheus, Grafana, cAdvisor, ELK Stack)
-- Performance optimization (database tuning, resource allocation)
-- Upgrade strategies (rolling updates, blue-green deployments)
+- OpenTelemetry configuration
 
 ### Troubleshooting
 
@@ -171,11 +173,22 @@ Common issues and solutions:
 ### Service Management
 
 ```bash
-# Start all services
+# Start all services (Standalone)
 docker compose up -d
 
-# Stop all services
+# Start all services (Standard PostgreSQL)
+docker compose -f docker-compose-standard.yml up -d
+
+# Start all services (Standard MongoDB)
+docker compose -f docker-compose-mongodb.yml up -d
+
+# Start all services (Professional)
+docker compose -f docker-compose-pro.yml up -d
+
+# Stop all services (use same -f flag as used for starting)
 docker compose down
+# or for non-default configs:
+docker compose -f docker-compose-standard.yml down
 
 # View status
 docker compose ps
@@ -213,42 +226,42 @@ docker compose exec mongodb mongodump --out /backup --db featbit
 ## When to Choose Each Tier
 
 ### Choose Standalone If:
-✅ Development or testing environment  
-✅ Team size <10 users
-✅ Low traffic (< 100k requests/day)
+✅ **Production or non-production** with low to moderate traffic:  
+   - Low to moderate concurrent WebSocket connections from frontend clients
+   - Moderate API call volume to clients
+✅ Low event volume (feature flag usage events & custom events)
+✅ Simple single-server deployment preferred
+✅ Cost-effective solution for small-scale production use
 ✅ Quick evaluation of FeatBit
-✅ Simple single-server deployment
 
 ❌ Not Recommended For:
-- Production deployments
-- High-traffic applications
-- Need for reliability and performance
+- Very high concurrent WebSocket connections
+- High event volume requiring event streaming
+- Need for caching layer to improve performance
 
 ### Choose Standard If:
-✅ Production environment  
-✅ Team size 10-50 users
-✅ Moderate to high traffic
-✅ Need caching for performance
-✅ Production-level reliability required
+✅ **Very high concurrent WebSocket connections & API calls**  
+✅ Need caching layer (Redis) for improved performance
+✅ Moderate event volume (feature flag usage events & custom events)
+✅ Production environment requiring reliability
 ✅ Good balance of complexity vs features
 
 ❌ Consider Professional If:
-- Team size >50 users
-- Very high traffic (millions of requests/day)
-- Need advanced analytics
+- Very high event volume requiring Kafka event streaming
+- Require real-time analytics at scale with ClickHouse
+- Need horizontal scalability for data analytics
 
 ### Choose Professional If:
-✅ Enterprise deployment  
-✅ Team size 50+ users
-✅ Very high traffic (millions of requests/day)
-✅ Need advanced analytics and data warehousing
-✅ Event streaming requirements
+✅ **Very high concurrent WebSocket connections & API calls**  
+✅ **Very high event volume** (feature flag usage events & custom events)
+✅ Need Kafka for high-throughput event streaming
+✅ Need ClickHouse for real-time analytics at scale
 ✅ Have dedicated DevOps resources
 ✅ Budget for infrastructure
 
 ❌ Consider Standard If:
 - Limited DevOps expertise
-- Moderate traffic requirements
+- Moderate event volume (Redis sufficient for message queue)
 - Cost-sensitive
 
 ## Official Resources
@@ -265,7 +278,7 @@ docker compose exec mongodb mongodump --out /backup --db featbit
 - **Standard (MongoDB)**: https://github.com/featbit/featbit/blob/main/docker-compose-mongodb.yml
 - **Professional**: https://github.com/featbit/featbit/blob/main/docker-compose-pro.yml
 - **PostgreSQL Init**: https://github.com/featbit/featbit/tree/main/infra/postgresql/docker-entrypoint-initdb.d
-- **MongoDB Init**: https://github.com/featbit/featbit/blob/main/infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js
+- **MongoDB Init**: https://github.com/featbit/featbit/blob/main/infra/mongodb/docker-entrypoint-initdb.d
 
 ### Docker Images
 - **Docker Hub**: https://hub.docker.com/u/featbit
@@ -273,7 +286,7 @@ docker compose exec mongodb mongodump --out /backup --db featbit
 
 ### Alternative Deployments
 - **Kubernetes**: https://github.com/featbit/featbit-charts
-- **Azure Container Apps**: https://github.com/featbit/azure-container-apps
+- **Azure Container Apps**: https://github.com/featbit/featbit-aspire
 - **Terraform (AWS)**: https://github.com/featbit/featbit-terraform-aws
 
 ## Related Skills
