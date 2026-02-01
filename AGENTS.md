@@ -347,6 +347,10 @@ Before any release:
 
 ---
 
+## Language and Tone
+
+**Use English (US)** consistently throughout all documentation and commit messages. Maintain a professional yet approachable tone. Avoid jargon unless necessary, and always explain technical terms when first introduced.
+
 ## 🤝 Collaboration Guidelines
 
 When working on this project:

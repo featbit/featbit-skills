@@ -1,160 +1,183 @@
 ---
 name: featbit-deployment-docker
-description: Expert guidance for deploying FeatBit using Docker Compose. Covers standalone, standard, and professional deployment tiers with Docker. Use when users work with docker-compose files or ask about Docker-based FeatBit deployments.
+description: Expert guidance for deploying FeatBit with Docker Compose across three tiers - Standalone (PostgreSQL only), Standard (PostgreSQL/MongoDB + Redis), and Professional (+ ClickHouse + Kafka). Use when user mentions "docker-compose", "deploy with Docker", "standalone vs standard vs pro", works with docker-compose.yml files, or asks about container configuration, environment variables, or production Docker setup.
 appliesTo:
   - "**/docker-compose.yml"
   - "**/docker-compose.yaml"
   - "**/Dockerfile"
+license: MIT
+metadata:
+  version: 2.0.0
+  category: deployment
 ---
 
-# FeatBit Docker Compose Deployment Expert
+# FeatBit Docker Compose Deployment
 
-You are an expert on deploying FeatBit using Docker Compose, with deep knowledge of container orchestration, environment configuration, and production-ready Docker deployments.
+Expert guidance for deploying FeatBit with Docker Compose. This skill provides deployment instructions for all three tiers with links to detailed configuration files.
 
-## When to Use This Skill
+## Core Concepts
 
-Activate when users:
-- Work with `docker-compose.yml` files
-- Ask about Docker-based FeatBit deployment
-- Need help with container configuration
-- Want to deploy FeatBit on a single server
-- Need guidance on Docker networking and volumes
-- Ask about local development setup
+FeatBit offers three deployment architectures optimized for different scales:
 
-## Deployment Tiers Overview
+| Tier | Database | Cache | Message Queue | Analytics | Best For |
+|------|----------|-------|---------------|-----------|----------|
+| **Standalone** | PostgreSQL | None | PostgreSQL | PostgreSQL | Development, testing, teams <10 users |
+| **Standard** | PostgreSQL/MongoDB | Redis | Redis | MongoDB | Production, teams 10-50 users |
+| **Professional** | PostgreSQL/MongoDB | Redis | Kafka | ClickHouse | Enterprise, 50+ users, millions of requests |
 
-FeatBit offers three Docker Compose deployment tiers:
+**Quick Selection Guide**:
+- **Standalone**: Minimal setup, single server, good for dev/test
+- **Standard**: Production-ready with caching, good performance
+- **Professional**: Maximum scale, advanced analytics, requires DevOps expertise
 
-### 1. Standalone (Minimal)
-- **Database**: PostgreSQL only
-- **Cache**: None
-- **Message Queue**: PostgreSQL
-- **Analytics**: PostgreSQL
-- **Best For**: Development, testing, small teams
-- **Pros**: Minimal infrastructure, easy setup, quick start
-- **Cons**: Limited scalability, single point of failure
+📚 **Architecture Details**: https://docs.featbit.co/installation/deployment-options
 
-### 2. Standard (Balanced)
-- **Database**: PostgreSQL or MongoDB
-- **Cache**: Redis
-- **Message Queue**: Redis
-- **Analytics**: MongoDB
-- **Best For**: Production use, medium teams (up to 50 users)
-- **Pros**: Good scalability, reliable performance, battle-tested
-- **Cons**: More infrastructure to manage
+## Deployment Guides
 
-### 3. Professional (High-Volume)
-- **Database**: PostgreSQL + MongoDB + ClickHouse
-- **Cache**: Redis
-- **Message Queue**: Kafka
-- **Analytics**: ClickHouse
-- **Best For**: Large enterprises, high traffic (1000+ users)
-- **Pros**: Massive scalability, advanced analytics, event streaming
-- **Cons**: Most complex setup, significant resource requirements
+### Standalone Deployment
 
-## Quick Start: Standalone Deployment
+**Quick Start**:
+```bash
+# Download official configuration
+curl -O https://raw.githubusercontent.com/featbit/featbit/main/docker-compose.yml
 
-### Prerequisites
-- Docker 20.10+ and Docker Compose 2.0+
-- 2GB RAM minimum (4GB recommended)
-- Port availability: 8081 (UI), 5000 (API), 5100 (Evaluation), 5432 (PostgreSQL)
+# Start services
+docker compose up -d
 
-### Step 1: Create docker-compose.yml
-
-```yaml
-name: featbit
-services:
-  ui:
-    image: featbit/featbit-ui:latest
-    environment:
-      - API_URL=http://localhost:5000
-      - DEMO_URL=https://featbit-samples.vercel.app
-      - EVALUATION_URL=http://localhost:5100
-      - BASE_HREF=/
-    depends_on:
-      - api-server
-    ports:
-      - "8081:80"
-    networks:
-      - featbit-network
-
-  api-server:
-    image: featbit/featbit-api-server:latest
-    environment:
-      - DbProvider=Postgres
-      - MqProvider=Postgres
-      - CacheProvider=None
-      - Postgres__ConnectionString=Host=postgresql;Port=5432;Username=postgres;Password=please_change_me;Database=featbit
-      - OLAP__ServiceHost=http://da-server
-    depends_on:
-      - postgresql
-      - da-server
-    ports:
-      - "5000:5000"
-    networks:
-      - featbit-network
-
-  evaluation-server:
-    image: featbit/featbit-evaluation-server:latest
-    environment:
-      - DbProvider=Postgres
-      - MqProvider=Postgres
-      - CacheProvider=None
-      - Postgres__ConnectionString=Host=postgresql;Port=5432;Username=postgres;Password=please_change_me;Database=featbit
-    depends_on:
-      - postgresql
-    ports:
-      - "5100:5100"
-    networks:
-      - featbit-network
-
-  da-server:
-    image: featbit/featbit-data-analytics-server:latest
-    depends_on:
-      - postgresql
-    ports:
-      - "8200:80"
-    networks:
-      - featbit-network
-    environment:
-      DB_PROVIDER: Postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: please_change_me
-      POSTGRES_HOST: postgresql
-      POSTGRES_PORT: 5432
-      POSTGRES_DATABASE: featbit
-      CHECK_DB_LIVNESS: true
-
-  postgresql:
-    image: postgres:15.10
-    container_name: postgresql
-    restart: on-failure
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: please_change_me
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    networks:
-      - featbit-network
-
-volumes:
-  postgres:
-
-networks:
-  featbit-network:
-    name: featbit-network
-    driver: bridge
+# Access at http://localhost:8081
+# Default login: test@featbit.com / 123456
 ```
 
-### Step 2: Deploy
+**Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 2GB RAM
+
+📄 **Complete Guide**: [references/standalone-configuration.md](references/standalone-configuration.md)
+- Full docker-compose.yml with health checks
+- Step-by-step setup instructions
+- Using managed PostgreSQL
+- Resource requirements
+- Limitations and when to upgrade
+
+### Standard Deployment
+
+**Two Options Available**:
+
+**Option A: PostgreSQL + Redis**
+- Best for teams familiar with PostgreSQL
+- Simpler than MongoDB option
+
+**Option B: MongoDB + Redis** 
+- Better for document-oriented workloads
+- Requires initialization script
+
+```bash
+# Download MongoDB configuration
+curl -O https://raw.githubusercontent.com/featbit/featbit/main/docker-compose-mongodb.yml
+mv docker-compose-mongodb.yml docker-compose.yml
+
+# Get MongoDB init script
+mkdir -p infra/mongodb/docker-entrypoint-initdb.d
+curl -o infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js \
+  https://raw.githubusercontent.com/featbit/featbit/main/infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js
+
+# Start services  
+docker compose up -d
+```
+
+**Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 4GB RAM (8GB recommended)
+
+📄 **Complete Guide**: [references/standard-configuration.md](references/standard-configuration.md)
+- Full configurations for both PostgreSQL and MongoDB options
+- Production setup with managed services
+- Resource requirements
+- When to choose Standard vs Professional
+
+### Professional Deployment
+
+**Enterprise-Scale Architecture**:
+- Kafka for high-throughput messaging
+- ClickHouse for advanced analytics
+- Horizontal scalability
+- Handles millions of events per day
+
+```bash
+# Download Professional configuration
+curl -O https://raw.githubusercontent.com/featbit/featbit/main/docker-compose-pro.yml
+mv docker-compose-pro.yml docker-compose.yml
+
+# Start infrastructure first
+docker compose up -d zookeeper kafka clickhouse-server postgresql redis
+sleep 30
+
+# Start application services
+docker compose up -d
+```
+
+**Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 8GB+ RAM, 4+ CPU cores
+
+⚠️ **Complexity Warning**: Requires significant DevOps expertise
+
+📄 **Complete Guide**: [references/professional-configuration.md](references/professional-configuration.md)
+- Full docker-compose.yml with all services
+- Infrastructure startup sequence
+- Horizontal scaling configuration
+- Using managed services (AWS MSK, ClickHouse Cloud)
+- Performance tuning
+- Monitoring setup
+
+## Reference Guides
+
+### Environment Variables
+
+Complete reference for all configuration options:
+
+📄 **[references/environment-variables.md](references/environment-variables.md)**
+- Provider configuration (DbProvider, MqProvider, CacheProvider)
+- Database connection strings (PostgreSQL, MongoDB, Redis, Kafka, ClickHouse)
+- UI configuration (API_URL, EVALUATION_URL)
+- Service-specific variables
+- Using .env files for secrets
+- Environment-specific configurations
+
+### Production Best Practices
+
+Security, high availability, backup, and monitoring:
+
+📄 **[references/production-best-practices.md](references/production-best-practices.md)**
+- Security (passwords, secrets, SSL/TLS, firewalls, network isolation)
+- High availability (health checks, resource limits, managed services)
+- Backup and recovery (automated backups, volume snapshots, disaster recovery)
+- Monitoring (Prometheus, Grafana, cAdvisor, ELK Stack)
+- Performance optimization (database tuning, resource allocation)
+- Upgrade strategies (rolling updates, blue-green deployments)
+
+### Troubleshooting
+
+Common issues and solutions:
+
+📄 **[references/troubleshooting.md](references/troubleshooting.md)**
+- Port conflicts
+- UI connection issues  
+- Database connection failures
+- Service startup problems
+- WebSocket connection failures
+- Redis and MongoDB issues
+- Kafka and ClickHouse troubleshooting
+- Performance problems
+- Emergency recovery procedures
+- Debugging tips
+
+## Quick Commands
+
+### Service Management
 
 ```bash
 # Start all services
 docker compose up -d
 
-# Check status
+# Stop all services
+docker compose down
+
+# View status
 docker compose ps
 
 # View logs
@@ -163,632 +186,99 @@ docker compose logs -f
 # View specific service logs
 docker compose logs -f api-server
 
-# Stop services
-docker compose down
-
-# Stop and remove volumes (data will be lost!)
-docker compose down -v
-```
-
-### Step 3: Access FeatBit
-
-- **URL**: http://localhost:8081
-- **Default Credentials**: 
-  - Email: `test@featbit.com`
-  - Password: `123456`
-
-**⚠️ Important**: Change the default password immediately after first login!
-
-## Standard Deployment (Production-Ready)
-
-For production use with MongoDB and Redis:
-
-```yaml
-name: featbit
-services:
-  ui:
-    image: featbit/featbit-ui:latest
-    environment:
-      - API_URL=http://localhost:5000
-      - EVALUATION_URL=http://localhost:5100
-      - DEMO_URL=https://featbit-samples.vercel.app
-    ports:
-      - "8081:80"
-    networks:
-      - featbit-network
-
-  api-server:
-    image: featbit/featbit-api-server:latest
-    environment:
-      - DbProvider=MongoDb
-      - MqProvider=Redis
-      - CacheProvider=Redis
-      - MongoDb__ConnectionString=mongodb://mongodb:27017
-      - MongoDb__Database=featbit
-      - Redis__ConnectionString=redis:6379
-      - OLAP__ServiceHost=http://da-server
-    depends_on:
-      - mongodb
-      - redis
-      - da-server
-    ports:
-      - "5000:5000"
-    networks:
-      - featbit-network
-
-  evaluation-server:
-    image: featbit/featbit-evaluation-server:latest
-    environment:
-      - DbProvider=MongoDb
-      - MqProvider=Redis
-      - CacheProvider=Redis
-      - MongoDb__ConnectionString=mongodb://mongodb:27017
-      - MongoDb__Database=featbit
-      - Redis__ConnectionString=redis:6379
-    depends_on:
-      - mongodb
-      - redis
-    ports:
-      - "5100:5100"
-    networks:
-      - featbit-network
-
-  da-server:
-    image: featbit/featbit-data-analytics-server:latest
-    environment:
-      - DB_PROVIDER=MongoDb
-      - MongoDb__ConnectionString=mongodb://mongodb:27017
-      - MongoDb__Database=featbit
-    depends_on:
-      - mongodb
-    ports:
-      - "8200:80"
-    networks:
-      - featbit-network
-
-  mongodb:
-    image: mongo:6.0
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb:/data/db
-    networks:
-      - featbit-network
-
-  redis:
-    image: redis:7.0-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis:/data
-    networks:
-      - featbit-network
-
-volumes:
-  mongodb:
-  redis:
-
-networks:
-  featbit-network:
-    name: featbit-network
-    driver: bridge
-```
-
-## Professional Deployment (High-Volume)
-
-For enterprise scale with ClickHouse and Kafka:
-
-**Note**: This requires significant infrastructure resources (8GB+ RAM, 4+ CPU cores).
-
-Complete configuration: https://github.com/featbit/featbit
-
-Key additions:
-- **ClickHouse**: High-performance columnar analytics database
-- **Kafka + Zookeeper**: Event streaming and message processing
-- **ClickHouse Analytics**: Advanced data warehouse capabilities
-
-## Environment Variables Reference
-
-### Common Variables (All Services)
-
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `DbProvider` | Database type: `Postgres` or `MongoDb` | - | Yes |
-| `MqProvider` | Message queue: `Postgres`, `Redis`, or `Kafka` | - | Yes |
-| `CacheProvider` | Cache provider: `None` or `Redis` | `None` | No |
-
-### API Server
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `Postgres__ConnectionString` | PostgreSQL connection string | `Host=postgresql;Port=5432;Username=postgres;Password=***;Database=featbit` |
-| `MongoDb__ConnectionString` | MongoDB connection string | `mongodb://mongodb:27017` |
-| `MongoDb__Database` | MongoDB database name | `featbit` |
-| `Redis__ConnectionString` | Redis connection string | `redis:6379` |
-| `OLAP__ServiceHost` | Data analytics service URL | `http://da-server` |
-
-### Evaluation Server
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `Postgres__ConnectionString` | PostgreSQL connection string | Same as API Server |
-| `MongoDb__ConnectionString` | MongoDB connection string | Same as API Server |
-| `MongoDb__Database` | MongoDB database name | `featbit` |
-| `Redis__ConnectionString` | Redis connection string | `redis:6379` |
-
-### UI
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `API_URL` | API server URL (accessible from browser) | `http://localhost:5000` or `https://api.yourdomain.com` |
-| `EVALUATION_URL` | Evaluation server URL (accessible from browser) | `http://localhost:5100` or `https://eval.yourdomain.com` |
-| `DEMO_URL` | Demo application URL | `https://featbit-samples.vercel.app` |
-| `BASE_HREF` | Base URL path | `/` (or `/featbit/` for sub-path) |
-
-### Data Analytics Server
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `DB_PROVIDER` | Database type: `Postgres` or `MongoDb` | `Postgres` |
-| `POSTGRES_HOST` | PostgreSQL hostname | `postgresql` |
-| `POSTGRES_PORT` | PostgreSQL port | `5432` |
-| `POSTGRES_USER` | PostgreSQL username | `postgres` |
-| `POSTGRES_PASSWORD` | PostgreSQL password | `your_password` |
-| `POSTGRES_DATABASE` | PostgreSQL database name | `featbit` |
-| `MongoDb__ConnectionString` | MongoDB connection string | `mongodb://mongodb:27017` |
-| `MongoDb__Database` | MongoDB database name | `featbit` |
-
-## Production Configurations
-
-### Using Managed Databases
-
-Replace embedded databases with managed services:
-
-```yaml
-api-server:
-  environment:
-    # Use AWS RDS PostgreSQL
-    - Postgres__ConnectionString=Host=featbit.xxxxx.us-east-1.rds.amazonaws.com;Port=5432;Username=admin;Password=${DB_PASSWORD};Database=featbit;SSL Mode=Require
-    
-    # Use Azure Cache for Redis
-    - Redis__ConnectionString=featbit.redis.cache.windows.net:6380,password=${REDIS_PASSWORD},ssl=True
-```
-
-### Reverse Proxy with nginx
-
-```yaml
-nginx:
-  image: nginx:alpine
-  ports:
-    - "80:80"
-    - "443:443"
-  volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    - ./ssl:/etc/nginx/ssl:ro
-  depends_on:
-    - ui
-    - api-server
-    - evaluation-server
-  networks:
-    - featbit-network
-```
-
-Example `nginx.conf`:
-
-```nginx
-server {
-    listen 443 ssl;
-    server_name app.yourdomain.com;
-    
-    ssl_certificate /etc/nginx/ssl/cert.pem;
-    ssl_certificate_key /etc/nginx/ssl/key.pem;
-    
-    location / {
-        proxy_pass http://ui:80;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-
-server {
-    listen 443 ssl;
-    server_name api.yourdomain.com;
-    
-    ssl_certificate /etc/nginx/ssl/cert.pem;
-    ssl_certificate_key /etc/nginx/ssl/key.pem;
-    
-    location / {
-        proxy_pass http://api-server:5000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-
-server {
-    listen 443 ssl;
-    server_name eval.yourdomain.com;
-    
-    ssl_certificate /etc/nginx/ssl/cert.pem;
-    ssl_certificate_key /etc/nginx/ssl/key.pem;
-    
-    location / {
-        proxy_pass http://evaluation-server:5100;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        
-        # WebSocket support
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-    }
-}
-```
-
-### Health Checks
-
-```yaml
-api-server:
-  healthcheck:
-    test: ["CMD", "curl", "-f", "http://localhost:5000/health/liveness"]
-    interval: 30s
-    timeout: 10s
-    retries: 3
-    start_period: 40s
-
-evaluation-server:
-  healthcheck:
-    test: ["CMD", "curl", "-f", "http://localhost:5100/health/liveness"]
-    interval: 30s
-    timeout: 10s
-    retries: 3
-    start_period: 40s
-```
-
-### Resource Limits
-
-```yaml
-api-server:
-  deploy:
-    resources:
-      limits:
-        cpus: '2'
-        memory: 2G
-      reservations:
-        cpus: '1'
-        memory: 512M
-```
-
-## Troubleshooting
-
-### Port Conflicts
-
-If ports are already in use, change the host port:
-
-```yaml
-ui:
-  ports:
-    - "9081:80"  # Changed from 8081 to 9081
-```
-
-### Making FeatBit Publicly Accessible
-
-Update UI environment variables to use public URLs:
-
-```yaml
-ui:
-  environment:
-    - API_URL=https://api.yourdomain.com
-    - EVALUATION_URL=https://eval.yourdomain.com
-```
-
-**Important**: Ensure API and Evaluation Server URLs are accessible from users' browsers, not just from the Docker network.
-
-### Database Connection Issues
-
-1. **Check connection string format** - Ensure no typos
-2. **Verify network connectivity** - All services must be on same network
-3. **Ensure database is ready** - Use `depends_on` with health checks:
-
-```yaml
-api-server:
-  depends_on:
-    postgresql:
-      condition: service_healthy
-
-postgresql:
-  healthcheck:
-    test: ["CMD-SHELL", "pg_isready -U postgres"]
-    interval: 5s
-    timeout: 5s
-    retries: 5
-```
-
-### Container Fails to Start
-
-```bash
-# Check logs
-docker compose logs api-server
-
-# Check specific service status
-docker compose ps api-server
-
-# Restart specific service
+# Restart service
 docker compose restart api-server
 
-# Rebuild and restart
-docker compose up -d --force-recreate api-server
-
-# Remove everything and start fresh
-docker compose down -v
-docker compose up -d
+# Scale service (Professional tier)
+docker compose up -d --scale evaluation-server=3
 ```
 
-### Disk Space Issues
+### Maintenance
 
 ```bash
-# Check Docker disk usage
-docker system df
-
-# Clean up unused images and volumes
-docker system prune -a --volumes
-```
-
-## Backup and Recovery
-
-### Database Backups
-
-**PostgreSQL**:
-```bash
-# Backup
-docker exec postgresql pg_dump -U postgres featbit > backup_$(date +%Y%m%d).sql
-
-# Restore
-docker exec -i postgresql psql -U postgres featbit < backup_20260128.sql
-```
-
-**MongoDB**:
-```bash
-# Backup
-docker exec mongodb mongodump --out /backup --db featbit
-docker cp mongodb:/backup ./mongodb-backup
-
-# Restore
-docker cp ./mongodb-backup mongodb:/backup
-docker exec mongodb mongorestore /backup/featbit --db featbit
-```
-
-### Volume Backups
-
-```bash
-# Stop services first
-docker compose down
-
-# Backup PostgreSQL volume
-docker run --rm \
-  -v featbit_postgres:/data \
-  -v $(pwd):/backup \
-  alpine tar czf /backup/postgres-$(date +%Y%m%d).tar.gz /data
-
-# Restore PostgreSQL volume
-docker run --rm \
-  -v featbit_postgres:/data \
-  -v $(pwd):/backup \
-  alpine tar xzf /backup/postgres-20260128.tar.gz -C /
-```
-
-## Security Best Practices
-
-### 1. Change Default Credentials
-
-```yaml
-postgresql:
-  environment:
-    POSTGRES_PASSWORD: ${DB_PASSWORD}  # Use secrets
-
-# Create .env file
-echo "DB_PASSWORD=strong_random_password" > .env
-```
-
-### 2. Use Docker Secrets (Swarm Mode)
-
-```yaml
-services:
-  api-server:
-    secrets:
-      - db_password
-    environment:
-      - Postgres__ConnectionString=Host=postgresql;Port=5432;Username=postgres;Password_File=/run/secrets/db_password;Database=featbit
-
-secrets:
-  db_password:
-    file: ./secrets/db_password.txt
-```
-
-### 3. Network Isolation
-
-```yaml
-networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
-    internal: true  # No external access
-
-services:
-  ui:
-    networks:
-      - frontend
-  
-  api-server:
-    networks:
-      - frontend
-      - backend
-  
-  postgresql:
-    networks:
-      - backend  # Only accessible from backend network
-```
-
-### 4. TLS/SSL Certificates
-
-Use Let's Encrypt with nginx or Traefik reverse proxy for automatic SSL certificates.
-
-### 5. Firewall Rules
-
-```bash
-# Allow only necessary ports
-ufw allow 80/tcp
-ufw allow 443/tcp
-ufw deny 5432/tcp  # Block direct PostgreSQL access
-ufw deny 27017/tcp # Block direct MongoDB access
-```
-
-## Performance Tuning
-
-### PostgreSQL Optimization
-
-```yaml
-postgresql:
-  command: >
-    postgres
-    -c max_connections=200
-    -c shared_buffers=256MB
-    -c effective_cache_size=1GB
-    -c maintenance_work_mem=64MB
-    -c checkpoint_completion_target=0.9
-    -c wal_buffers=16MB
-    -c default_statistics_target=100
-    -c random_page_cost=1.1
-    -c effective_io_concurrency=200
-```
-
-### Redis Optimization
-
-```yaml
-redis:
-  command: >
-    redis-server
-    --maxmemory 512mb
-    --maxmemory-policy allkeys-lru
-    --save 60 1000
-    --appendonly yes
-```
-
-### MongoDB Optimization
-
-```yaml
-mongodb:
-  command: >
-    mongod
-    --wiredTigerCacheSizeGB 1
-    --maxConns 200
-```
-
-### Horizontal Scaling (Docker Swarm)
-
-```yaml
-evaluation-server:
-  deploy:
-    replicas: 3
-    update_config:
-      parallelism: 1
-      delay: 10s
-    restart_policy:
-      condition: on-failure
-```
-
-## Monitoring
-
-### Add Prometheus and Grafana
-
-```yaml
-prometheus:
-  image: prom/prometheus:latest
-  volumes:
-    - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-  ports:
-    - "9090:9090"
-  networks:
-    - featbit-network
-
-grafana:
-  image: grafana/grafana:latest
-  environment:
-    - GF_SECURITY_ADMIN_PASSWORD=admin
-  ports:
-    - "3000:3000"
-  networks:
-    - featbit-network
-```
-
-### Container Metrics with cAdvisor
-
-```yaml
-cadvisor:
-  image: gcr.io/cadvisor/cadvisor:latest
-  ports:
-    - "8080:8080"
-  volumes:
-    - /:/rootfs:ro
-    - /var/run:/var/run:ro
-    - /sys:/sys:ro
-    - /var/lib/docker/:/var/lib/docker:ro
-  networks:
-    - featbit-network
-```
-
-## Upgrade Strategy
-
-### Rolling Updates
-
-```bash
-# Pull latest images
+# Update to latest images
 docker compose pull
-
-# Recreate services with new images
 docker compose up -d
 
-# Check logs
-docker compose logs -f
+# Clean up
+docker system prune -a --volumes
+
+# Backup PostgreSQL
+docker compose exec postgresql pg_dump -U postgres featbit > backup.sql
+
+# Backup MongoDB
+docker compose exec mongodb mongodump --out /backup --db featbit
 ```
 
-### Blue-Green Deployment
+## When to Choose Each Tier
 
-Use different compose files for zero-downtime updates:
+### Choose Standalone If:
+✅ Development or testing environment  
+✅ Team size <10 users
+✅ Low traffic (< 100k requests/day)
+✅ Quick evaluation of FeatBit
+✅ Simple single-server deployment
 
-```bash
-# Start new version
-docker compose -f docker-compose-v2.yml up -d
+❌ Not Recommended For:
+- Production deployments
+- High-traffic applications
+- Need for reliability and performance
 
-# Switch traffic (update nginx config)
-# Then remove old version
-docker compose -f docker-compose-v1.yml down
-```
+### Choose Standard If:
+✅ Production environment  
+✅ Team size 10-50 users
+✅ Moderate to high traffic
+✅ Need caching for performance
+✅ Production-level reliability required
+✅ Good balance of complexity vs features
+
+❌ Consider Professional If:
+- Team size >50 users
+- Very high traffic (millions of requests/day)
+- Need advanced analytics
+
+### Choose Professional If:
+✅ Enterprise deployment  
+✅ Team size 50+ users
+✅ Very high traffic (millions of requests/day)
+✅ Need advanced analytics and data warehousing
+✅ Event streaming requirements
+✅ Have dedicated DevOps resources
+✅ Budget for infrastructure
+
+❌ Consider Standard If:
+- Limited DevOps expertise
+- Moderate traffic requirements
+- Cost-sensitive
 
 ## Official Resources
 
-### Documentation & Guides
-- **Official Installation Guide**: https://docs.featbit.co/installation/docker-compose
-- **Main Documentation**: https://docs.featbit.co/installation
+### Documentation
+- **Installation Guide**: https://docs.featbit.co/installation/docker-compose
+- **Deployment Options**: https://docs.featbit.co/installation/deployment-options
+- **Infrastructure Components**: https://docs.featbit.co/tech-stack/infrastructure-components
+- **FAQ**: https://docs.featbit.co/installation/faq
 
-### Source Code & Configuration Files
+### Source Code & Configurations
 - **Main Repository**: https://github.com/featbit/featbit
-- **Standalone docker-compose.yml**: https://github.com/featbit/featbit/blob/main/docker-compose.yml
-- **Standard docker-compose.yml** (MongoDB + Redis): https://github.com/featbit/featbit/blob/main/docker-compose-mongodb.yml
-- **Professional docker-compose.yml** (ClickHouse + Kafka): https://github.com/featbit/featbit/blob/main/docker-compose-pro.yml
-- **MongoDB Init Script** (default credentials): https://github.com/featbit/featbit/blob/main/infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js
-- **PostgreSQL Init Scripts**: https://github.com/featbit/featbit/tree/main/infra/postgresql/docker-entrypoint-initdb.d
+- **Standalone**: https://github.com/featbit/featbit/blob/main/docker-compose.yml
+- **Standard (MongoDB)**: https://github.com/featbit/featbit/blob/main/docker-compose-mongodb.yml
+- **Professional**: https://github.com/featbit/featbit/blob/main/docker-compose-pro.yml
+- **PostgreSQL Init**: https://github.com/featbit/featbit/tree/main/infra/postgresql/docker-entrypoint-initdb.d
+- **MongoDB Init**: https://github.com/featbit/featbit/blob/main/infra/mongodb/docker-entrypoint-initdb.d/v0.0.0.js
 
 ### Docker Images
-- **Docker Hub Organization**: https://hub.docker.com/u/featbit
-- **UI Image**: https://hub.docker.com/r/featbit/featbit-ui
-- **API Server Image**: https://hub.docker.com/r/featbit/featbit-api-server
-- **Evaluation Server Image**: https://hub.docker.com/r/featbit/featbit-evaluation-server
-- **Data Analytics Server Image**: https://hub.docker.com/r/featbit/featbit-data-analytics-server
+- **Docker Hub**: https://hub.docker.com/u/featbit
+- Images: featbit-ui, featbit-api-server, featbit-evaluation-server, featbit-data-analytics-server
 
-### Infrastructure as Code
+### Alternative Deployments
+- **Kubernetes**: https://github.com/featbit/featbit-charts
+- **Azure Container Apps**: https://github.com/featbit/azure-container-apps
 - **Terraform (AWS)**: https://github.com/featbit/featbit-terraform-aws
 
-### Additional Resources
-- **Sample Applications**: https://github.com/featbit/featbit-samples
-- **Development Compose Files**: https://github.com/featbit/featbit/tree/main/docker/composes
+## Related Skills
+
+- **featbit-deployment-kubernetes**: Kubernetes/Helm deployments with auto-scaling
+- **featbit-deployment**: Overview of all deployment options and architecture
+- **featbit-getting-started**: Initial setup, creating feature flags, SDK integration
+- **featbit-opentelemetry**: Observability and monitoring setup
