@@ -5,6 +5,32 @@ All notable changes to the FeatBit Claude Code Skills plugin will be documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-01
+
+### Added
+- **Enhanced Documentation Skill** (`featbit-documentation` v2.0.0)
+  - New complete documentation index with 75+ documented URLs
+  - Organized into 12 main topic areas for faster navigation
+  - Each URL now includes detailed summaries for better context
+  - Reference file: `references/complete-documentation-index.md`
+  
+- **Enhanced Docker Deployment Skill** (`featbit-deployment-docker` v2.0.0)
+  - Comprehensive environment variables guide with 50+ configuration options
+  - Detailed configuration guides for Standalone, Standard, and Professional deployments
+  - Troubleshooting reference with common issues and solutions
+  - New reference files structure for progressive disclosure
+
+- **Enhanced Claude Skills Best Practices** (`claude-skills-best-practices`)
+  - New reference files on MCP integration patterns
+  - Progressive disclosure implementation guide
+  - Real-world examples and troubleshooting tips
+  - Workflow patterns for common scenarios
+
+### Improved
+- Better content organization using progressive disclosure pattern
+- Enhanced skill structure following official best practices
+- More concise main skill files with detailed references
+
 ## [1.2.0] - 2026-01-30
 
 ### Added
