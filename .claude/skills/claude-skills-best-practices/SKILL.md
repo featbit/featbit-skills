@@ -10,7 +10,7 @@ metadata:
 
 # Claude Skills Best Practices
 
-Expert guidance for creating production-ready Claude skills following Anthropic's official standards and battle-tested patterns.
+Expert guidance for creating production-ready Claude skills, aligned to the official Best Practices. Additional details from prior guides appear only as supplements.
 
 ## When to Use This Skill
 
@@ -22,26 +22,41 @@ Activate this skill when:
 - Planning skill architecture and structure
 - Troubleshooting skill upload or execution problems
 
-## Core Principles
+## Core Principles (Best Practices)
+
+### Concise Is Key
+
+Your Skill shares a limited context window with system prompts, conversation history, and other Skills. Keep SKILL.md short and focused.
+
+**Assume Claude is already smart** — only add information Claude wouldn't know, or project-specific rules it must follow.
+
+### Set the Right Degree of Freedom
+
+Match instruction specificity to task risk:
+
+- **High freedom** (heuristics and goals) for flexible tasks.
+- **Medium freedom** (templates or pseudocode) when a preferred pattern exists.
+- **Low freedom** (exact scripts/commands) for fragile or high-stakes operations.
+
+### Test Across Models
+
+Skills are model-sensitive. Verify your Skill works with all models you intend to use and adjust detail level as needed.
 
 ### Progressive Disclosure (Three-Level System)
 
 **Level 1: YAML Frontmatter**
-- Always loaded in Claude's system prompt
-- Provides just enough info for Claude to know when to activate
-- Minimize token usage while maintaining discoverability
+- Always loaded in system prompt
+- Minimal activation signals only
 
 **Level 2: SKILL.md Body**
-- Loaded when Claude determines skill is relevant
-- Contains full instructions and guidance
-- Keep focused and actionable
+- Loaded only when the Skill is relevant
+- Provide primary instructions and navigation
 
 **Level 3: Linked Files**
-- Additional files in `references/`, `scripts/`, `assets/`
-- Claude navigates to these as needed
-- Keeps main content lean
+- Reference docs, examples, or scripts loaded only when needed
+- Keep details out of SKILL.md unless they are required for most requests
 
-### Design Philosophy
+### Design Philosophy (Supplement)
 
 **Composability**: Skills work alongside others, not in isolation.
 
@@ -78,14 +93,18 @@ description: What it does. Use when user asks to [specific phrases].
 ### Field Requirements
 
 **name** (required):
+- Max 64 characters
+- Lowercase letters, numbers, hyphens only
 - Use kebab-case: `notion-project-setup` ✅
 - No spaces: `Notion Project Setup` ❌
 - No underscores: `notion_project_setup` ❌
 - No capitals: `NotionProjectSetup` ❌
 - Must match folder name
+- Cannot contain reserved words: `anthropic`, `claude`
 
 **description** (required):
 - MUST include BOTH what AND when
+- Write in third person (not "I" or "you")
 - Structure: `[What it does] + [When to use it] + [Key capabilities]`
 - Under 1024 characters
 - No XML tags (< or >)
@@ -195,167 +214,31 @@ Before writing queries, consult `references/api-patterns.md` for:
 
 Keep SKILL.md focused on core instructions. Move detailed documentation to `references/` and link to it.
 
+## Progressive Disclosure Patterns
+
+Treat SKILL.md as a table of contents and keep details in reference files.
+
+### Reference Files (Explicit Index)
+
+The following reference files are available and should be read when the task requires that level of detail:
+
+- [references/progressive-disclosure.md](references/progressive-disclosure.md) — patterns, rules, and anti-patterns
+- [references/real-world-examples.md](references/real-world-examples.md) — full example skills and workflows
+- [references/workflows-and-feedback.md](references/workflows-and-feedback.md) — workflows, checklists, and validation loops
+- [references/mcp-integration.md](references/mcp-integration.md) — MCP tool naming, dependency declaration, and error handling
+- [references/troubleshooting.md](references/troubleshooting.md) — common failure modes and fixes
+
 ## Real-World Examples
 
-### Example 1: Simple Skill Without MCP
+See [references/real-world-examples.md](references/real-world-examples.md) for complete examples.
 
-**Pattern**: Pure document generation skill
+## Common Use Case Patterns (Concise)
 
-**Key Elements**:
+1. **Sequential workflows**: explicit order, dependencies, and validation.
+2. **Multi-MCP coordination**: phase separation and data handoffs.
+3. **Iterative refinement**: quality criteria + validate → fix → repeat.
 
-```yaml
----
-name: tech-doc-generator
-description: Generates technical documentation with consistent formatting. Use when user asks to "create technical docs", "write API documentation", "generate developer guide".
----
-```
-
-**Structure**:
-1. **Gather Requirements**: Ask about doc type, audience, sections
-2. **Generate Structure**: Overview → Prerequisites → Getting Started → Details → Troubleshooting
-3. **Apply Formatting**: Headings, code blocks, tables, diagrams
-4. **Quality Checklist**: Terms defined ✅ | Examples tested ✅ | Links verified ✅
-
-**Why It Works**: Clear triggers in description, step-by-step workflow, built-in validation, no dependencies.
-
----
-
-### Example 2: Single MCP Integration
-
-**Pattern**: Feature flag management with FeatBit MCP
-
-**Key Elements**:
-
-```yaml
----
-name: featbit-feature-flag-helper
-description: Manages FeatBit feature flags. Use when user mentions "feature flag", "FeatBit", "toggle feature", "gradual rollout", "A/B test".
-metadata:
-  mcp-server: featbit  # Declares dependency
----
-```
-
-**Workflow**:
-1. **Validate Prerequisites**: Check MCP connection, credentials, naming conventions
-2. **Execute Operation**: 
-   - Create flag: `featbit_create_flag(name, description, type, environment)`
-   - Update targeting: Fetch config → Apply rules → Validate → Update
-   - Rollout strategy: 5% canary → Monitor 24h → 25% → Progressive increase
-3. **Verification**: Check dashboard, test evaluation, document changes
-
-**Best Practices Embedded**:
-- Naming: `feature-area-description` format
-- Never expose all users immediately (use targeting)
-- Archive flags after full rollout
-
-**Error Handling**:
-- MCP connection failed → Check Settings > Extensions
-- Flag exists → Use version suffix or update existing
-
-**Why It Works**: Declares MCP dependency in metadata, validates before operations, includes domain best practices, handles common errors.
-
----
-
-### Example 3: Multi-MCP Orchestration
-
-**Pattern**: Release workflow coordinating GitHub + Slack + Datadog
-
-**Key Elements**:
-
-```yaml
----
-name: release-orchestrator
-description: Orchestrates end-to-end releases. Use when user says "create release", "deploy to production", "release workflow".
-metadata:
-  mcp-servers: github, slack, datadog  # Multiple MCPs
----
-```
-
-**5-Phase Workflow**:
-
-**Phase 1 - Pre-Release** (GitHub MCP):
-- Verify main branch healthy
-- Generate release notes from commits
-- Create release PR
-
-**Phase 2 - Review** (Slack MCP):
-- Notify team: `slack_post_message(channel="#releases", message="🚀 Release ready")`
-- Monitor for approvals
-
-**Phase 3 - Deploy** (GitHub MCP):
-- Merge PR and create tag
-- Track pipeline progress
-
-**Phase 4 - Validate** (Datadog MCP):
-- Health checks: Error rate < baseline, Response time < 500ms
-- Post success metrics to Slack
-
-**Phase 5 - Rollback** (If needed):
-- Revert deployment
-- Create incident report
-- Notify stakeholders
-
-**Safety Checks**: All tests pass ✅ | 2+ approvals ✅ | No conflicts ✅ | Release notes complete ✅
-
-**Why It Works**: Coordinates 3 MCP servers seamlessly, clear phase separation, extensive safety checks, automated rollback, team communication built-in.
-
----
-
-## Common Use Case Patterns
-
-### Pattern 1: Sequential Workflow Orchestration
-
-**Use when**: Multi-step processes in specific order
-
-**Example workflow**:
-1. Create Account - Call MCP tool `create_customer` with parameters: name, email, company
-2. Setup Payment - Call MCP tool `setup_payment_method`, wait for verification
-3. Create Subscription - Call MCP tool `create_subscription` with plan_id and customer_id from Step 1
-
-**Key techniques**:
-- Explicit step ordering
-- Dependencies between steps
-- Validation at each stage
-- Rollback instructions for failures
-
-### Pattern 2: Multi-MCP Coordination
-
-**Use when**: Workflows span multiple services
-
-**Key techniques**:
-- Clear phase separation
-- Data passing between MCPs
-- Validation before moving to next phase
-- Centralized error handling
-
-### Pattern 3: Iterative Refinement
-
-**Use when**: Output quality improves with iteration
-
-**Key techniques**:
-- Explicit quality criteria
-- Iterative improvement loops
-- Validation scripts
-- Clear stopping conditions
-
-### Pattern 4: Context-Aware Tool Selection
-
-**Use when**: Same outcome, different tools based on context
-
-**Key techniques**:
-- Clear decision criteria
-- Fallback options
-- Transparency about choices
-
-### Pattern 5: Domain-Specific Intelligence
-
-**Use when**: Adding specialized knowledge beyond tool access
-
-**Key techniques**:
-- Domain expertise embedded in logic
-- Compliance/validation before action
-- Comprehensive documentation
-- Clear governance
+See [references/workflows-and-feedback.md](references/workflows-and-feedback.md) for full workflow patterns.
 
 ## Testing Your Skill
 
@@ -396,108 +279,15 @@ Compare:
 
 ## Troubleshooting Guide
 
-### Skill Won't Upload
-
-**Error**: "Could not find SKILL.md in uploaded folder"
-- **Cause**: File not named exactly SKILL.md
-- **Solution**: Rename to SKILL.md (case-sensitive)
-
-**Error**: "Invalid frontmatter"
-- **Cause**: YAML formatting issue
-- **Solution**: Verify `---` delimiters, closed quotes, proper indentation
-
-**Error**: "Invalid skill name"
-- **Cause**: Name has spaces or capitals
-- **Solution**: Use kebab-case: `my-cool-skill`
-
-### Skill Doesn't Trigger
-
-**Symptom**: Skill never loads automatically
-
-**Fix**: Revise your description field
-
-Quick checklist:
-- ❌ Too generic? ("Helps with projects")
-- ❌ Missing trigger phrases users would say?
-- ❌ Relevant file types not mentioned?
-
-**Debug approach**: Ask Claude "When would you use the [skill name] skill?" Adjust based on response.
-
-### Skill Triggers Too Often
-
-**Symptom**: Skill loads for unrelated queries
-
-**Solutions**:
-
-1. Add negative triggers:
-```yaml
-description: Advanced data analysis for CSV files. Use for statistical modeling, regression, clustering. Do NOT use for simple data exploration (use data-viz skill instead).
-```
-
-2. Be more specific:
-```yaml
-# Too broad
-description: Processes documents
-
-# More specific  
-description: Processes PDF legal documents for contract review
-```
-
-### MCP Connection Issues
-
-**Symptom**: Skill loads but MCP calls fail
-
-**Checklist**:
-1. Verify MCP server is connected (Settings > Extensions)
-2. Check authentication (API keys, permissions, OAuth tokens)
-3. Test MCP independently (without skill)
-4. Verify tool names match (case-sensitive)
-
-### Instructions Not Followed
-
-**Symptom**: Skill loads but Claude ignores instructions
-
-**Common causes**:
-
-1. **Too verbose**: Use bullet points, move details to references
-2. **Instructions buried**: Put critical items at top with `## Important`
-3. **Ambiguous language**: Be explicit with validations
-4. **Model "laziness"**: Add encouragement in user prompts
-
-**Advanced**: For critical validations, use scripts instead of language instructions.
+Details and common fixes are in [references/troubleshooting.md](references/troubleshooting.md).
 
 ## Skills + MCP Integration
 
-If you have an MCP server, skills complete the story:
+If you use MCP tools, declare dependencies in metadata and provide deterministic workflows using fully qualified tool names. See [references/mcp-integration.md](references/mcp-integration.md) for workflow and error handling guidance.
 
-- **MCP**: Provides the tools (what Claude CAN do)
-- **Skills**: Provides the workflows (how Claude SHOULD do it)
+## Length of Skill.md
 
-### The Value Proposition
-
-**Without skills**:
-- Users don't know what to do next
-- Each conversation starts from scratch
-- Inconsistent results
-- Support tickets asking "how do I do X"
-
-**With skills**:
-- Pre-built workflows activate automatically
-- Consistent, reliable tool usage
-- Best practices embedded
-- Lower learning curve
-
-### Positioning Your Skill
-
-✅ Good:
-```
-"The ProjectHub skill enables teams to set up complete project workspaces in seconds — including pages, databases, and templates — instead of spending 30 minutes on manual setup."
-```
-
-❌ Bad:
-```
-"The ProjectHub skill is a folder containing YAML frontmatter and Markdown instructions that calls our MCP server tools."
-```
+Keep SKILL.md under **500 lines**. Split content into reference files as soon as you approach the limit.
 
 ## Distribution Checklist
 
@@ -524,38 +314,11 @@ Before publishing:
 | Instructions | Vague guidance | Specific steps with examples |
 | Structure | README.md in folder | Only SKILL.md |
 
-## Success Criteria
-
-Your skill is ready when:
-
-- ✅ Triggers on 90%+ of relevant queries
-- ✅ Doesn't trigger on unrelated queries
-- ✅ Completes workflows without user corrections
-- ✅ Consistent results across sessions
-- ✅ New users succeed on first try
-- ✅ Reduces token usage vs. baseline
-- ✅ Documentation is clear and actionable
-
 ## Resources
 
-- **Official Docs**: https://docs.anthropic.com/en/docs/build-with-claude/skills
-- **Example Skills**: https://github.com/anthropics/skills
+- **Skills Overview**: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+- **Best Practices**: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 - **MCP Docs**: https://modelcontextprotocol.io
-- **Support**: Claude Developers Discord
-
-## Pro Tips
-
-💡 **Start Small**: Iterate on a single challenging task until Claude succeeds, then extract the pattern into a skill.
-
-💡 **Use skill-creator**: Available in Claude.ai and Claude Code to generate and review skills.
-
-💡 **Test Early**: Upload and test after writing frontmatter and first section. Iterate quickly.
-
-💡 **Progressive Disclosure**: Don't load everything upfront. Link to references when appropriate.
-
-💡 **Version Control**: Track changes with semantic versioning in metadata.
-
-💡 **Learn from Examples**: Clone anthropics/skills repo and study patterns that work.
 
 ---
 
