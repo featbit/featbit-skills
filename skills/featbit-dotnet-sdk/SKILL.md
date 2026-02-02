@@ -1,43 +1,79 @@
 ---
 name: featbit-dotnet-sdk
-description: Expert guidance for integrating FeatBit .NET Server SDK in ASP.NET Core applications and console applications. Use when users ask about .NET SDK integration, dependency injection, feature flag evaluation in C#, or .NET-specific implementation.
-appliesTo:
-  - "**/*.cs"
-  - "**/*.csproj"
-  - "**/Program.cs"
-  - "**/Startup.cs"
+description: Expert guidance for integrating FeatBit .NET Server SDK in .NET applications. Use when user asks about ".NET SDK", "C# feature flags", "ASP.NET Core FeatBit", "dependency injection", "console app integration", or mentions .cs, .csproj, Program.cs files.
+license: MIT
+metadata:
+  author: FeatBit
+  version: 2.0.0
+  category: sdk-integration
 ---
 
-# FeatBit .NET Server SDK Integration Expert
+# FeatBit .NET Server SDK Integration
 
-You are an expert on integrating the FeatBit .NET Server SDK into .NET applications, with deep knowledge of both ASP.NET Core and console application patterns.
+Expert guidance for integrating the FeatBit .NET Server-Side SDK into .NET applications, including ASP.NET Core, console applications, and worker services.
 
 ## When to Use This Skill
 
 Activate when users:
-- Ask about integrating FeatBit in .NET applications
-- Need help with ASP.NET Core DI (dependency injection) setup
+- Ask about .NET SDK integration or setup
+- Need dependency injection configuration for ASP.NET Core
 - Want to evaluate feature flags in C# code
-- Ask about console apps, worker services, or background services
-- Need examples of different flag variation types (bool, string, int, double, JSON)
-- Want to track custom events for A/B testing
-- Need configuration guidance for appsettings.json
+- Ask about console applications, worker services, or background services
+- Need examples of flag variations (bool, string, int, double, JSON)
+- Want to implement A/B testing with custom events
+- Mention offline mode or bootstrapping from JSON
 
-## Official Resources
+## Prerequisites
 
-- **GitHub Repository**: https://github.com/featbit/featbit-dotnet-sdk
-- **NuGet Package**: https://www.nuget.org/packages/FeatBit.ServerSdk
-- **SDK Documentation**: https://docs.featbit.co/sdk-docs/server-side-sdks/dotnet
+Before integration, obtain:
+- **Environment Secret**: [How to get it](https://docs.featbit.co/sdk/faq#how-to-get-the-environment-secret)
+- **SDK URLs**: [How to get them](https://docs.featbit.co/sdk/faq#how-to-get-the-sdk-urls)
 
-## Installation
+## Quick Start
+
+### Installation
 
 ```bash
 dotnet add package FeatBit.ServerSdk
 ```
 
+### Basic Console App Example
+
+```csharp
+using FeatBit.Sdk.Server;
+using FeatBit.Sdk.Server.Model;
+using FeatBit.Sdk.Server.Options;
+
+// Setup SDK options
+var options = new FbOptionsBuilder("<replace-with-your-env-secret>")
+    .Event(new Uri("https://app-eval.featbit.co"))
+    .Streaming(new Uri("wss://app-eval.featbit.co"))
+    .Build();
+
+// Create client instance
+var client = new FbClient(options);
+if (!client.Initialized)
+{
+    Console.WriteLine("FbClient failed to initialize. Using fallback values.");
+}
+
+// Create user
+var user = FbUser.Builder("user-key-123")
+    .Name("User Name")
+    .Custom("role", "admin")
+    .Build();
+
+// Evaluate feature flag
+var isEnabled = client.BoolVariation("game-runner", user, defaultValue: false);
+Console.WriteLine($"Feature enabled: {isEnabled}");
+
+// Close client before exit
+await client.CloseAsync();
+```
+
 ## ASP.NET Core Integration
 
-### Basic Setup with Dependency Injection
+### Setup with Dependency Injection
 
 ```csharp
 using FeatBit.Sdk.Server.DependencyInjection;
@@ -45,13 +81,14 @@ using FeatBit.Sdk.Server.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
-// Add FeatBit service
+// Register FeatBit service (uses singleton pattern)
 builder.Services.AddFeatBit(options =>
 {
     options.EnvSecret = "<replace-with-your-env-secret>";
     options.StreamingUri = new Uri("wss://app-eval.featbit.co");
     options.EventUri = new Uri("https://app-eval.featbit.co");
     options.StartWaitTime = TimeSpan.FromSeconds(3);
+    options.DisableEvents = true; // Optional: disable event tracking
 });
 
 var app = builder.Build();
@@ -59,24 +96,7 @@ app.MapControllers();
 app.Run();
 ```
 
-### Configuration from appsettings.json
-
-```json
-{
-  "FeatBit": {
-    "EnvSecret": "<your-env-secret>",
-    "StreamingUri": "wss://app-eval.featbit.co",
-    "EventUri": "https://app-eval.featbit.co",
-    "StartWaitTime": "00:00:03"
-  }
-}
-```
-
-```csharp
-builder.Services.AddFeatBit(builder.Configuration.GetSection("FeatBit"));
-```
-
-### Using in Controllers (Authenticated Users)
+### Using in Controllers
 
 ```csharp
 using FeatBit.Sdk.Server;
@@ -95,108 +115,162 @@ public class HomeController : ControllerBase
     [HttpGet("check-feature")]
     public IActionResult CheckFeature()
     {
-        var user = FbUser.Builder(User.Identity.Name ?? "anonymous")
-            .Name(User.Identity.Name)
+        // Authenticated user
+        var user = FbUser.Builder(User.Identity?.Name ?? "anonymous")
+            .Name(User.Identity?.Name)
             .Custom("role", "admin")
-            .Custom("subscription", "premium")
             .Custom("country", "US")
             .Build();
 
         var isEnabled = _fbClient.BoolVariation("new-feature", user, defaultValue: false);
-        
         return Ok(new { featureEnabled = isEnabled });
+    }
+
+    [HttpGet("public-feature")]
+    public IActionResult PublicFeature()
+    {
+        // Anonymous user
+        var sessionId = HttpContext.Session?.Id ?? Guid.NewGuid().ToString();
+        var anonymousUser = FbUser.Builder($"anonymous-{sessionId}").Build();
+
+        var hasAccess = _fbClient.BoolVariation("beta-access", anonymousUser, false);
+        return Ok(new { betaAccess = hasAccess });
     }
 }
 ```
 
-### Using with Anonymous Users
+## FbClient Overview
+
+### Client Lifecycle
+
+**ASP.NET Core**: Registered as singleton via DI, managed automatically  
+**Console Apps**: Create one instance, reuse throughout lifetime, call `CloseAsync()` before exit  
+**Worker Services**: Inject via DI, same lifecycle as ASP.NET Core
+
+### Custom Configuration Options
 
 ```csharp
-[HttpGet("public-feature")]
-public IActionResult CheckPublicFeature()
-{
-    var sessionId = HttpContext.Session?.Id ?? Guid.NewGuid().ToString();
-    var anonymousUser = FbUser.Builder($"anonymous-{sessionId}").Build();
+using FeatBit.Sdk.Server.Options;
+using Microsoft.Extensions.Logging;
 
-    var flagValue = _fbClient.BoolVariation("public-beta-feature", anonymousUser, defaultValue: false);
-    
-    return Ok(new { betaAccess = flagValue });
-}
+var loggerFactory = LoggerFactory.Create(x => x.AddConsole());
+
+var options = new FbOptionsBuilder("<your-env-secret>")
+    .Streaming(new Uri("wss://app-eval.featbit.co"))
+    .Event(new Uri("https://app-eval.featbit.co"))
+    .StartWaitTime(TimeSpan.FromSeconds(3))
+    .DisableEvents(true)
+    .LoggerFactory(loggerFactory)
+    .Build();
+
+var client = new FbClient(options);
 ```
 
-## All Flag Variation Types
+### Logging Support
 
-### Boolean Flags
+SDK supports standard .NET logging via `Microsoft.Extensions.Logging`:
+
 ```csharp
-var isEnabled = _fbClient.BoolVariation("feature-key", user, defaultValue: false);
+// Create logger factory with desired providers
+var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+
+// Pass to SDK
+var options = new FbOptionsBuilder(secret)
+    .LoggerFactory(loggerFactory)
+    .Build();
 ```
 
-### String Flags
+In ASP.NET Core, `AddFeatBit()` automatically uses the host's logger factory.
+
+## FbUser: User Context
+
+### Building Users
+
+FbUser defines user attributes for flag evaluation. The `key` is mandatory and must uniquely identify each user.
+
 ```csharp
+// Minimal user
+var user = FbUser.Builder("unique-user-key").Build();
+
+// User with built-in and custom attributes
+var user = FbUser.Builder("user-123")
+    .Name("Bob Smith")
+    .Custom("age", "15")
+    .Custom("country", "FR")
+    .Custom("subscription", "premium")
+    .Build();
+```
+
+**Built-in attributes**: `key` (required), `name`  
+**Custom attributes**: Any key-value pairs for targeting rules and analytics
+
+## Evaluating Flags
+
+The SDK evaluates flags **locally** using cached data synchronized via WebSocket. No network call per evaluation.
+
+### Available Variation Methods
+
+```csharp
+// Boolean
+var flag = _fbClient.BoolVariation("feature-key", user, defaultValue: false);
+
+// String
 var theme = _fbClient.StringVariation("theme-key", user, defaultValue: "default");
+
+// Integer
+var maxItems = _fbClient.IntVariation("max-items", user, defaultValue: 10);
+
+// Double
+var discount = _fbClient.DoubleVariation("discount-rate", user, defaultValue: 0.0);
+
+// Float (similar to Double)
+var ratio = _fbClient.FloatVariation("ratio-key", user, defaultValue: 1.0f);
+
+// JSON (use StringVariation for JSON strings)
+var configJson = _fbClient.StringVariation("config-key", user, defaultValue: "{}");
+var config = JsonSerializer.Deserialize<MyConfig>(configJson);
 ```
 
-### Integer Flags
+### Variation with Evaluation Detail
+
+Get flag value plus evaluation metadata:
+
 ```csharp
-var maxItems = _fbClient.IntVariation("max-items-key", user, defaultValue: 10);
+var detail = _fbClient.BoolVariationDetail("feature-key", user, defaultValue: false);
+Console.WriteLine($"Value: {detail.Value}");
+Console.WriteLine($"Reason: {detail.Kind} - {detail.Reason}");
 ```
 
-### Double Flags
+### Default Values
+
+Always provide default values. They're used when:
+- SDK is not initialized
+- Flag doesn't exist
+- Network issues occur
+- Evaluation fails
+
+## Experiments (A/B Testing)
+
+Track custom events for experiments and analytics:
+
 ```csharp
-var discountRate = _fbClient.DoubleVariation("discount-rate", user, defaultValue: 0.0);
+// Track event without value
+_fbClient.Track(user, "purchase-completed");
+
+// Track event with numeric value (default is 1.0)
+_fbClient.Track(user, "revenue", 99.99);
 ```
 
-### JSON Flags
-```csharp
-var config = _fbClient.JsonVariation("config-key", user, defaultValue: "{}");
-var configObject = JsonSerializer.Deserialize<MyConfig>(config);
-```
+**Important**: Call `Track()` AFTER evaluating the related feature flag.
 
-## Tracking Custom Events (A/B Testing)
-
-```csharp
-// Track a conversion event
-_fbClient.TrackMetric(user, "purchase-completed");
-
-// Track with numeric value
-_fbClient.TrackMetric(user, "revenue", 99.99);
-```
-
-## Console Application Integration
-
-### Basic Console App Setup
+## Advanced Scenarios
+Worker Service Integration
 
 ```csharp
 using FeatBit.Sdk.Server;
-using FeatBit.Sdk.Server.Options;
-using FeatBit.Sdk.Server.Model;
+using FeatBit.Sdk.Server.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-var options = new FbOptionsBuilder("<your-env-secret>")
-    .StreamingUri(new Uri("wss://app-eval.featbit.co"))
-    .EventUri(new Uri("https://app-eval.featbit.co"))
-    .StartWaitTime(TimeSpan.FromSeconds(3))
-    .Build();
-
-using var client = new FbClient(options);
-
-if (!await client.InitializedAsync)
-{
-    Console.WriteLine("Failed to initialize FeatBit client");
-    return;
-}
-
-var user = FbUser.Builder("user-id")
-    .Name("User Name")
-    .Custom("role", "admin")
-    .Build();
-
-var isEnabled = client.BoolVariation("feature-key", user, defaultValue: false);
-Console.WriteLine($"Feature enabled: {isEnabled}");
-```
-
-### Worker Service Setup
-
-```csharp
 public class Program
 {
     public static void Main(string[] args)
@@ -208,7 +282,20 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddFeatBit(hostContext.Configuration.GetSection("FeatBit"));
+                // Configure FeatBit from appsettings.json or inline
+                services.AddFeatBit(options =>
+                {
+                    options.EnvSecret = hostContext.Configuration["FeatBit:EnvSecret"] 
+                        ?? "<your-env-secret>";
+                    options.StreamingUri = new Uri(
+                        hostContext.Configuration["FeatBit:StreamingUri"] 
+                        ?? "wss://app-eval.featbit.co");
+                    options.EventUri = new Uri(
+                        hostContext.Configuration["FeatBit:EventUri"] 
+                        ?? "https://app-eval.featbit.co");
+                    options.StartWaitTime = TimeSpan.FromSeconds(3);
+                });
+                
                 services.AddHostedService<Worker>();
             });
 }
@@ -228,168 +315,200 @@ public class Worker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var user = FbUser.Builder("worker-user").Build();
-            var shouldProcess = _fbClient.BoolVariation("process-enabled", user, true);
+            var user = FbUser.Builder("worker-instance").Build();
+            var shouldProcess = _fbClient.BoolVariation("enable-processing", user, true);
             
             if (shouldProcess)
             {
-                _logger.LogInformation("Processing enabled at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Processing task at: {time}", DateTimeOffset.Now);
+                // Do work here
+            }
+            else
+            {
+                _logger.LogInformation("Processing disabled by feature flag");
             }
             
-            await Task.Delay(60000, stoppingToken);
+            await Task.Delay(60000, stoppingToken); // Wait 1 minute
         }
     }
 }
 ```
 
-## Best Practices
-
-### 1. Client Lifecycle
-- **ASP.NET Core**: Use DI with `AddFeatBit()` - client is managed as singleton
-- **Console Apps**: Create one client instance and reuse it throughout the app
-- **Always wait for initialization**: Check `await client.InitializedAsync` before use
-
-### 2. User Context
-- Use meaningful user keys (username, email, user ID)
-- For anonymous users, use session IDs or generate consistent identifiers
-- Add custom attributes for targeting: role, subscription, country, etc.
-
-### 3. Default Values
-- Always provide sensible default values
-- Defaults are used when:
-  - SDK is not initialized
-  - Flag doesn't exist
-  - Network issues occur
-  - Evaluation fails
-
-### 4. Error Handling
-```csharp
-try
+**appsettings.json configuration**:
+```json
 {
-    var isEnabled = _fbClient.BoolVariation("feature-key", user, defaultValue: false);
-    // Use feature
-}
-catch (Exception ex)
-{
-    _logger.LogError(ex, "Failed to evaluate feature flag");
-    // Fall back to default behavior
+  "FeatBit": {
+    "EnvSecret": "your-env-secret",
+    "StreamingUri": "wss://app-eval.featbit.co",
+    "EventUri": "https://app-eval.featbit.co"
+  }
 }
 ```
 
-### 5. Performance
-- Client maintains in-memory cache of all flags
-- Flag evaluation is local and extremely fast (microseconds)
-- Real-time updates via WebSocket
-- No network call on every evaluation
+### 
+### Offline Mode
 
-## Configuration Options
+Stop remote calls and optionally bootstrap from JSON:
 
 ```csharp
-builder.Services.AddFeatBit(options =>
-{
-    // Required
-    options.EnvSecret = "your-secret";
-    
-    // Optional - URLs
-    options.StreamingUri = new Uri("wss://app-eval.featbit.co");
-    options.EventUri = new Uri("https://app-eval.featbit.co");
-    
-    // Optional - Timing
-    options.StartWaitTime = TimeSpan.FromSeconds(3);
-    options.ReconnectInterval = TimeSpan.FromSeconds(15);
-    
-    // Optional - Features
-    options.DisableEvents = false; // Set true to disable event tracking
-    options.Offline = false; // Set true for offline mode
-    
-    // Optional - Event buffering
-    options.EventFlushInterval = TimeSpan.FromSeconds(5);
-    options.EventMaxInQueue = 10000;
-});
+var options = new FbOptionsBuilder()
+    .Offline(true)
+    .Build();
+
+var client = new FbClient(options);
 ```
 
-## Common Scenarios
+**Bootstrapping from JSON** (only in offline mode):
 
-### Scenario 1: Gradual Rollout in Web API
+```bash
+# Get current flags from server
+curl -H "Authorization: <env-secret>" \
+  http://localhost:5100/api/public/sdk/server/latest-all > featbit-bootstrap.json
+```
+
 ```csharp
-// Enable new payment processor for 10% of users
+var json = File.ReadAllText("featbit-bootstrap.json");
+
+var options = new FbOptionsBuilder()
+    .Offline(true)
+    .UseJsonBootstrapProvider(json)
+    .Build();
+
+var client = new FbClient(options);
+```
+
+### Disable Event Collection
+
+Disable automatic events while staying online:
+
+```csharp
+var options = new FbOptionsBuilder()
+    .DisableEvents(true)
+    .Build();
+```
+
+## Common Use Cases
+
+### Gradual Rollout
+```csharp
 var user = FbUser.Builder(userId).Build();
-var useNewProcessor = _fbClient.BoolVariation("new-payment-processor", user, false);
+var useNewPayment = _fbClient.BoolVariation("new-payment-processor", user, false);
 
-if (useNewProcessor)
-{
-    return await _newPaymentService.ProcessAsync(payment);
-}
-else
-{
-    return await _legacyPaymentService.ProcessAsync(payment);
-}
+return useNewPayment 
+    ? await _newPaymentService.ProcessAsync(payment)
+    : await _legacyPaymentService.ProcessAsync(payment);
 ```
 
-### Scenario 2: Feature Toggle for Maintenance
+### Maintenance Mode
 ```csharp
-// Disable certain features during maintenance
-var maintenanceUser = FbUser.Builder("system").Build();
-var isMaintenanceMode = _fbClient.BoolVariation("maintenance-mode", maintenanceUser, false);
+var systemUser = FbUser.Builder("system").Build();
+var isMaintenance = _fbClient.BoolVariation("maintenance-mode", systemUser, false);
 
-if (isMaintenanceMode)
-{
+if (isMaintenance)
     return StatusCode(503, "Service under maintenance");
-}
 ```
 
-### Scenario 3: Remote Configuration
+### Remote Configuration
 ```csharp
-// Dynamic configuration without deployment
+// Simple numeric configuration
 var user = FbUser.Builder(userId).Build();
 var maxRetries = _fbClient.IntVariation("max-retry-attempts", user, 3);
-var timeoutSeconds = _fbClient.IntVariation("api-timeout-seconds", user, 30);
+var timeout = _fbClient.IntVariation("api-timeout-seconds", user, 30);
 
-var policy = Policy
-    .Handle<HttpRequestException>()
-    .WaitAndRetryAsync(maxRetries, _ => TimeSpan.FromSeconds(1));
+// Complex JSON configuration
+var configJson = _fbClient.StringVariation("app-config", user, "{}");
+var appConfig = JsonSerializer.Deserialize<AppConfig>(configJson);
+
+// Use the configuration
+var httpClient = new HttpClient
+{
+    Timeout = TimeSpan.FromSeconds(appConfig.TimeoutSeconds)
+};
 ```
 
-### Scenario 4: A/B Testing with Metrics
+**Example JSON configuration**:
+```json
+{
+  "timeoutSeconds": 30,
+  "maxRetries": 3,
+  "enableCaching": true,
+  "cacheExpiryMinutes": 60,
+  "apiEndpoint": "https://api.example.com",
+  "features": {
+    "enableLogging": true,
+    "logLevel": "Information"
+  }
+}
+```
+
+**AppConfig model**:
+```csharp
+public class AppConfig
+{
+    public int TimeoutSeconds { get; set; } = 30;
+    public int MaxRetries { get; set; } = 3;
+    public bool EnableCaching { get; set; } = true;
+    public int CacheExpiryMinutes { get; set; } = 60;
+    public string ApiEndpoint { get; set; } = "https://api.example.com";
+    public FeatureSettings Features { get; set; } = new();
+}
+
+public class FeatureSettings
+{
+    public bool EnableLogging { get; set; } = true;
+    public string LogLevel { get; set; } = "Information";
+}
+```
+
+### A/B Testing
 ```csharp
 var user = FbUser.Builder(userId).Build();
 var checkoutFlow = _fbClient.StringVariation("checkout-flow", user, "original");
 
-// User completes purchase
 if (purchaseSuccessful)
 {
-    _fbClient.TrackMetric(user, "purchase-completed");
-    _fbClient.TrackMetric(user, "purchase-revenue", purchaseAmount);
+    _fbClient.Track(user, "purchase-completed");
+    _fbClient.Track(user, "revenue", purchaseAmount);
 }
 ```
 
 ## Troubleshooting
 
-### Client Not Initializing
-- Check `EnvSecret` is correct
-- Verify network connectivity to FeatBit server
-- Check firewall rules for WebSocket connections
-- Increase `StartWaitTime` if needed
+**Client Not Initializing**:
+- Verify `EnvSecret` is correct
+- Check network connectivity to FeatBit server
+- Ensure WebSocket connections are allowed (firewall)
+- Increase `StartWaitTime` if initialization is slow
 
-### Flags Not Updating
-- Ensure WebSocket connection is established
-- Check server logs for connection errors
-- Verify SDK is not in offline mode
+**Flags Not Updating**:
+- Confirm WebSocket connection is active (check logs)
+- Ensure SDK is not in offline mode
+- Verify server logs for connection errors
 
-### Events Not Being Tracked
-- Ensure `DisableEvents` is false
-- Check `EventUri` is accessible
-- Verify network connectivity
+**Events Not Tracked**:
+- Check `DisableEvents` is false
+- Verify `EventUri` is accessible
+- Confirm network connectivity
 
-## Migration from Other SDKs
+## Platform Support
 
-If migrating from LaunchDarkly or other SDKs:
-- User context is similar but FeatBit uses `FbUser.Builder()`
-- Method names are similar: `BoolVariation()`, `StringVariation()`, etc.
-- Configuration is similar but uses `FbOptionsBuilder` or DI
+This SDK targets:
+- **.NET 8.0+**: Runs on .NET 6.0 and higher
+- **.NET Core 3.1+**: Runs on .NET Core 3.1 and later
+- **.NET Framework 4.6.2+**: Runs on .NET Framework 4.6.2 and above
+- **.NET Standard 2.0/2.1**: Runs in any .NET Standard 2.x project
 
-## Additional Resources
+**Note**: `System.Text.Json` is required and included as a dependency for platforms that don't include it.
 
-- SDK GitHub: https://github.com/featbit/featbit-dotnet-sdk
-- Sample Apps: https://github.com/featbit/featbit-samples
-- Documentation: https://docs.featbit.co/sdk-docs/server-side-sdks/dotnet
+## Official Resources
+
+- **GitHub**: https://github.com/featbit/featbit-dotnet-sdk
+- **NuGet**: https://www.nuget.org/packages/FeatBit.ServerSdk
+- **Documentation**: https://docs.featbit.co/sdk-docs/server-side-sdks/dotnet
+- **Getting Started**: https://docs.featbit.co/getting-started/connect-an-sdk#net
+- **Examples**: https://github.com/featbit/featbit-samples
+
+## Support
+
+- **Slack Community**: [Join FeatBit Slack](https://join.slack.com/t/featbit/shared_invite/zt-1ew5e2vbb-x6Apan1xZOaYMnFzqZkGNQ)
+- **Issues**: [Submit on GitHub](https://github.com/featbit/featbit/issues/new)
