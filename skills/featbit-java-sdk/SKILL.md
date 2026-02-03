@@ -1,6 +1,6 @@
 ---
 name: featbit-java-sdk
-description: Integrates FeatBit feature flags in Java server applications (Spring Boot, Servlet, JAX-RS). Use when working with .java files, pom.xml, build.gradle, or when user asks about "Java SDK", "Spring Boot integration", "feature flags in Java", or "FeatBit Java".
+description: Integrates FeatBit feature flags in Java server applications (Spring Boot, Servlet, JAX-RS). Use when working with .java files, pom.xml, build.gradle, or when user asks about "Java SDK", "Spring Boot integration", "feature flags in Java", "OpenFeature Java", or "FeatBit Java".
 appliesTo:
   - "**/*.java"
   - "**/pom.xml"
@@ -309,10 +309,89 @@ public void cleanup() {
 }
 ```
 
+## OpenFeature Integration
+
+FeatBit provides an [OpenFeature](https://openfeature.dev/) provider for Java server applications.
+
+📚 **OpenFeature Provider Repository**: https://github.com/featbit/featbit-openfeature-provider-java-server
+
+### Installation
+
+```xml
+<dependency>
+    <groupId>co.featbit</groupId>
+    <artifactId>featbit-openfeature-provider-java-server</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+### Usage
+
+```java
+import dev.openfeature.sdk.OpenFeatureAPI;
+import co.featbit.openfeature.FeatBitProvider;
+
+FBConfig config = new FBConfig.Builder()
+        .streamingURL(STREAM_URL)
+        .eventURL(EVENT_URL)
+        .build();
+
+// Synchronous
+OpenFeatureAPI.getInstance().setProviderAndWait(new FeatBitProvider(ENV_SECRET, config));
+
+// Asynchronous
+OpenFeatureAPI.getInstance().setProvider(new FeatBitProvider(ENV_SECRET, config));
+```
+
+### Evaluation Context
+
+**Required**: FeatBit requires a context with a targeting key for evaluation.
+
+**Targeting Key**: Specify using `targetingKey` (OpenFeature standard), or `key`/`keyid` (FeatBit identifier). If both specified, `targetingKey` takes precedence.
+
+**Name Attribute**: Used to search users quickly. If not set explicitly, FeatBit uses the targeting key as the name.
+
+**Custom Attributes**: Only string type values are supported.
+
+```java
+EvaluationContext ctx = new ImmutableContext("user-key", new HashMap() {{
+    put("name", new Value("user-name"));
+    put("country", new Value("USA"));
+}});
+```
+
+### Evaluation
+
+```java
+Client client = OpenFeatureAPI.getInstance().getClient();
+
+// Evaluation Context
+EvaluationContext evalCtx = new ImmutableContext("user-key", new HashMap() {{
+    put("name", new Value("user-name"));
+    put("country", new Value("USA"));
+}});
+
+// Evaluate a feature flag
+String result = client.getStringValue(flagKey, defaultValue, evalCtx);
+
+// Evaluate with details
+FlagEvaluationDetails<String> details = client.getStringDetails(flagKey, defaultValue, evalCtx);
+```
+
+**Object Conversion**: When using `Client#getObjectValue` or `Client#getObjectDetails`:
+1. SDK converts result to `Value` type according to default `Value`
+2. If default value is `List` or `Structure` Value, SDK parses result as JSON object
+3. Wrong type of default value may throw an exception
+
+**More Info**: [OpenFeature Java Documentation](https://openfeature.dev/docs/reference/technologies/server/java)
+
 ## Additional Resources
 
 - **GitHub Repository**: https://github.com/featbit/featbit-java-sdk
+- **OpenFeature Provider**: https://github.com/featbit/featbit-openfeature-provider-java-server
 - **Code Samples**: https://github.com/featbit/featbit-samples
+- **FeatBit Documentation**: https://docs.featbit.co/
+- **OpenFeature Documentation**: https://openfeature.dev/docs/reference/intro
 
 ---
 
