@@ -1,6 +1,6 @@
 ---
 name: featbit-javascript-client-sdk
-description: Integrates FeatBit JavaScript Client SDK in browser applications. Use when working with client-side feature flags, browser-based feature toggles, or when user asks about "JavaScript SDK", "JS client SDK", "browser feature flags".
+description: Integrates FeatBit JavaScript Client SDK in browser applications with OpenFeature standard support. Use when working with client-side feature flags, browser-based feature toggles, or when user asks about "JavaScript SDK", "JS client SDK", "browser feature flags", "OpenFeature", "OpenFeature provider".
 appliesTo:
   - "**/*.html"
   - "**/*.js"
@@ -259,6 +259,19 @@ fetch(config.apiUrl, { timeout: config.timeout });
 **SDK not initializing**: Check SDK key, network, CORS, WebSocket connection  
 **Flags not updating**: Verify event listeners and WebSocket status  
 **CORS errors**: Configure allowed origins on FeatBit server
+
+## OpenFeature Integration
+
+Use FeatBit with [OpenFeature](https://openfeature.dev/) standard:
+
+```bash
+npm install @openfeature/web-sdk
+npm install featbit-js-client-sdk
+npm install @featbit/openfeature-provider-js-client
+```
+
+**Documentation**: [OpenFeature Provider for FeatBit JS Client](https://github.com/featbit/openfeature-provider-js-client)  
+**Integration Examples**: [Example projects](https://github.com/featbit/openfeature-provider-js-client/tree/main/examples)
 
 ## Examples & Resources
 

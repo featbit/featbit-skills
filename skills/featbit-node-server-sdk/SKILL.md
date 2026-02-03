@@ -1,6 +1,6 @@
 ---
 name: featbit-node-server-sdk
-description: Expert guidance for integrating FeatBit Node.js Server-Side SDK in backend applications. Use when building Node.js server apps with feature flags, A/B testing, or gradual rollouts. Covers SDK setup, flag evaluation, and event tracking.
+description: Expert guidance for integrating FeatBit Node.js Server-Side SDK in backend applications. Use when building Node.js server apps with feature flags, A/B testing, gradual rollouts, or OpenFeature integration. Covers SDK setup, flag evaluation, and event tracking.
 appliesTo:
   - "**/server.js"
   - "**/app.js"
@@ -183,6 +183,62 @@ fbClient.track(user, eventName, numericValue);
 **numericValue** is optional (default: **1.0**).
 
 **Important**: Call `track` **after** the related feature flag is evaluated.
+
+## OpenFeature Integration
+
+FeatBit provides an OpenFeature provider for Node.js server applications.
+
+> **📦 OpenFeature Provider**: [@featbit/openfeature-provider-node-server](https://www.npmjs.com/package/@featbit/openfeature-provider-node-server)  
+> **📖 Repository**: [GitHub](https://github.com/featbit/openfeature-provider-node-server)
+
+### Installation
+
+```bash
+npm install @openfeature/server-sdk
+npm install @featbit/node-server-sdk
+npm install @featbit/openfeature-provider-node-server
+```
+
+### Quick Start
+
+```javascript
+import { OpenFeature, ProviderEvents } from '@openfeature/server-sdk';
+import { FbProvider } from '@featbit/openfeature-provider-node-server';
+
+const provider = new FbProvider({
+    sdkKey: '<your-sdk-key>',
+    streamingUri: 'wss://app-eval.featbit.co',
+    eventsUri: 'https://app-eval.featbit.co'
+});
+
+OpenFeature.setProvider(provider);
+
+// Access FbClient if needed: provider.getClient()
+
+// Wait for provider ready
+OpenFeature.addHandler(ProviderEvents.Ready, (eventDetails) => {
+    console.log(`Provider ready. Flags changed: ${eventDetails.flagsChanged}`);
+});
+
+// Listen for configuration changes
+OpenFeature.addHandler(ProviderEvents.ConfigurationChanged, async (eventDetails) => {
+    const client = OpenFeature.getClient();
+    const value = await client.getBooleanValue('ff1', false, {targetingKey: 'my-key'});
+    console.log({...eventDetails, value});
+});
+
+// Evaluate flags
+const client = OpenFeature.getClient();
+const value = await client.getBooleanValue('my-flag', false, {targetingKey: 'user-123'});
+console.log(`Flag value: ${value}`);
+
+// For short-lived processes, close to flush events
+// await OpenFeature.close();
+```
+
+### Supported Node.js Versions
+
+Compatible with Node.js versions **16 and above**.
 
 ## Configuration Options
 
