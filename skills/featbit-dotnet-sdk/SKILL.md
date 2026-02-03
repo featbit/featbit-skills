@@ -1,6 +1,6 @@
 ---
 name: featbit-dotnet-sdk
-description: Expert guidance for integrating FeatBit .NET Server SDK in .NET applications. Use when user asks about ".NET SDK", "C# feature flags", "ASP.NET Core FeatBit", "dependency injection", "console app integration", or mentions .cs, .csproj, Program.cs files.
+description: Expert guidance for integrating FeatBit .NET Server SDK in .NET applications. Use when user asks about ".NET SDK", "C# feature flags", "ASP.NET Core FeatBit", "dependency injection", "console app integration", "OpenFeature .NET", or mentions .cs, .csproj, Program.cs files.
 license: MIT
 metadata:
   author: FeatBit
@@ -22,6 +22,7 @@ Activate when users:
 - Need examples of flag variations (bool, string, int, double, JSON)
 - Want to implement A/B testing with custom events
 - Mention offline mode or bootstrapping from JSON
+- Ask about OpenFeature integration or vendor-neutral feature flagging
 
 ## Prerequisites
 
@@ -181,6 +182,64 @@ var options = new FbOptionsBuilder(secret)
 ```
 
 In ASP.NET Core, `AddFeatBit()` automatically uses the host's logger factory.
+
+## OpenFeature Integration
+
+FeatBit supports [OpenFeature](https://openfeature.dev/), the vendor-neutral feature flagging standard.
+
+### Quick Start with OpenFeature
+
+```bash
+dotnet add package FeatBit.OpenFeature.ServerProvider
+```
+
+```csharp
+using FeatBit.OpenFeature.ServerProvider;
+using OpenFeature;
+using OpenFeature.Model;
+
+// Setup FeatBit client (same as before)
+builder.Services.AddFeatBit(options => { /* ... */ });
+
+// Add OpenFeature
+builder.Services.AddOpenFeature((sp, builder) =>
+{
+    var fbClient = sp.GetRequiredService<IFbClient>();
+    builder.AddProvider(new FeatBitProvider(fbClient));
+});
+```
+
+**Using in code**:
+```csharp
+public class HomeController : ControllerBase
+{
+    private readonly IFeatureClient _featureClient;
+
+    public HomeController(IFeatureClient featureClient)
+    {
+        _featureClient = featureClient;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var context = EvaluationContext.Builder()
+            .SetTargetingKey(User.Identity?.Name ?? "anonymous")
+            .Set("role", "admin")
+            .Build();
+
+        var isEnabled = await _featureClient.GetBooleanValueAsync(
+            "new-feature", 
+            false, 
+            context
+        );
+
+        return View(new { featureEnabled = isEnabled });
+    }
+}
+```
+
+**📄 Complete Guide**: [OpenFeature Integration](references/openfeature-integration.md)  
+Includes: ASP.NET Core setup, all variation types, event tracking, migration guide, and best practices.
 
 ## FbUser: User Context
 
@@ -446,9 +505,15 @@ var httpClient = new HttpClient
 public class AppConfig
 {
     public int TimeoutSeconds { get; set; } = 30;
-    public int MaxRetries { get; set; } = 3;
-    public bool EnableCaching { get; set; } = true;
-    public int CacheExpiryMinutes { get; set; } = 60;
+    OpenFeature Provider**: https://www.nuget.org/packages/FeatBit.OpenFeature.ServerProvider
+- **Documentation**: https://docs.featbit.co/sdk-docs/server-side-sdks/dotnet
+- **Getting Started**: https://docs.featbit.co/getting-started/connect-an-sdk#net
+- **Examples**: https://github.com/featbit/featbit-samples
+
+## Reference Documentation
+
+For detailed information on specific topics, see:
+- **[OpenFeature Integration](references/openfeature-integration.md)** - Complete OpenFeature setup and usage guide
     public string ApiEndpoint { get; set; } = "https://api.example.com";
     public FeatureSettings Features { get; set; } = new();
 }
