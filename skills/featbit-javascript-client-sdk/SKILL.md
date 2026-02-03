@@ -1,6 +1,6 @@
 ---
 name: featbit-javascript-client-sdk
-description: Expert guidance for integrating FeatBit JavaScript Client SDK in web applications (browser-only). Use when users work with vanilla JavaScript in browsers, need client-side feature flags, or ask about JS client SDK integration.
+description: Integrates FeatBit JavaScript Client SDK in browser applications. Use when working with client-side feature flags, browser-based feature toggles, or when user asks about "JavaScript SDK", "JS client SDK", "browser feature flags".
 appliesTo:
   - "**/*.html"
   - "**/*.js"
@@ -8,496 +8,265 @@ appliesTo:
   - "**/app.js"
 ---
 
-# FeatBit JavaScript Client SDK Expert
+# FeatBit JavaScript Client SDK
 
-Expert knowledge for integrating FeatBit JavaScript Client SDK in web browsers.
+Integration guide for FeatBit JavaScript Client SDK in web browsers.
 
-**Source**: https://github.com/featbit/featbit-js-client-sdk
+> **📖 Complete Documentation**: [GitHub Repository](https://github.com/featbit/featbit-js-client-sdk)  
+> If this skill doesn't cover your needs, refer to the full SDK documentation above.
 
-⚠️ **Important**: This is a **client-side SDK** for single-user browser environments only. Not suitable for Node.js server applications (use `@featbit/node-server-sdk` instead).
+⚠️ **Client-Side SDK Only**: For single-user browser environments. Use `@featbit/node-server-sdk` for Node.js server applications.
 
-## Installation
+## Installation & Setup
 
 ```bash
 npm install --save @featbit/js-client-sdk
 ```
 
-## Prerequisites
-
-Before using, obtain:
-- **Environment Secret (SDK Key)**: [How to get](https://docs.featbit.co/sdk/faq#how-to-get-the-environment-secret)
-- **SDK URLs**: [How to get](https://docs.featbit.co/sdk/faq#how-to-get-the-sdk-urls)
+**Prerequisites**:
+- SDK Key: [How to get](https://docs.featbit.co/sdk/faq#how-to-get-the-environment-secret)
+- SDK URLs: [How to get](https://docs.featbit.co/sdk/faq#how-to-get-the-sdk-urls)
 
 ## Quick Start
 
 ```javascript
 import { FbClientBuilder, UserBuilder } from "@featbit/js-client-sdk";
 
-// Create user
-const bob = new UserBuilder('a-unique-key-of-user')
+// 1. Build user context
+const user = new UserBuilder('user-unique-key')
     .name('bob')
     .custom('age', '18')
     .custom('country', 'FR')
     .build();
 
-// Setup SDK client with WebSocket streaming
+// 2. Initialize client (WebSocket streaming)
 const fbClient = new FbClientBuilder()
     .sdkKey("your_sdk_key")
-    .streamingUri('wss://app-eval.featbit.co')
-    .eventsUri("https://app-eval.featbit.co")
-    .user(bob)
+    .streamingUri('ws://localhost:5100')
+    .eventsUri("http://localhost:5100")
+    .user(user)
     .build();
 
+// 3. Wait for initialization & evaluate
 (async () => {
-  // Wait for initialization
   try {
     await fbClient.waitForInitialization();
+    const isEnabled = await fbClient.boolVariation("game-runner", false);
+    console.log(`Feature enabled: ${isEnabled}`);
   } catch(err) {
-    console.log("Failed to initialize SDK:", err);
+    console.error("SDK initialization failed:", err);
   }
-
-  // Evaluate feature flag
-  const flagKey = "game-runner";
-  const isEnabled = await fbClient.boolVariation(flagKey, false);
-  
-  console.log(`Feature ${flagKey}: ${isEnabled}`);
-  
-  // Switch user
-  const alice = new UserBuilder('another-unique-key-of-user')
-      .name('alice')
-      .custom('country', 'UK')
-      .custom('age', 36)
-      .build();
-  
-  await fbClient.identify(alice);
 })();
 ```
 
-## Building User Context
+## Core Concepts
+
+### 1. User Context (IUser)
+
+Build users with `UserBuilder`:
 
 ```javascript
-import { UserBuilder } from "@featbit/js-client-sdk";
-
-// Basic user
-const user = new UserBuilder('user-key-123')
-    .name('John Doe')
-    .build();
-
-// User with custom properties
-const userWithProps = new UserBuilder('user-key-456')
-    .name('Jane Smith')
-    .custom('age', 25)
-    .custom('country', 'US')
+const user = new UserBuilder('user-key')  // Required: unique key
+    .name('Alice')                        // Optional: display name
+    .custom('role', 'admin')              // Optional: custom properties
     .custom('subscription', 'premium')
-    .custom('role', 'admin')
     .build();
 ```
 
-## Client Configuration
+**Key Requirements**:
+- `key` is mandatory and must uniquely identify each user
+- Custom properties are used for targeting rules
+- Properties are included in analytics
 
-### Using WebSocket Streaming (Recommended)
+### 2. Client Configuration
 
+**Option A: WebSocket Streaming (Recommended)**
 ```javascript
 const fbClient = new FbClientBuilder()
     .sdkKey("your_sdk_key")
-    .streamingUri('wss://app-eval.featbit.co')
-    .eventsUri("https://app-eval.featbit.co")
+    .streamingUri('ws://localhost:5100')
+    .eventsUri("http://localhost:5100")
     .user(user)
     .build();
 ```
 
-### Using HTTP Polling
-
+**Option B: HTTP Polling**
 ```javascript
+import { DataSyncModeEnum } from "@featbit/js-client-sdk";
+
 const fbClient = new FbClientBuilder()
     .sdkKey("your_sdk_key")
-    .eventsUri("https://app-eval.featbit.co")
-    .pollingUri("https://app-eval.featbit.co")
-    .pollingInterval(3000) // 3 seconds
+    .dataSyncMode(DataSyncModeEnum.POLLING)
+    .pollingUri('http://localhost:5100')
+    .pollingInterval(10000)  // 10 seconds
+    .eventsUri("http://localhost:5100")
     .user(user)
     .build();
 ```
 
-## Flag Evaluation
-
-### Boolean Flags
+### 3. Flag Evaluation
 
 ```javascript
+// Boolean flags
 const isEnabled = await fbClient.boolVariation('feature-key', false);
-if (isEnabled) {
-  // Feature is enabled
-}
-```
 
-### String Flags
+// String flags
+const theme = await fbClient.variation('theme', 'default');
 
-```javascript
-const theme = await fbClient.variation('theme-key', 'default');
-console.log(`Current theme: ${theme}`);
-```
-
-### Numeric Flags
-
-```javascript
-const maxItems = await fbClient.variation('max-items', 10);
-```
-
-### JSON Flags
-
-```javascript
-const config = await fbClient.variation('config-key', '{}');
-const configObject = JSON.parse(config);
-```
-
-### With Evaluation Details
-
-```javascript
+// With evaluation details
 const detail = await fbClient.boolVariationDetail('feature-key', false);
-console.log(`Value: ${detail.value}`);
-console.log(`Reason: ${detail.reason}`);
-console.log(`Kind: ${detail.kind}`);
+console.log(detail.value, detail.reason, detail.kind);
 ```
 
-## User Identification & Switching
-
-### Identify New User
+### 4. User Switching
 
 ```javascript
 const newUser = new UserBuilder('new-user-key')
-    .name('New User')
-    .custom('role', 'viewer')
+    .name('Bob')
     .build();
 
 await fbClient.identify(newUser);
 ```
 
-### Anonymous Users
+### 5. Event Tracking (A/B Testing)
 
 ```javascript
-// Use session ID or generate unique ID
-const sessionId = sessionStorage.getItem('sessionId') || crypto.randomUUID();
-const anonymousUser = new UserBuilder(sessionId)
-    .custom('anonymous', true)
-    .build();
-```
+// Track custom events
+fbClient.track('button-clicked');
+fbClient.track('purchase-completed', 99.99);  // with numeric value
 
-## Event Tracking
-
-### Track Custom Events
-
-```javascript
-// Simple event
-fbClient.trackMetric('button-clicked');
-
-// Event with numeric value
-fbClient.trackMetric('purchase-completed', 99.99);
-
-// For A/B testing
-fbClient.trackMetric('conversion-event');
-```
-
-### Flush Events Manually
-
-```javascript
+// Manual flush
 await fbClient.flush();
 ```
 
-## Real-Time Flag Updates
-
-### Listen for Flag Changes
+### 6. Real-Time Updates
 
 ```javascript
-fbClient.on('ff_update', (changes) => {
-  console.log('Flags updated:', changes);
-  
-  // Re-evaluate flags
-  const isEnabled = fbClient.variation('feature-key', false);
-  updateUI(isEnabled);
+// Listen to any flag changes
+fbClient.on('update', (flagKeys) => {
+  console.log('Flags changed:', flagKeys);
 });
+
+// Listen to specific flag
+fbClient.on('update:feature-key', (key) => {
+  const newValue = fbClient.variation('feature-key', false);
+  console.log(`${key} updated:`, newValue);
+});
+
+// Ready event
+fbClient.on('ready', () => console.log('SDK ready'));
 ```
 
-### Listen for Specific Flag
+## Advanced Features
+
+### Bootstrap (Pre-loaded Flags)
+
+Provide initial flags to avoid waiting for remote fetch:
 
 ```javascript
-fbClient.on('ff_update', (changes) => {
-  if (changes.includes('feature-key')) {
-    const newValue = fbClient.variation('feature-key', false);
-    console.log(`Feature flag updated: ${newValue}`);
-  }
+const options = {
+  bootstrap: [
+    { id: 'flag-key', variation: 'true', variationType: 'boolean' },
+    { id: 'theme', variation: 'dark', variationType: 'string' }
+  ]
+};
+
+const fbClient = new FbClientBuilder(options).build();
+```
+
+> Bootstrapped flags are overridden by remote flags once fetched.
+
+### Logging Configuration
+
+**Method 1: Set log level**
+```javascript
+const fbClient = new FbClientBuilder()
+    .logLevel('debug')  // 'debug', 'info', 'warn', 'error', 'none'
+    .build();
+```
+
+**Method 2: Custom logger**
+```javascript
+import { BasicLogger } from "@featbit/js-client-sdk";
+
+const logger = new BasicLogger({
+    level: 'debug',
+    destination: console.log
 });
+
+const fbClient = new FbClientBuilder()
+    .logger(logger)  // Takes precedence over logLevel
+    .build();
 ```
 
-## Complete Web App Example
+### Offline Mode
 
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>FeatBit Demo</title>
-</head>
-<body>
-  <div id="app">
-    <h1>Feature Flag Demo</h1>
-    <div id="feature-content"></div>
-    <button id="switch-user">Switch User</button>
-  </div>
-
-  <script type="module">
-    import { FbClientBuilder, UserBuilder } from '@featbit/js-client-sdk';
-
-    const users = [
-      new UserBuilder('user-1').name('Alice').custom('role', 'admin').build(),
-      new UserBuilder('user-2').name('Bob').custom('role', 'user').build()
-    ];
-
-    let currentUserIndex = 0;
-
-    const fbClient = new FbClientBuilder()
-      .sdkKey('your_sdk_key')
-      .streamingUri('wss://app-eval.featbit.co')
-      .eventsUri('https://app-eval.featbit.co')
-      .user(users[0])
-      .build();
-
-    async function init() {
-      try {
-        await fbClient.waitForInitialization();
-        updateFeatureDisplay();
-        
-        fbClient.on('ff_update', () => {
-          updateFeatureDisplay();
-        });
-      } catch (err) {
-        console.error('Failed to initialize:', err);
-      }
-    }
-
-    function updateFeatureDisplay() {
-      const isEnabled = fbClient.variation('new-feature', false);
-      const content = document.getElementById('feature-content');
-      
-      if (isEnabled) {
-        content.innerHTML = '<p>✅ New Feature Enabled</p>';
-      } else {
-        content.innerHTML = '<p>❌ New Feature Disabled</p>';
-      }
-    }
-
-    document.getElementById('switch-user').onclick = async () => {
-      currentUserIndex = (currentUserIndex + 1) % users.length;
-      await fbClient.identify(users[currentUserIndex]);
-      updateFeatureDisplay();
-    };
-
-    init();
-  </script>
-</body>
-</html>
-```
-
-## Configuration Options
+Disable remote calls (use with bootstrap):
 
 ```javascript
 const fbClient = new FbClientBuilder()
-    // Required
-    .sdkKey("your_sdk_key")
-    .user(user)
-    
-    // Streaming (recommended)
-    .streamingUri('wss://app-eval.featbit.co')
-    
-    // Or Polling
-    .pollingUri('https://app-eval.featbit.co')
-    .pollingInterval(3000)
-    
-    // Events
-    .eventsUri('https://app-eval.featbit.co')
-    
-    // Optional
-    .startWaitTime(3000) // Wait time for initialization in ms
-    .enableDataSync(true) // Enable data synchronization
-    
+    .offline(true)
+    .bootstrap([/* flags */])
+    .build();
+```
+
+### Disable Event Collection
+
+```javascript
+const fbClient = new FbClientBuilder()
+    .disableEvents(true)
     .build();
 ```
 
 ## Best Practices
 
-### 1. Single Client Instance
+1. **Single Client Instance**: Create once, reuse throughout app lifetime
+2. **Wait for Initialization**: Always `await fbClient.waitForInitialization()`
+3. **Stable User IDs**: Use IDs from authentication system, not random values
+4. **Error Handling**: Wrap initialization in try-catch and provide fallback
+5. **Cleanup**: Close client on page unload
 
 ```javascript
-// ✅ Good: Create once, reuse
-const fbClient = createFbClient();
-
-// ❌ Bad: Creating multiple instances
-function checkFeature() {
-  const client = createFbClient(); // Don't do this
-}
+window.addEventListener('beforeunload', () => fbClient.close());
 ```
 
-### 2. Wait for Initialization
+## Common Patterns
 
+**Progressive Rollout**:
 ```javascript
-// ✅ Good: Wait for initialization
-await fbClient.waitForInitialization();
-const value = fbClient.variation('key', default);
-
-// ❌ Bad: Don't wait
-const value = fbClient.variation('key', default); // May return default
-```
-
-### 3. Error Handling
-
-```javascript
-try {
-  await fbClient.waitForInitialization();
-  const isEnabled = fbClient.variation('feature', false);
-  // Use feature
-} catch (error) {
-  console.error('SDK initialization failed:', error);
-  // Fall back to default behavior
-  const isEnabled = false;
-}
-```
-
-### 4. User Context Best Practices
-
-```javascript
-// ✅ Good: Use stable user IDs
-const userId = getUserId(); // From auth system
-const user = new UserBuilder(userId).build();
-
-// ✅ Good: Add relevant properties for targeting
-const user = new UserBuilder(userId)
-    .name(userName)
-    .custom('subscription', subscription)
-    .custom('country', country)
-    .build();
-
-// ❌ Bad: Random IDs (user won't get consistent experience)
-const user = new UserBuilder(Math.random().toString()).build();
-```
-
-### 5. Clean Up
-
-```javascript
-// Close client when page unloads
-window.addEventListener('beforeunload', async () => {
-  await fbClient.close();
-});
-```
-
-## Common Use Cases
-
-### Progressive Rollout
-
-```javascript
-// Enable feature for percentage of users
-const isEnabled = await fbClient.boolVariation('new-checkout', false);
-
-if (isEnabled) {
+if (await fbClient.boolVariation('new-checkout', false)) {
   renderNewCheckout();
 } else {
   renderOldCheckout();
 }
 ```
 
-### A/B Testing
-
+**A/B Testing**:
 ```javascript
 const variant = await fbClient.variation('landing-page', 'A');
-
-switch(variant) {
-  case 'A':
-    renderVariantA();
-    break;
-  case 'B':
-    renderVariantB();
-    break;
-}
-
-// Track conversion
-if (userConverted) {
-  fbClient.trackMetric('landing-page-conversion');
-}
+if (variant === 'B') renderVariantB();
+if (userConverted) fbClient.track('conversion');
 ```
 
-### Feature Toggle
-
+**Remote Configuration**:
 ```javascript
-const showBetaFeature = await fbClient.boolVariation('beta-feature', false);
-
-if (showBetaFeature) {
-  document.getElementById('beta-section').style.display = 'block';
-}
-```
-
-### Remote Configuration
-
-```javascript
-const config = await fbClient.variation('app-config', '{}');
-const { apiUrl, timeout, retries } = JSON.parse(config);
-
-// Use configuration
-fetch(apiUrl, { timeout });
+const config = JSON.parse(await fbClient.variation('app-config', '{}'));
+fetch(config.apiUrl, { timeout: config.timeout });
 ```
 
 ## Troubleshooting
 
-### SDK Not Initializing
+**SDK not initializing**: Check SDK key, network, CORS, WebSocket connection  
+**Flags not updating**: Verify event listeners and WebSocket status  
+**CORS errors**: Configure allowed origins on FeatBit server
 
-```javascript
-try {
-  await fbClient.waitForInitialization();
-} catch (err) {
-  // Check:
-  // 1. SDK key is correct
-  // 2. Network connectivity
-  // 3. CORS settings
-  // 4. WebSocket/HTTP connection
-  console.error('Initialization error:', err);
-}
-```
+## Examples & Resources
 
-### Flags Not Updating
-
-```javascript
-// Check event listeners
-fbClient.on('ff_update', (changes) => {
-  console.log('Update received:', changes);
-});
-
-// Check WebSocket connection status
-fbClient.on('ready', () => console.log('Connected'));
-fbClient.on('error', (err) => console.error('Connection error:', err));
-```
-
-### CORS Issues
-
-Ensure FeatBit server allows your origin. Contact your FeatBit administrator to configure CORS settings.
-
-## Migration from LaunchDarkly
-
-```javascript
-// LaunchDarkly
-const ldClient = LDClient.initialize('sdk-key', user);
-const flag = ldClient.variation('flag-key', false);
-
-// FeatBit equivalent
-const fbClient = new FbClientBuilder()
-    .sdkKey('sdk-key')
-    .streamingUri('wss://app-eval.featbit.co')
-    .eventsUri('https://app-eval.featbit.co')
-    .user(user)
-    .build();
-
-await fbClient.waitForInitialization();
-const flag = fbClient.variation('flag-key', false);
-```
-
-## Additional Resources
-
-- **GitHub**: https://github.com/featbit/featbit-js-client-sdk
-- **NPM**: https://www.npmjs.com/package/@featbit/js-client-sdk
+- **Full Examples**: [GitHub examples folder](https://github.com/featbit/featbit-js-client-sdk/tree/main/examples)
+- **React Integration**: Use [@featbit/react-client-sdk](https://github.com/featbit/featbit-react-client-sdk)
 - **Documentation**: https://docs.featbit.co/sdk-docs/client-side-sdks/javascript
-- **Examples**: https://github.com/featbit/featbit-js-client-sdk/tree/main/examples
-- **FAQ**: https://docs.featbit.co/sdk/faq
+- **Getting Support**: [FeatBit Slack](https://join.slack.com/t/featbit/shared_invite/zt-1ew5e2vbb-x6Apan1xZOaYMnFzqZkGNQ)
+
+---
+
+> 💡 **Version Notice**: For v1/v2 SDK, see [legacy documentation](https://github.com/featbit/featbit-js-client-sdk/tree/v2)
