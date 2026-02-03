@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Official FeatBit plugin marketplace for Claude Code",
-    "version": "1.3.0"
+    "version": "1.4.0"
   },
   "plugins": [
     {
       "name": "featbit-skills",
       "source": "./",
       "description": "Comprehensive FeatBit integration with 14 specialized skills covering platform documentation, observability, Docker/Kubernetes deployment, and SDK implementations for multiple programming languages",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "author": {
         "name": "FeatBit Team",
         "email": "contact@featbit.co"

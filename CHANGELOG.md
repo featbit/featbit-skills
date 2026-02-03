@@ -5,6 +5,29 @@ All notable changes to the FeatBit Claude Code Skills plugin will be documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-02-03
+
+### Improved
+- **Enhanced All SDK Documentation** - Comprehensive documentation improvements across all SDK skills
+  - **React Native SDK**: Enhanced integration guidance with detailed initialization patterns and best practices
+  - **React Client SDK**: Added comprehensive reference files covering initialization, flag consumption, user management, and configuration
+  - **Python SDK**: Detailed integration guidelines with bootstrapping, lifecycle, data synchronization, evaluation, and offline mode
+  - **.NET Server SDK**: Enhanced with OpenFeature integration details and updated examples
+  - **Java SDK**: Improved documentation with OpenFeature integration guidance
+  - **JavaScript & Node.js SDKs**: Enhanced with OpenFeature integration patterns and clearer examples
+  - **Go SDK**: Enhanced for better clarity and implementation details
+  
+- **Improved Deployment Documentation**
+  - **Kubernetes Deployment**: Updated for better clarity and completeness
+  
+- **Enhanced Observability Documentation**
+  - **OpenTelemetry Skill**: Refined documentation for improved clarity
+  
+### Changed
+- All SDK skills now follow consistent documentation patterns with improved examples
+- Better progressive disclosure structure across all skills
+- More actionable code examples and integration guidance
+
 ## [1.3.0] - 2026-02-01
 
 ### Added
