@@ -93,6 +93,7 @@ On failure:
 
 | Method | Endpoint | Description | Permission |
 |--------|----------|-------------|------------|
+| `GET` | `/api/v1/projects` | List all projects in the organization | `CanAccessProject` |
 | `POST` | `/api/v1/projects` | Create a new project | `CreateProject` |
 | `GET` | `/api/v1/projects/{projectId}` | Get project details with environments | `CanAccessProject` |
 
