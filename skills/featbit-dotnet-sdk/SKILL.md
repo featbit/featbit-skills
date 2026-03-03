@@ -500,31 +500,6 @@ var httpClient = new HttpClient
 }
 ```
 
-**AppConfig model**:
-```csharp
-public class AppConfig
-{
-    public int TimeoutSeconds { get; set; } = 30;
-    OpenFeature Provider**: https://www.nuget.org/packages/FeatBit.OpenFeature.ServerProvider
-- **Documentation**: https://docs.featbit.co/sdk-docs/server-side-sdks/dotnet
-- **Getting Started**: https://docs.featbit.co/getting-started/connect-an-sdk#net
-- **Examples**: https://github.com/featbit/featbit-samples
-
-## Reference Documentation
-
-For detailed information on specific topics, see:
-- **[OpenFeature Integration](references/openfeature-integration.md)** - Complete OpenFeature setup and usage guide
-    public string ApiEndpoint { get; set; } = "https://api.example.com";
-    public FeatureSettings Features { get; set; } = new();
-}
-
-public class FeatureSettings
-{
-    public bool EnableLogging { get; set; } = true;
-    public string LogLevel { get; set; } = "Information";
-}
-```
-
 ### A/B Testing
 ```csharp
 var user = FbUser.Builder(userId).Build();
@@ -569,7 +544,7 @@ This SDK targets:
 
 - **GitHub**: https://github.com/featbit/featbit-dotnet-sdk
 - **NuGet**: https://www.nuget.org/packages/FeatBit.ServerSdk
-- **Documentation**: https://docs.featbit.co/sdk-docs/server-side-sdks/dotnet
+- **Documentation**: https://github.com/featbit/featbit-dotnet-sdk
 - **Getting Started**: https://docs.featbit.co/getting-started/connect-an-sdk#net
 - **Examples**: https://github.com/featbit/featbit-samples
 
