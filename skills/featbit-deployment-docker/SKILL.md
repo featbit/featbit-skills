@@ -1,10 +1,6 @@
 ---
 name: featbit-deployment-docker
 description: Expert guidance for deploying FeatBit with Docker Compose across three tiers - Standalone (PostgreSQL only), Standard (PostgreSQL/MongoDB + Redis), and Professional (+ ClickHouse + Kafka). Use when user mentions "docker-compose", "deploy with Docker", "standalone vs standard vs pro", works with docker-compose.yml files, or asks about container configuration, environment variables, or production Docker setup.
-appliesTo:
-  - "**/docker-compose.yml"
-  - "**/docker-compose.yaml"
-  - "**/Dockerfile"
 license: MIT
 metadata:
   version: 2.0.0

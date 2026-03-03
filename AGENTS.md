@@ -226,8 +226,6 @@ Each skill MUST follow this structure in `SKILL.md`:
 ---
 name: skill-name
 description: One-line description of the skill
-appliesTo:
-  - "**"
 ---
 
 # Skill Title

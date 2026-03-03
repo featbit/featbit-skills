@@ -1,13 +1,6 @@
 ---
 name: featbit-java-sdk
 description: Integrates FeatBit feature flags in Java server applications (Spring Boot, Servlet, JAX-RS). Use when working with .java files, pom.xml, build.gradle, or when user asks about "Java SDK", "Spring Boot integration", "feature flags in Java", "OpenFeature Java", or "FeatBit Java".
-appliesTo:
-  - "**/*.java"
-  - "**/pom.xml"
-  - "**/build.gradle"
-  - "**/src/main/**/*.java"
-  - "**/application.properties"
-  - "**/application.yml"
 ---
 
 # FeatBit Java Server SDK

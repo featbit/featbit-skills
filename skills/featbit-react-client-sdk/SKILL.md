@@ -1,13 +1,6 @@
 ---
 name: featbit-react-client-sdk
 description: Expert guidance for integrating FeatBit React Client SDK in React and Next.js applications. Use when users work with React, need React hooks, or ask about React/Next.js feature flag integration.
-appliesTo:
-  - "**/*.jsx"
-  - "**/*.tsx"
-  - "**/App.jsx"
-  - "**/App.tsx"
-  - "**/_app.js"
-  - "**/_app.tsx"
 ---
 
 # FeatBit React Client SDK

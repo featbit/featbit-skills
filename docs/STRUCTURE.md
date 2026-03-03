@@ -53,8 +53,6 @@ Each skill follows the Claude Code skills format:
 ---
 name: skill-name
 description: Brief description
-appliesTo:
-  - "file-pattern"
 ---
 
 # Skill Title

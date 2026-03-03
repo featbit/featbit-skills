@@ -1,22 +1,6 @@
 ---
 name: featbit-react-native-sdk
 description: Provides integration guidance for FeatBit React Native client SDK. Use when adding FeatBit feature flags to React Native apps (iOS/Android), initializing the SDK, or evaluating flags in components.
-appliesTo:
-  - "**/App.tsx"
-  - "**/App.jsx"
-  - "**/App.ts"
-  - "**/App.js"
-  - "**/app/**/*.tsx"
-  - "**/app/**/*.jsx"
-  - "**/app/**/*.ts"
-  - "**/app/**/*.js"
-  - "**/src/**/*.tsx"
-  - "**/src/**/*.jsx"
-  - "**/src/**/*.ts"
-  - "**/src/**/*.js"
-  - "**/*.native.js"
-  - "**/*.ios.js"
-  - "**/*.android.js"
 ---
 
 # FeatBit React Native SDK

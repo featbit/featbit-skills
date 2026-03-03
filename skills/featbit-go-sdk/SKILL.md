@@ -1,14 +1,6 @@
 ---
 name: featbit-go-sdk
 description: Expert knowledge for FeatBit Go Server-Side SDK integration in web servers and backend applications. Use when working with .go files, building feature flags in Go servers, implementing A/B testing in Go, or when user mentions "Go SDK", "featbit go", "feature flags golang", or "go websocket sync". Server-side only, not for client applications.
-appliesTo:
-  - "**/*.go"
-  - "**/go.mod"
-  - "**/go.sum"
-  - "**/main.go"
-  - "**/server.go"
-  - "**/api/**/*.go"
-  - "**/handlers/**/*.go"
 license: MIT
 metadata:
   author: FeatBit

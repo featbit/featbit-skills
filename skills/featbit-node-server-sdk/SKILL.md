@@ -1,13 +1,6 @@
 ---
 name: featbit-node-server-sdk
 description: Expert guidance for integrating FeatBit Node.js Server-Side SDK in backend applications. Use when building Node.js server apps with feature flags, A/B testing, gradual rollouts, or OpenFeature integration. Covers SDK setup, flag evaluation, and event tracking.
-appliesTo:
-  - "**/server.js"
-  - "**/app.js"
-  - "**/index.js"
-  - "**/*.server.js"
-  - "**/api/**/*.js"
-  - "**/backend/**/*.js"
 ---
 
 # FeatBit Node.js Server SDK

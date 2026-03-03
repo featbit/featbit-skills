@@ -6,8 +6,6 @@ metadata:
   author: FeatBit
   version: 2.0.0
   category: documentation-router
-appliesTo:
-  - "**"
 ---
 
 # FeatBit Documentation Router

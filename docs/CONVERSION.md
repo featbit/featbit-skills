@@ -150,8 +150,6 @@ Each skill follows the Claude Code Skills format:
 ---
 name: skill-identifier
 description: When to use this skill
-appliesTo:
-  - "**/*.extension"
 ---
 
 # Skill Title

@@ -1,11 +1,6 @@
 ---
 name: featbit-javascript-client-sdk
 description: Integrates FeatBit JavaScript Client SDK in browser applications with OpenFeature standard support. Use when working with client-side feature flags, browser-based feature toggles, or when user asks about "JavaScript SDK", "JS client SDK", "browser feature flags", "OpenFeature", "OpenFeature provider".
-appliesTo:
-  - "**/*.html"
-  - "**/*.js"
-  - "**/index.js"
-  - "**/app.js"
 ---
 
 # FeatBit JavaScript Client SDK

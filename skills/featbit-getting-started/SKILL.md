@@ -1,8 +1,6 @@
 ---
 name: featbit-getting-started
 description: Step-by-step guide for getting started with FeatBit including creating feature flags, interactive demos, multi-variant flags, and SDK integration
-appliesTo:
-  - "**"
 ---
 
 # FeatBit Getting Started Guide

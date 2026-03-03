@@ -1,8 +1,6 @@
 ---
 name: featbit-opentelemetry
 description: Expert guidance for setting up FeatBit's OpenTelemetry observability integration. Use when users ask about monitoring FeatBit, enabling metrics/traces/logs, configuring OTEL backends like Seq/Jaeger/Prometheus, or troubleshooting FeatBit performance.
-appliesTo:
-  - "**"
 ---
 
 # FeatBit OpenTelemetry Integration

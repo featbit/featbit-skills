@@ -1,14 +1,6 @@
 ---
 name: featbit-python-sdk
 description: Guides integration of the FeatBit Python Server-Side SDK for backend services. Use when users ask about FeatBit feature flags in Python, fbclient usage, or server frameworks like Flask, Django, or FastAPI. Not for client-side use.
-appliesTo:
-  - "**/*.py"
-  - "**/app.py"
-  - "**/main.py"
-  - "**/server.py"
-  - "**/views.py"
-  - "**/api/**/*.py"
-  - "**/backend/**/*.py"
 ---
 
 # FeatBit Python Server-Side SDK
