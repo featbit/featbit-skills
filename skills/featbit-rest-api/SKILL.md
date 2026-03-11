@@ -50,7 +50,7 @@ Authorization: {api_key}
 
 Best for: CI/CD pipelines, automation scripts, service-to-service calls.
 
-📄 **Detailed Guide**: [references/authentication.md](references/authentication.md)
+**Detailed Guide**: [references/authentication.md](references/authentication.md)
 
 ## Response Format
 
@@ -109,7 +109,7 @@ curl -X POST "https://your-featbit-instance.com/api/v1/projects" \
 - Auto-generates two environments: **Prod** and **Dev**
 - Each environment gets a Server Key and Client Key
 
-📄 **Full Reference**: [references/projects-api.md](references/projects-api.md)
+**Full Reference**: [references/projects-api.md](references/projects-api.md)
 
 ### Environment Management
 
@@ -129,7 +129,7 @@ curl -X POST "https://your-featbit-instance.com/api/v1/projects/{projectId}/envs
 - Auto-generates Server Key and Client Key
 - Key must be unique within the project
 
-📄 **Full Reference**: [references/environments-api.md](references/environments-api.md)
+**Full Reference**: [references/environments-api.md](references/environments-api.md)
 
 ### Feature Flag Management
 
@@ -161,7 +161,7 @@ curl -X POST "https://your-featbit-instance.com/api/v1/envs/{envId}/feature-flag
 - Supports variation types: `boolean`, `string`, `number`, `json`
 - Key pattern: `^[a-zA-Z0-9._-]+$`
 
-📄 **Full Reference**: [references/feature-flags-api.md](references/feature-flags-api.md)
+**Full Reference**: [references/feature-flags-api.md](references/feature-flags-api.md)
 
 ## Workflow Example
 
@@ -195,7 +195,7 @@ curl -s -X POST "$BASE_URL/api/v1/envs/$DEV_ENV_ID/feature-flags" \
   }'
 ```
 
-📄 **More Patterns**: [references/common-patterns.md](references/common-patterns.md)
+**More Patterns**: [references/common-patterns.md](references/common-patterns.md)
 
 ## Best Practices
 

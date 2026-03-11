@@ -80,7 +80,7 @@ import {useFlags} from '@featbit/react-client-sdk';
 
 export default function TestComponent({isDarkMode}: {isDarkMode: boolean}) {
   const {robot} = useFlags();
-  return robot === 'AlphaGo' ? <Text>AlphaGo 🤖</Text> : null;
+  return robot === 'AlphaGo' ? <Text>AlphaGo</Text> : null;
 }
 ```
 

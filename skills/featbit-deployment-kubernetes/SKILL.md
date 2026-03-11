@@ -7,13 +7,13 @@ description: Deploys FeatBit to Kubernetes using Helm Charts. Use when user ment
 
 Deploy FeatBit to Kubernetes using official Helm Charts with support for two architecture tiers, multiple service exposure methods, external databases, and auto-scaling.
 
-## 📄 Complete Guide
+## Complete Guide
 
 **Official Repository**: https://github.com/featbit/featbit-charts
 
 **Primary Documentation**: https://raw.githubusercontent.com/featbit/featbit-charts/refs/heads/main/README.md
 
-## 🎯 Overview
+## Overview
 
 **Current Version**: 0.9.1 (FeatBit App: 5.2.1)
 
@@ -22,7 +22,7 @@ Deploy FeatBit to Kubernetes using official Helm Charts with support for two arc
 - Helm >= 3.7.0
 - kubectl configured
 
-## 📦 Architecture Tiers
+## Architecture Tiers
 
 Two official deployment tiers configured via `architecture.tier` in values.yaml:
 
@@ -36,7 +36,7 @@ Database (PostgreSQL or MongoDB) with optional Redis caching.
 Standard tier + Kafka + ClickHouse for real-time analytics and insights.
 - **Use for**: Enterprise deployments requiring real-time data analysis
 
-## 📚 Configuration Examples
+## Configuration Examples
 
 Official example configurations organized by deployment scenario:
 
@@ -71,14 +71,14 @@ Examples include:
 
 Browse all available configuration examples for different deployment scenarios and cloud providers.
 
-## 🔄 Upgrading & Migrations
+## Upgrading & Migrations
 
-**⚠️ Important**: Starting from v0.9.0, database migrations are NOT automatic.
+**Important**: Starting from v0.9.0, database migrations are NOT automatic.
 
 - **Migration Scripts**: https://github.com/featbit/featbit-charts/tree/main/migration
 - **Migration Guide**: Review `migration/RELEASE-v{version}.md` before upgrading
 
-## 🔗 Key Resources
+## Key Resources
 
 - **Values Reference**: https://github.com/featbit/featbit-charts/blob/main/charts/featbit/values.yaml
 - **Chart README**: https://github.com/featbit/featbit-charts/blob/main/README.md

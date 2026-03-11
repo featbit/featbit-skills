@@ -16,7 +16,7 @@ The official [featbit-terraform-aws](https://github.com/featbit/featbit-terrafor
 
 **Option 2 — AWS Kubernetes (EKS)**
 For teams already running Kubernetes on AWS, use the Helm chart approach instead.
-👉 See the **featbit-deployment-kubernetes** skill for full guidance.
+See the **featbit-deployment-kubernetes** skill for full guidance.
 
 ---
 
@@ -28,7 +28,7 @@ Note the distinction: running multiple tasks in the **same AZ** improves **fault
 
 Not all services are equally critical — `evaluation-server` and `api-server` have direct user impact if they go down and should be scaled first. `ui` only affects the portal. `data-analytics-server` only affects analytics; flags keep working without it.
 
-📄 [references/ecs-high-availability.md](references/ecs-high-availability.md)
+[references/ecs-high-availability.md](references/ecs-high-availability.md)
 
 ---
 

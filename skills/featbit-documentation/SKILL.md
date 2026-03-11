@@ -32,7 +32,7 @@ Do **not** use this skill when another FeatBit skill already provides a full ans
 
 FeatBit documentation is organized into 12 main sections. Use the topic keywords below to identify relevant areas, then consult the complete index for specific URLs.
 
-**📚 Complete Documentation Index**: [references/complete-documentation-index.md](references/complete-documentation-index.md)  
+**Complete Documentation Index**: [references/complete-documentation-index.md](references/complete-documentation-index.md)  
 Contains all 75 documentation URLs with detailed summaries. Reference this when you need specific page URLs.
 
 ### Documentation Topics

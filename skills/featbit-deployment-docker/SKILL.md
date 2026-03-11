@@ -28,11 +28,11 @@ FeatBit offers three deployment architectures optimized for different scales:
 
 **Note**: Traffic includes both concurrent WebSocket connections from frontend clients and API calls to clients - these have different scales.
 
-📚 **Architecture Details**: https://docs.featbit.co/installation/deployment-options
+**Architecture Details**: https://docs.featbit.co/installation/deployment-options
 
 ## Deployment Guides
 
-**⚠️ Important**: Before starting any deployment, clone the FeatBit repository as it contains required scripts:
+**Important**: Before starting any deployment, clone the FeatBit repository as it contains required scripts:
 
 ```bash
 git clone https://github.com/featbit/featbit.git
@@ -41,7 +41,7 @@ cd featbit
 
 These scripts are accessed during Docker execution.
 
-**📍 Access Information** (applies to all deployment tiers):
+**Access Information** (applies to all deployment tiers):
 - **URL**: http://localhost:8081
 - **Default Login**: test@featbit.com / 123456
 
@@ -59,7 +59,7 @@ docker compose up -d
 
 **Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 2GB RAM
 
-📄 **Complete Guide**: [references/standalone-configuration.md](references/standalone-configuration.md)
+**Complete Guide**: [references/standalone-configuration.md](references/standalone-configuration.md)
 - Full docker-compose.yml with health checks
 - Step-by-step setup instructions
 - Using managed PostgreSQL
@@ -98,7 +98,7 @@ docker compose -f docker-compose-mongodb.yml up -d
 
 **Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 4GB RAM (8GB recommended)
 
-📄 **Complete Guide**: [references/standard-configuration.md](references/standard-configuration.md)
+**Complete Guide**: [references/standard-configuration.md](references/standard-configuration.md)
 - Full configurations for both PostgreSQL and MongoDB options
 - Production setup with managed services
 - Resource requirements
@@ -123,9 +123,9 @@ docker compose -f docker-compose-pro.yml up -d
 
 **Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 8GB+ RAM, 4+ CPU cores
 
-⚠️ **Complexity Warning**: Requires significant DevOps expertise
+**Complexity Warning**: Requires significant DevOps expertise
 
-📄 **Complete Guide**: [references/professional-configuration.md](references/professional-configuration.md)
+**Complete Guide**: [references/professional-configuration.md](references/professional-configuration.md)
 - Full docker-compose.yml with all services
 - Infrastructure startup sequence
 - Horizontal scaling configuration
@@ -139,7 +139,7 @@ docker compose -f docker-compose-pro.yml up -d
 
 Complete reference for all configuration options:
 
-📄 **[references/environment-variables.md](references/environment-variables.md)**
+**[references/environment-variables.md](references/environment-variables.md)**
 - Provider configuration (DbProvider, MqProvider, CacheProvider)
 - Database connection strings (PostgreSQL, MongoDB, Redis, Kafka, ClickHouse)
 - UI configuration (API_URL, EVALUATION_URL)
@@ -152,7 +152,7 @@ Complete reference for all configuration options:
 
 Common issues and solutions:
 
-📄 **[references/troubleshooting.md](references/troubleshooting.md)**
+**[references/troubleshooting.md](references/troubleshooting.md)**
 - Port conflicts
 - UI connection issues  
 - Database connection failures
@@ -222,40 +222,40 @@ docker compose exec mongodb mongodump --out /backup --db featbit
 ## When to Choose Each Tier
 
 ### Choose Standalone If:
-✅ **Production or non-production** with low to moderate traffic:  
+- **Production or non-production** with low to moderate traffic:  
    - Low to moderate concurrent WebSocket connections from frontend clients
    - Moderate API call volume to clients
-✅ Low event volume (feature flag usage events & custom events)
-✅ Simple single-server deployment preferred
-✅ Cost-effective solution for small-scale production use
-✅ Quick evaluation of FeatBit
+- Low event volume (feature flag usage events & custom events)
+- Simple single-server deployment preferred
+- Cost-effective solution for small-scale production use
+- Quick evaluation of FeatBit
 
-❌ Not Recommended For:
+**Not Recommended For:**
 - Very high concurrent WebSocket connections
 - High event volume requiring event streaming
 - Need for caching layer to improve performance
 
 ### Choose Standard If:
-✅ **Very high concurrent WebSocket connections & API calls**  
-✅ Need caching layer (Redis) for improved performance
-✅ Moderate event volume (feature flag usage events & custom events)
-✅ Production environment requiring reliability
-✅ Good balance of complexity vs features
+- **Very high concurrent WebSocket connections & API calls**  
+- Need caching layer (Redis) for improved performance
+- Moderate event volume (feature flag usage events & custom events)
+- Production environment requiring reliability
+- Good balance of complexity vs features
 
-❌ Consider Professional If:
+**Consider Professional If:**
 - Very high event volume requiring Kafka event streaming
 - Require real-time analytics at scale with ClickHouse
 - Need horizontal scalability for data analytics
 
 ### Choose Professional If:
-✅ **Very high concurrent WebSocket connections & API calls**  
-✅ **Very high event volume** (feature flag usage events & custom events)
-✅ Need Kafka for high-throughput event streaming
-✅ Need ClickHouse for real-time analytics at scale
-✅ Have dedicated DevOps resources
-✅ Budget for infrastructure
+- **Very high concurrent WebSocket connections & API calls**  
+- **Very high event volume** (feature flag usage events & custom events)
+- Need Kafka for high-throughput event streaming
+- Need ClickHouse for real-time analytics at scale
+- Have dedicated DevOps resources
+- Budget for infrastructure
 
-❌ Consider Standard If:
+**Consider Standard If:**
 - Limited DevOps expertise
 - Moderate event volume (Redis sufficient for message queue)
 - Cost-sensitive
