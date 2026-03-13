@@ -1,11 +1,6 @@
 ---
 name: featbit-sdks-react
-description: >
-  Expert guidance for integrating FeatBit React Client SDK in React web applications.
-  Use when user asks about "React SDK", "React feature flags", "FeatBit React",
-  "useFlags hook", "asyncWithFbProvider", "withFbProvider", or mentions .tsx/.jsx files
-  with FeatBit. Do not use for React Native, Node.js server-side rendering, Python,
-  Java, Go, .NET, or Next.js server-side questions.
+description: Expert guidance for integrating FeatBit React Client SDK in React web applications. Use when user asks about "React SDK", "React feature flags", "FeatBit React", "useFlags hook", "asyncWithFbProvider", "withFbProvider", or mentions .tsx/.jsx files with FeatBit. Do not use for React Native, Node.js server-side rendering, Python, Java, Go, .NET, or Next.js server-side questions.
 license: MIT
 metadata:
   author: FeatBit

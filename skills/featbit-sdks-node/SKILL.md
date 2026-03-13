@@ -1,10 +1,6 @@
 ---
 name: featbit-sdks-node
-description: >
-  Expert guidance for integrating FeatBit Node.js Server SDK. Use when user asks about
-  "Node.js SDK", "Node server SDK", "FeatBit Node", or mentions server-side
-  TypeScript/JavaScript with FeatBit. Do not use for browser JavaScript, React,
-  React Native, Python, Java, Go, or .NET questions.
+description: Expert guidance for integrating FeatBit Node.js Server SDK. Use when user asks about "Node.js SDK", "Node server SDK", "FeatBit Node", or mentions server-side TypeScript/JavaScript with FeatBit. Do not use for browser JavaScript, React, React Native, Python, Java, Go, or .NET questions.
 license: MIT
 metadata:
   author: FeatBit

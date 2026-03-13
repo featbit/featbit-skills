@@ -1,10 +1,6 @@
 ---
 name: featbit-sdks-javascript
-description: >
-  Expert guidance for integrating FeatBit JavaScript Client SDK in browser environments.
-  Use when user asks about "JavaScript client SDK", "browser feature flags", "FeatBit JS",
-  "vanilla JS SDK", or mentions browser-side HTML/JS with FeatBit. Do not use for Node.js
-  server-side, React, React Native, .NET, Python, Java, or Go questions.
+description: Expert guidance for integrating FeatBit JavaScript Client SDK in browser environments. Use when user asks about "JavaScript client SDK", "browser feature flags", "FeatBit JS", "vanilla JS SDK", or mentions browser-side HTML/JS with FeatBit. Do not use for Node.js server-side, React, React Native, .NET, Python, Java, or Go questions.
 license: MIT
 metadata:
   author: FeatBit

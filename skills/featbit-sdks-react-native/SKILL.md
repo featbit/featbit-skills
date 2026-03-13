@@ -1,11 +1,6 @@
 ---
 name: featbit-sdks-react-native
-description: >
-  Expert guidance for integrating FeatBit React Native SDK in mobile React Native
-  and Expo applications. Use when user asks about "React Native SDK", "React Native feature flags",
-  "FeatBit mobile", "FeatBit Expo", "buildConfig", "withFbProvider React Native", or
-  mentions .tsx/.jsx files in a React Native or Expo project with FeatBit.
-  Do not use for React web browser apps, Node.js server-side, Python, Java, Go, or .NET questions.
+description: Expert guidance for integrating FeatBit React Native SDK in mobile React Native and Expo applications. Use when user asks about "React Native SDK", "React Native feature flags", "FeatBit mobile", "FeatBit Expo", "buildConfig", "withFbProvider React Native", or mentions .tsx/.jsx files in a React Native or Expo project with FeatBit. Do not use for React web browser apps, Node.js server-side, Python, Java, Go, or .NET questions.
 license: MIT
 metadata:
   author: FeatBit

@@ -1,9 +1,6 @@
 ---
 name: featbit-sdks-go
-description: >
-  Expert guidance for integrating FeatBit Go Server SDK. Use when user asks about
-  "Go SDK", "Golang feature flags", "FeatBit Go", or mentions .go files with FeatBit.
-  Do not use for Node.js, Python, Java, .NET, or JavaScript questions.
+description: Expert guidance for integrating FeatBit Go Server SDK. Use when user asks about "Go SDK", "Golang feature flags", "FeatBit Go", or mentions .go files with FeatBit. Do not use for Node.js, Python, Java, .NET, or JavaScript questions.
 license: MIT
 metadata:
   author: FeatBit

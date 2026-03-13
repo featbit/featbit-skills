@@ -1,10 +1,6 @@
 ---
 name: featbit-sdks-python
-description: >
-  Expert guidance for integrating FeatBit Python Server SDK in backend applications.
-  Use when user asks about "Python SDK", "Python feature flags", "FeatBit Python",
-  fbclient usage, or mentions .py files, Flask, Django, FastAPI, or scripts with FeatBit.
-  Do not use for Node.js, Java, Go, .NET, React, or any browser/client-side questions.
+description: Expert guidance for integrating FeatBit Python Server SDK in backend applications. Use when user asks about "Python SDK", "Python feature flags", "FeatBit Python", fbclient usage, or mentions .py files, Flask, Django, FastAPI, or scripts with FeatBit. Do not use for Node.js, Java, Go, .NET, React, or any browser/client-side questions.
 license: MIT
 metadata:
   author: FeatBit

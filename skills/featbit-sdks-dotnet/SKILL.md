@@ -1,10 +1,6 @@
 ---
 name: featbit-sdks-dotnet
-description: >
-  Expert guidance for integrating FeatBit .NET Server SDK into C# and ASP.NET Core
-  applications. Use when user asks about ".NET SDK", "C# feature flags",
-  "ASP.NET Core FeatBit", "dotnet feature flags", or mentions .cs or .csproj files.
-  Do not use for Node.js, Python, Java, Go, or client-side JavaScript questions.
+description: Expert guidance for integrating FeatBit .NET Server SDK into C# and ASP.NET Core applications. Use when user asks about ".NET SDK", "C# feature flags", "ASP.NET Core FeatBit", "dotnet feature flags", or mentions .cs or .csproj files. Do not use for Node.js, Python, Java, Go, or client-side JavaScript questions.
 license: MIT
 metadata:
   author: FeatBit

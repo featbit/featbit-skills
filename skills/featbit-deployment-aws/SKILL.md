@@ -1,6 +1,6 @@
 ---
 name: featbit-deployment-aws
-description: Guidance for deploying FeatBit on AWS, including ECS Fargate, EKS (Kubernetes), and Terraform. Use when user asks about deploying or running FeatBit on AWS.
+description: Guidance for deploying FeatBit on AWS, including ECS Fargate, EKS (Kubernetes), and Terraform. Use when user asks about deploying or running FeatBit on AWS. Do not use for Docker Compose deployments or Kubernetes deployments on non-AWS clouds.
 license: MIT
 metadata:
   version: 1.0.0

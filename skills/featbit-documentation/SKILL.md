@@ -1,11 +1,11 @@
 ---
 name: featbit-documentation
-description: FeatBit documentation router that provides likely relevant docs.featbit.co URLs when other FeatBit skills cannot fully answer. Use when user asks about FeatBit features, concepts, deployment, SDKs, API, integrations, or architecture and the response should point to official documentation for deeper detail.
+description: FeatBit documentation router that provides likely relevant docs.featbit.co URLs when other FeatBit skills cannot fully answer. Use when user asks about FeatBit features, concepts, deployment, SDKs, API, integrations, or architecture and the response should point to official documentation for deeper detail. Do not use when another FeatBit skill already provides a complete answer.
 license: MIT
 metadata:
   author: FeatBit
   version: 2.0.0
-  category: documentation-router
+  category: platform
 ---
 
 # FeatBit Documentation Router

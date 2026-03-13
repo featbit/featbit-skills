@@ -1,6 +1,6 @@
 ---
 name: featbit-rest-api
-description: Expert guidance for using the FeatBit REST API to manage projects, environments, and feature flags programmatically. Use when user asks about "FeatBit API", "REST API", "create project API", "create environment API", "create feature flag API", "API authentication", "OpenAPI key", or needs to automate FeatBit operations via HTTP endpoints.
+description: Expert guidance for using the FeatBit REST API to manage projects, environments, and feature flags programmatically. Use when user asks about "FeatBit API", "REST API", "create project API", "create environment API", "create feature flag API", "API authentication", "OpenAPI key", or needs to automate FeatBit operations via HTTP endpoints. Do not use for SDK integration, deployment configuration, or flag evaluation questions.
 license: MIT
 metadata:
   author: FeatBit

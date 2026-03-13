@@ -1,10 +1,6 @@
 ---
 name: featbit-sdks
-description: >
-  SDK language router for FeatBit. Routes SDK questions to the correct language-specific
-  skill. Use when user asks about "which SDK to use", "SDK overview", "all FeatBit SDKs",
-  or mentions FeatBit SDK without specifying a language. Do not use for deployment,
-  REST API, observability, or documentation questions.
+description: SDK language router for FeatBit. Routes SDK questions to the correct language-specific skill. Use when user asks about "which SDK to use", "SDK overview", "all FeatBit SDKs", or mentions FeatBit SDK without specifying a language. Do not use for deployment, REST API, observability, or documentation questions.
 license: MIT
 metadata:
   author: FeatBit

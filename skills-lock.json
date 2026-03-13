@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "skill-forge": {
+      "source": "motiful/skill-forge",
+      "sourceType": "github",
+      "computedHash": "60ee4d67965b22b6c24a3dd02de2c5d7ae23355bff37b628a5cf1c828fe41b66"
+    }
+  }
+}

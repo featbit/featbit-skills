@@ -1,6 +1,11 @@
 ---
 name: featbit-deployment-kubernetes
-description: Deploys FeatBit to Kubernetes using Helm Charts. Use when user mentions "Kubernetes", "Helm", "K8s", "kubectl", works with values.yaml files, asks about "cloud deployment", "Azure Kubernetes", "AKS", "EKS", "GKE", "ingress", or needs production-grade container orchestration setup.
+description: Deploys FeatBit to Kubernetes using Helm Charts. Use when user mentions "Kubernetes", "Helm", "K8s", "kubectl", works with values.yaml files, asks about "cloud deployment", "Azure Kubernetes", "AKS", "EKS", "GKE", "ingress", or needs production-grade container orchestration setup. Do not use for Docker Compose deployments or AWS-specific Terraform questions.
+license: MIT
+metadata:
+  author: FeatBit
+  version: 1.0.0
+  category: deployment
 ---
 
 # FeatBit Kubernetes Deployment with Helm
@@ -14,8 +19,6 @@ Deploy FeatBit to Kubernetes using official Helm Charts with support for two arc
 **Primary Documentation**: https://raw.githubusercontent.com/featbit/featbit-charts/refs/heads/main/README.md
 
 ## Overview
-
-**Current Version**: 0.9.1 (FeatBit App: 5.2.1)
 
 **Prerequisites**:
 - Kubernetes >= 1.23

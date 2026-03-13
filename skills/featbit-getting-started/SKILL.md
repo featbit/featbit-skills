@@ -1,6 +1,11 @@
 ---
 name: featbit-getting-started
-description: Step-by-step guide for getting started with FeatBit including creating feature flags, interactive demos, multi-variant flags, and SDK integration
+description: Step-by-step guide for getting started with FeatBit. Use when user asks about "getting started", "first feature flag", "FeatBit tutorial", "Dino Game demo", "create boolean flag", "multi-variant flag", or "how to use FeatBit". Do not use for advanced SDK integration, deployment configuration, REST API, or observability questions.
+license: MIT
+metadata:
+  author: FeatBit
+  version: 1.0.0
+  category: platform
 ---
 
 # FeatBit Getting Started Guide

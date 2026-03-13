@@ -1,10 +1,6 @@
 ---
 name: featbit-sdks-java
-description: >
-  Expert guidance for integrating FeatBit Java Server SDK. Use when user asks about
-  "Java SDK", "Java feature flags", "FeatBit Java", "Maven feature flags", or mentions
-  .java or build.gradle files with FeatBit. Do not use for .NET, Go, Node.js, Python,
-  or JavaScript questions.
+description: Expert guidance for integrating FeatBit Java Server SDK. Use when user asks about "Java SDK", "Java feature flags", "FeatBit Java", "Maven feature flags", or mentions .java or build.gradle files with FeatBit. Do not use for .NET, Go, Node.js, Python, or JavaScript questions.
 license: MIT
 metadata:
   author: FeatBit
