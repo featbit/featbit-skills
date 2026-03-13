@@ -6,9 +6,6 @@ This repo contains agent skills for FeatBit. The primary task is authoring and m
 
 ```
 featbit-skills/
-├── .claude-plugin/
-│   ├── plugin.json          # version must stay in sync
-│   └── marketplace.json     # version must stay in sync
 ├── skills/
 │   └── featbit-{topic}/
 │       ├── SKILL.md         # required, <500 lines
@@ -166,7 +163,7 @@ When adding a new skill, complete all steps in order:
 3. Update skill count in `README.md` ("What is This?" section).
 4. Add skill entry to `README.md` ("Available Skills" section).
 5. Update `CHANGELOG.md`.
-6. Bump MINOR version in `package.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and `README.md` version badge.
+6. Bump MINOR version in `package.json` and `README.md` version badge.
 
 ### Pre-commit Validation
 
@@ -196,10 +193,8 @@ Follow Semantic Versioning (`MAJOR.MINOR.PATCH`).
 | New skill, new feature, non-breaking enhancement | MINOR |
 | Bug fix, typo, doc update, minor improvement | PATCH |
 
-Keep version in sync across all four files simultaneously:
+Keep version in sync across both files simultaneously:
 - `package.json`
-- `.claude-plugin/plugin.json`
-- `.claude-plugin/marketplace.json`
 - `README.md` version badge
 
 ## Release
@@ -209,7 +204,7 @@ Release title format: `v{MAJOR}.{MINOR}.{PATCH} - {3–6 word description in Tit
 Examples: `v1.5.0 - AWS Deployment Support`, `v2.0.0 - Breaking Architecture Changes`
 
 Release checklist:
-- [ ] Version bumped in all four files
+- [ ] Version bumped in both files
 - [ ] `CHANGELOG.md` updated
 - [ ] `git tag -a v{VERSION} -m "{title}"`
 - [ ] `git push origin main && git push origin v{VERSION}`

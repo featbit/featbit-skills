@@ -37,6 +37,9 @@ out/
 .env.local
 .env.*.local
 
+# Claude Code local settings (may contain credentials)
+.claude/
+
 # Testing
 coverage/
 .nyc_output/
