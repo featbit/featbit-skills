@@ -71,3 +71,7 @@ Icon
 # Windows
 ehthumbs.db
 ehthumbs_vista.db
+
+
+# .agents
+.agents/skills/
