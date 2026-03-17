@@ -1,7 +1,0 @@
-.DS_Store
-*.skill
-node_modules/
-dist/
-.env
-.claude/
-assets/candidates/
