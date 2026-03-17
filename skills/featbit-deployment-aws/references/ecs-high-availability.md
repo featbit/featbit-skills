@@ -4,6 +4,15 @@
 >
 > **Using Kubernetes on AWS?** See the **featbit-deployment-kubernetes** skill instead.
 
+## Table of Contents
+
+1. [Architecture Overview](#architecture-overview)
+2. [Understanding the Difference: Fault Tolerance vs. High Availability](#understanding-the-difference-fault-tolerance-vs-high-availability)
+3. [Step 2 — Increase the Task Count](#step-2--increase-the-task-count)
+4. [Step 3 — Spread Tasks Across Availability Zones](#step-3--spread-tasks-across-availability-zones)
+5. [For Complete High Availability](#for-complete-high-availability)
+6. [Reference Implementation](#reference-implementation)
+
 ---
 
 ## Architecture Overview

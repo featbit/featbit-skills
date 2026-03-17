@@ -1,7 +1,7 @@
-﻿{
+{
   "name": "@featbit/claude-skills",
-  "version": "2.1.1",
-  "description": "Official Claude Code skills plugin for FeatBit - comprehensive feature flag and A/B testing platform integration with 17 specialized skills including observability and AWS deployment",
+  "version": "2.1.2",
+  "description": "Official agent skills collection for FeatBit with 17 specialized skills for SDK integration, deployment, APIs, and platform workflows",
   "main": "package.json",
   "author": {
     "name": "FeatBit Team",
@@ -12,8 +12,7 @@
   "homepage": "https://github.com/featbit/featbit-skills#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/featbit/featbit-skills.git",
-    "directory": "featbit-plugin"
+    "url": "https://github.com/featbit/featbit-skills.git"
   },
   "bugs": {
     "url": "https://github.com/featbit/featbit-skills/issues",
@@ -48,9 +47,19 @@
   ],
   "skills": [
     {
+      "name": "featbit-getting-started",
+      "path": "skills/featbit-getting-started",
+      "description": "Step-by-step guide for first-run FeatBit setup, first feature flags, and onboarding workflows"
+    },
+    {
       "name": "featbit-documentation",
       "path": "skills/featbit-documentation",
       "description": "Expert knowledge of FeatBit's complete documentation"
+    },
+    {
+      "name": "featbit-rest-api",
+      "path": "skills/featbit-rest-api",
+      "description": "Expert guidance for FeatBit REST API authentication and management operations"
     },
     {
       "name": "featbit-opentelemetry",
@@ -118,22 +127,9 @@
       "description": "SDK language router — routes questions to the correct language-specific SDK skill"
     },
     {
-      "name": "featbit-openfeature-node-server",
-      "path": "skills/featbit-openfeature-node-server",
-      "description": "Expert guidance for FeatBit OpenFeature Node.js Provider"
-    },
-    {
-      "name": "featbit-openfeature-js-client",
-      "path": "skills/featbit-openfeature-js-client",
-      "description": "Expert guidance for FeatBit OpenFeature JavaScript Provider"
-    },
-    {
       "name": "featbit-evaluation-insights-api",
       "path": "skills/featbit-evaluation-insights-api",
       "description": "Flag Evaluation API and Track Insights API for building custom SDKs on mobile platforms (Kotlin, Swift, Android, iOS, etc.)"
     }
-  ],
-  "engines": {
-    "claude-code": ">=1.0.0"
-  }
+  ]
 }

@@ -1,4 +1,4 @@
-# FeatBit Claude Skills - Git Ignore
+# FeatBit Agent Skills - Git Ignore
 
 # Node modules (if using npm for tooling)
 node_modules/
@@ -37,8 +37,9 @@ out/
 .env.local
 .env.*.local
 
-# Claude Code local settings (may contain credentials)
+# Agent local settings (may contain credentials)
 .claude/
+.agents/
 
 # Testing
 coverage/
@@ -58,10 +59,8 @@ docs/_site/
 # Editor swap files
 .*.sw?
 
-# Claude Code specific (optional)
+# Agent-specific local state (optional)
 .claude-code/
-
-.claude/settings.json
 
 # macOS
 .AppleDouble
@@ -73,5 +72,5 @@ ehthumbs.db
 ehthumbs_vista.db
 
 
-# .agents
-.agents/skills/
+# Skills tooling lockfiles
+skills-lock.json

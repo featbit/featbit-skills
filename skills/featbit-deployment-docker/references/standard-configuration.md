@@ -2,6 +2,16 @@
 
 Complete configurations for FeatBit Standard deployment with PostgreSQL or MongoDB + Redis.
 
+## Table of Contents
+
+1. [Architecture Overview](#architecture-overview)
+2. [Option A: Standard with PostgreSQL + Redis](#option-a-standard-with-postgresql--redis)
+3. [Option B: Standard with MongoDB + Redis](#option-b-standard-with-mongodb--redis)
+4. [Deployment Steps](#deployment-steps)
+5. [Resource Requirements](#resource-requirements)
+6. [Using Managed Services](#using-managed-services)
+7. [Reference](#reference)
+
 ## Architecture Overview
 
 Standard deployment adds Redis for caching and message queuing, providing:

@@ -2,6 +2,11 @@
 
 APIs for managing FeatBit environments. Environments allow you to maintain separate configurations for different deployment stages (e.g., development, staging, production).
 
+## Table of Contents
+
+1. [Create an Environment](#create-an-environment)
+2. [Source Code References](#source-code-references)
+
 ---
 
 ## Create an Environment

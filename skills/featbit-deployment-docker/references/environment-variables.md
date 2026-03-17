@@ -2,6 +2,20 @@
 
 Complete reference for all FeatBit Docker Compose environment variables.
 
+## Table of Contents
+
+1. [Provider Configuration](#provider-configuration)
+2. [Database Connection Strings](#database-connection-strings)
+3. [UI Configuration](#ui-configuration)
+4. [Data Analytics Server Variables](#data-analytics-server-variables)
+5. [Other Service Configuration](#other-service-configuration)
+6. [Using Environment Variables with .env File](#using-environment-variables-with-env-file)
+7. [OpenTelemetry Configuration](#opentelemetry-configuration)
+8. [Environment-Specific Configurations](#environment-specific-configurations)
+9. [Quick Reference Table](#quick-reference-table)
+10. [Troubleshooting Environment Variables](#troubleshooting-environment-variables)
+11. [Reference](#reference)
+
 ## Provider Configuration
 
 These variables determine which infrastructure components FeatBit services use.

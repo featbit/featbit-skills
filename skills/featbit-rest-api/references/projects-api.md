@@ -2,6 +2,13 @@
 
 APIs for managing FeatBit projects. Projects are top-level containers for organizing feature flags across different applications.
 
+## Table of Contents
+
+1. [Create Project](#create-project)
+2. [Get a Project](#get-a-project)
+3. [Get Project List](#get-project-list)
+4. [Source Code References](#source-code-references)
+
 ---
 
 ## Create Project

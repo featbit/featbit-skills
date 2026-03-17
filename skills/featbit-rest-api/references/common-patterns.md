@@ -2,6 +2,16 @@
 
 Workflow examples, error code reference, and best practices for FeatBit REST API usage.
 
+## Table of Contents
+
+1. [End-to-End Workflow](#end-to-end-workflow)
+2. [Error Handling Pattern](#error-handling-pattern)
+3. [Common Error Codes](#common-error-codes)
+4. [Key Naming Conventions](#key-naming-conventions)
+5. [Variation Types Quick Reference](#variation-types-quick-reference)
+6. [Permission Reference](#permission-reference)
+7. [Tips for Automation](#tips-for-automation)
+
 ---
 
 ## End-to-End Workflow

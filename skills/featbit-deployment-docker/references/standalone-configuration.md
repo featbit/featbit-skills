@@ -2,6 +2,15 @@
 
 Complete docker-compose.yml and detailed setup guide for FeatBit Standalone deployment.
 
+## Table of Contents
+
+1. [Complete docker-compose.yml](#complete-docker-composeyml)
+2. [Deployment Steps](#deployment-steps)
+3. [Resource Requirements](#resource-requirements)
+4. [Port Usage](#port-usage)
+5. [Using with Managed PostgreSQL](#using-with-managed-postgresql)
+6. [Reference](#reference)
+
 ## Complete docker-compose.yml
 
 ```yaml

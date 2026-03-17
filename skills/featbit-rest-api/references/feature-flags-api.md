@@ -2,6 +2,12 @@
 
 APIs for managing FeatBit feature flags. Feature flags enable you to control feature rollouts, perform A/B testing, and manage configuration dynamically.
 
+## Table of Contents
+
+1. [Create a Feature Flag](#create-a-feature-flag)
+2. [Variation Types Reference](#variation-types-reference)
+3. [Source Code References](#source-code-references)
+
 ---
 
 ## Create a Feature Flag

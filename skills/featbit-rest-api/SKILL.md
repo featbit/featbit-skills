@@ -216,13 +216,5 @@ curl -s -X POST "$BASE_URL/api/v1/envs/$DEV_ENV_ID/feature-flags" \
 
 ## Official Resources
 
-- **Swagger/OpenAPI Docs**: Available at `/swagger` on your FeatBit instance
-- **FeatBit Documentation**: https://docs.featbit.co
-- **Source Repository**: https://github.com/featbit/featbit
-
-## Related Skills
-
-- **featbit-getting-started**: Initial setup and creating feature flags via UI
-- **featbit-deployment-docker**: Docker Compose deployment
-- **featbit-dotnet-sdk**: .NET SDK for evaluating feature flags in applications
-- **featbit-python-sdk**: Python SDK for server-side flag evaluation
+- **Interactive API Docs**: https://app-api.featbit.co/docs/index.html
+- **OpenAPI Schema**: https://app-api.featbit.co/swagger/OpenApi/swagger.json

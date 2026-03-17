@@ -2,6 +2,14 @@
 
 Comprehensive troubleshooting guide for FeatBit Docker Compose deployments.
 
+## Table of Contents
+
+1. [Common Issues](#common-issues)
+2. [Emergency Recovery](#emergency-recovery)
+3. [Debugging Tips](#debugging-tips)
+4. [Getting Help](#getting-help)
+5. [Reference](#reference)
+
 ## Common Issues
 
 ### Login Failed / Cannot Sign In

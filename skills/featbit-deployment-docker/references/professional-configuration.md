@@ -2,6 +2,18 @@
 
 Complete guide for FeatBit Professional deployment with ClickHouse and Kafka for enterprise-scale deployments.
 
+## Table of Contents
+
+1. [Architecture Overview](#architecture-overview)
+2. [System Requirements](#system-requirements)
+3. [Official Configurations](#official-configurations)
+4. [Service Configuration Reference](#service-configuration-reference)
+5. [Quick Start](#quick-start)
+6. [Configuration Customization](#configuration-customization)
+7. [Production Considerations](#production-considerations)
+8. [Troubleshooting](#troubleshooting)
+9. [Additional Resources](#additional-resources)
+
 ## Architecture Overview
 
 Professional deployment provides:

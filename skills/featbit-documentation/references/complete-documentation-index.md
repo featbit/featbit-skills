@@ -4,6 +4,21 @@ This reference contains all 75 documentation URLs from docs.featbit.co with summ
 
 Base URL: https://docs.featbit.co
 
+## Table of Contents
+
+1. [Getting Started](#1-getting-started)
+2. [Feature Flags](#2-feature-flags)
+3. [Experimentation](#3-experimentation)
+4. [Relay Proxy](#4-relay-proxy)
+5. [API Documentation](#5-api-documentation)
+6. [Data Import and Export](#6-data-import-and-export)
+7. [IAM (Identity and Access Management)](#7-iam-identity-and-access-management)
+8. [Installation](#8-installation)
+9. [Integrations](#9-integrations)
+10. [Licenses](#10-licenses)
+11. [Tech Stack](#11-tech-stack)
+12. [GitHub Repositories](#12-github-repositories)
+
 ---
 
 ## 1. Getting Started

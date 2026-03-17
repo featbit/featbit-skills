@@ -288,6 +288,6 @@ docker compose exec mongodb mongodump --out /backup --db featbit
 ## Related Skills
 
 - **featbit-deployment-kubernetes**: Kubernetes/Helm deployments with auto-scaling
-- **featbit-deployment**: Overview of all deployment options and architecture
+- **featbit-documentation**: Official deployment and architecture documentation lookup
 - **featbit-getting-started**: Initial setup, creating feature flags, SDK integration
 - **featbit-opentelemetry**: Observability and monitoring setup

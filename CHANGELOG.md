@@ -1,9 +1,24 @@
 # Changelog
 
-All notable changes to the FeatBit Claude Code Skills plugin will be documented in this file.
+All notable changes to the FeatBit Agent Skills collection will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.1.2] - 2026-03-17
+
+### Fixed
+- Synchronized `package.json` with the actual `skills/` directory by adding `featbit-getting-started`
+  and `featbit-rest-api`, and removing stale OpenFeature entries that no longer exist in the repo
+- Removed the tracked `skills-lock.json` development artifact and updated `.gitignore` to ignore
+  local `.agents/` tooling state and future lockfiles
+- Corrected stale skill cross-references in `featbit-deployment-docker` and `featbit-rest-api`
+- Cleaned up legacy repository metadata and outdated FeatBit collection wording in root docs
+
+### Changed
+- Reworked `README.md` so the skill catalog appears before installation, added direct links to each
+  `SKILL.md`, and clarified agent compatibility
+- Removed the outdated `Future Releases` planning section from this changelog
 
 ## [2.1.1] - 2026-03-16
 
@@ -101,7 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Troubleshooting reference with common issues and solutions
   - New reference files structure for progressive disclosure
 
-- **Enhanced Claude Skills Best Practices** (`claude-skills-best-practices`)
+- **Enhanced shared skill authoring references**
   - New reference files on MCP integration patterns
   - Progressive disclosure implementation guide
   - Real-world examples and troubleshooting tips
@@ -202,23 +217,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Individual skill documentation with 10,000+ lines of content
 - Usage examples for all major frameworks
 - Official resource links and GitHub repositories
-
----
-
-## Future Releases
-
-### Planned for 1.1.0
-- Additional language SDKs (Ruby, PHP, Rust)
-- Mobile SDKs (Android, iOS native)
-- CLI tool integration
-- Advanced experimentation patterns
-
-### Under Consideration
-- VS Code extension specific features
-- Code snippets and templates
-- Interactive examples
-- Video tutorials integration
-
----
-
-**Note**: This is the initial release with comprehensive coverage of all major FeatBit SDKs and deployment options.
