@@ -74,3 +74,6 @@ ehthumbs_vista.db
 
 # Skills tooling lockfiles
 skills-lock.json
+
+# Claude Code conversation exports
+202[0-9]-*.txt

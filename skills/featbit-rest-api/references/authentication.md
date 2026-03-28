@@ -1,3 +1,8 @@
+---
+name: authentication
+description: JWT bearer token and OpenAPI key authentication methods for FeatBit API requests
+---
+
 # Authentication
 
 FeatBit supports two methods for authenticating API requests.

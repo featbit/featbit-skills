@@ -10,90 +10,107 @@ metadata:
 
 # FeatBit OpenTelemetry Integration
 
-Guide users in setting up comprehensive observability for FeatBit's backend services using OpenTelemetry to publish metrics, traces, and logs.
+Set up comprehensive observability for FeatBit's backend services using OpenTelemetry to publish metrics, traces, and logs.
 
-## Overview
+## Execution Procedure
 
-FeatBit's three backend services are fully instrumented with OpenTelemetry:
+```
+1. DETERMINE deployment type
+   - Local dev → use ready-to-run Docker Compose example
+   - Production → configure env vars per service manually
 
-- **Api Service** (.NET/C#): [.NET Automatic Instrumentation](https://opentelemetry.io/docs/languages/net/automatic/)
-- **Evaluation-Server** (.NET/C#): [.NET Automatic Instrumentation](https://opentelemetry.io/docs/languages/net/automatic/)
-- **Data Analytic Service** (Python): [Python Automatic Instrumentation](https://opentelemetry.io/docs/languages/python/automatic/)
+2. CONFIGURE environment variables for each service
+   - Set ENABLE_OPENTELEMETRY=true
+   - Assign unique OTEL_SERVICE_NAME per service
+   - Set OTEL_EXPORTER_OTLP_ENDPOINT to collector address
 
-**What you get**: Metrics (CPU, memory, network), traces (request flows, latency), and logs (application events, errors).
+3. DEPLOY OpenTelemetry Collector (if not already running)
+   - Local: docker compose -f docker-compose-otel-collector-contrib.yml up -d
+   - Production: deploy collector with exporters for your backend
 
-## Quick Start Configuration
+4. START FeatBit services with OTEL enabled
+   - Local: docker compose -f docker-compose-otel.yml up -d
+   - Production: restart services with updated env vars
 
-To enable OpenTelemetry, set these environment variables for each service:
+5. VERIFY telemetry
+   - Check collector logs for incoming data
+   - Open backend UIs (Seq/Jaeger/Prometheus or equivalent)
+   - Trigger feature flag operations and confirm metrics/traces/logs appear
+```
+
+## Instrumented Services
+
+FeatBit has three backend services, each with OpenTelemetry automatic instrumentation:
+
+| Service | Language | Instrumentation Docs |
+|---------|----------|---------------------|
+| Api Service | .NET/C# | [.NET Automatic Instrumentation](https://opentelemetry.io/docs/languages/net/automatic/) |
+| Evaluation-Server | .NET/C# | [.NET Automatic Instrumentation](https://opentelemetry.io/docs/languages/net/automatic/) |
+| Data Analytic Service | Python | [Python Automatic Instrumentation](https://opentelemetry.io/docs/languages/python/automatic/) |
+
+Telemetry signals collected: metrics (CPU, memory, network), traces (request flows, latency), and logs (application events, errors).
+
+## Environment Variables
+
+Set these for each service to enable OpenTelemetry:
 
 ```bash
 # Enable OpenTelemetry
 ENABLE_OPENTELEMETRY=true
 
-# Service identification (set appropriately for each service)
-OTEL_SERVICE_NAME=featbit-api           # For Api service
-OTEL_SERVICE_NAME=featbit-els           # For Evaluation-Server
-OTEL_SERVICE_NAME=featbit-das           # For Data Analytic service
+# Assign a unique name per service
+OTEL_SERVICE_NAME=featbit-api           # Api Service
+OTEL_SERVICE_NAME=featbit-els           # Evaluation-Server
+OTEL_SERVICE_NAME=featbit-das           # Data Analytic Service
 
-# Exporter endpoint (gRPC endpoint of OpenTelemetry collector)
+# Point to the OpenTelemetry Collector gRPC endpoint
 OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
 ```
 
-**Additional configuration options**:
+For advanced configuration, refer to:
 - .NET services: [Configuration docs](https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/blob/main/docs/config.md)
 - Python service: [Environment variables](https://opentelemetry-python.readthedocs.io/en/latest/sdk/environment_variables.html)
 
-## Ready-to-Run Example
+## Local Development Example
 
-Try the complete working example with Seq (logs), Jaeger (traces), and Prometheus (metrics):
+Run the complete stack locally with Seq (logs), Jaeger (traces), and Prometheus (metrics):
 
 ```bash
-# Clone the repository
 git clone https://github.com/featbit/featbit.git
 cd featbit
 
-# Build the test images
+# Build test images
 docker compose --project-directory . -f ./docker/composes/docker-compose-dev.yml build
 
-# Start OTEL collector, Seq, Jaeger, and Prometheus
+# Start the OpenTelemetry Collector, Seq, Jaeger, and Prometheus
 docker compose --project-directory . -f ./docker/composes/docker-compose-otel-collector-contrib.yml up -d
 
 # Start FeatBit services with OpenTelemetry enabled
 docker compose --project-directory . -f ./docker/composes/docker-compose-otel.yml up -d
 ```
 
-After starting, use FeatBit normally (create flags, evaluate, view insights), then access:
+After startup, trigger feature flag operations (create flags, evaluate, view insights), then verify telemetry at:
 - **Seq (Logs)**: http://localhost:8082
 - **Jaeger (Traces)**: http://localhost:16686
 - **Prometheus (Metrics)**: http://localhost:9090
 
-## Common Use Cases
+## Production Deployment
 
-**Setting Up Observability**:
-1. Configure environment variables for each FeatBit service
-2. Deploy OpenTelemetry collector to receive telemetry data
-3. Connect to your backend (Seq, Jaeger, Prometheus, Datadog, New Relic, Grafana, or any OTEL-compatible system)
+1. Assign a unique `OTEL_SERVICE_NAME` to each service to distinguish telemetry
+2. Set exporter endpoints with correct protocol (http/https) and ports
+3. Configure sampling rates to control telemetry data volume
+4. Monitor all three services for complete visibility
+5. Configure one of these backends (or any OpenTelemetry-compatible system):
+   - Datadog
+   - New Relic One
+   - Grafana
+   - Seq / Jaeger / Prometheus
 
-**Monitoring & Troubleshooting**:
-- Track request latency, throughput, and resource utilization
-- Use traces to identify bottlenecks in request flows
-- Correlate logs with traces for debugging
-- Set up alerts for performance anomalies
+## Monitoring and Troubleshooting
 
-**Production Deployment**:
-- Use unique `OTEL_SERVICE_NAME` for each service to distinguish telemetry
-- Configure appropriate exporter endpoints (http/https, ports)
-- Set sampling rates to manage data volume
-- Monitor all three services for complete visibility
+- Track request latency, throughput, and resource utilization via metrics
+- Trace request flows to identify bottlenecks
+- Correlate logs with traces to pinpoint root causes
+- Set up alerts on performance anomalies in your backend
 
-## Best Practices
-
-1. **Always set unique `OTEL_SERVICE_NAME`** for each service
-2. **Start with the ready-to-run example** to understand the setup before customizing
-3. **Configure sampling in production** to manage telemetry data volume
-4. **Correlate metrics, traces, and logs** for comprehensive troubleshooting
-
-## References
-
-- Official documentation: https://docs.featbit.co/integrations/observability/opentelemetry
-- Compatible backends: Datadog, New Relic One, Grafana, any OpenTelemetry-compatible system
+Official documentation: https://docs.featbit.co/integrations/observability/opentelemetry

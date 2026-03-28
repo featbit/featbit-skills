@@ -3,17 +3,48 @@ name: featbit-deployment-docker
 description: Expert guidance for deploying FeatBit with Docker Compose across three tiers - Standalone (PostgreSQL only), Standard (PostgreSQL/MongoDB + Redis), and Professional (+ ClickHouse + Kafka). Use when user mentions "docker-compose", "deploy with Docker", "standalone vs standard vs pro", works with docker-compose.yml files, or asks about container configuration, environment variables, or production Docker setup. Do not use for Kubernetes, Helm, AWS ECS/EKS, or cloud-provider-specific deployments.
 license: MIT
 metadata:
+  author: FeatBit
   version: 2.0.0
   category: deployment
 ---
 
 # FeatBit Docker Compose Deployment
 
-Expert guidance for deploying FeatBit with Docker Compose. This skill provides deployment instructions for all three tiers with links to detailed configuration files.
+Deploy FeatBit with Docker Compose. Covers all three tiers with links to detailed configuration references.
+
+## Execution Procedure
+
+```
+1. DETERMINE tier
+   - Ask user about expected concurrent connections, API call volume, and event volume
+   - Low/moderate traffic, simple setup → Standalone
+   - High connections, need caching, moderate events → Standard
+   - High connections AND high event volume → Professional
+   - If Standard: ask PostgreSQL vs MongoDB preference
+
+2. CLONE repo
+   git clone https://github.com/featbit/featbit.git && cd featbit
+
+3. RUN docker compose
+   - Standalone:    docker compose up -d
+   - Standard PG:   docker compose -f docker-compose-standard.yml up -d
+   - Standard Mongo: docker compose -f docker-compose-mongodb.yml up -d
+   - Professional:  docker compose -f docker-compose-pro.yml up -d
+
+4. VERIFY access
+   - Open http://localhost:8081
+   - Login: test@featbit.com / 123456
+   - Confirm all services healthy: docker compose ps
+
+5. CONFIGURE (as needed)
+   - Read references/environment-variables.md for env var customization
+   - Read references/<tier>-configuration.md for tier-specific tuning
+   - Read references/troubleshooting-*.md if services fail health checks
+```
 
 ## Core Concepts
 
-FeatBit offers three deployment architectures optimized for different scales:
+Choose from three deployment architectures optimized for different scales:
 
 | Tier | Database | Cache | Message Queue | Analytics | Best For |
 |------|----------|-------|---------------|-----------|----------|
@@ -32,16 +63,14 @@ FeatBit offers three deployment architectures optimized for different scales:
 
 ## Deployment Guides
 
-**Important**: Before starting any deployment, clone the FeatBit repository as it contains required scripts:
+Clone the FeatBit repository first — it contains required init scripts:
 
 ```bash
 git clone https://github.com/featbit/featbit.git
 cd featbit
 ```
 
-These scripts are accessed during Docker execution.
-
-**Access Information** (applies to all deployment tiers):
+**Access all tiers at**:
 - **URL**: http://localhost:8081
 - **Default Login**: test@featbit.com / 123456
 
@@ -68,10 +97,10 @@ docker compose up -d
 
 ### Standard Deployment
 
-**Two Options Available**:
+Pick one of two database backends:
 
 **Option A: PostgreSQL + Redis**
-- Best for teams familiar with PostgreSQL
+- Use if the team already runs PostgreSQL
 - Simpler than MongoDB option
 
 ```bash
@@ -83,8 +112,8 @@ cd featbit
 docker compose -f docker-compose-standard.yml up -d
 ```
 
-**Option B: MongoDB + Redis** 
-- Better for document-oriented workloads
+**Option B: MongoDB + Redis**
+- Prefer for document-oriented workloads
 - Includes initialization script
 
 ```bash
@@ -106,9 +135,9 @@ docker compose -f docker-compose-mongodb.yml up -d
 
 ### Professional Deployment
 
-**Enterprise-Scale Architecture**:
+Deploy the full enterprise stack:
 - Kafka for high-throughput messaging
-- ClickHouse for advanced analytics
+- ClickHouse for advanced analytics via the Data Analytics Server
 - Horizontal scalability
 - Handles millions of events per day
 
@@ -123,7 +152,7 @@ docker compose -f docker-compose-pro.yml up -d
 
 **Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 8GB+ RAM, 4+ CPU cores
 
-**Complexity Warning**: Requires significant DevOps expertise
+**Complexity Warning**: Ensure dedicated DevOps expertise before deploying
 
 **Complete Guide**: [references/professional-configuration.md](references/professional-configuration.md)
 - Full docker-compose.yml with all services
@@ -137,7 +166,7 @@ docker compose -f docker-compose-pro.yml up -d
 
 ### Environment Variables
 
-Complete reference for all configuration options:
+Consult these references for all configuration options:
 
 **[references/environment-variables.md](references/environment-variables.md)**
 - Provider configuration (DbProvider, MqProvider, CacheProvider)
@@ -146,23 +175,34 @@ Complete reference for all configuration options:
 - Service-specific variables
 - Using .env files for secrets
 - Environment-specific configurations
-- OpenTelemetry configuration
+
+**[references/environment-variables-otel.md](references/environment-variables-otel.md)**
+- OpenTelemetry configuration variables
+- Integration with Seq, Jaeger, Prometheus, Grafana, Datadog
+- Testing and troubleshooting OTEL setup
 
 ### Troubleshooting
 
-Common issues and solutions:
+Diagnose issues by category:
 
-**[references/troubleshooting.md](references/troubleshooting.md)**
+**[references/troubleshooting-setup.md](references/troubleshooting-setup.md)**
+- Login failures and database initialization
 - Port conflicts
-- UI connection issues  
+- UI connection issues
 - Database connection failures
 - Service startup problems
+
+**[references/troubleshooting-infrastructure.md](references/troubleshooting-infrastructure.md)**
 - WebSocket connection failures
 - Redis and MongoDB issues
 - Kafka and ClickHouse troubleshooting
-- Performance problems
+- Container, disk space, and performance problems
+- Data loss after restart
+
+**[references/troubleshooting-recovery.md](references/troubleshooting-recovery.md)**
 - Emergency recovery procedures
 - Debugging tips
+- Getting help
 
 ## Quick Commands
 
@@ -219,47 +259,6 @@ docker compose exec postgresql pg_dump -U postgres featbit > backup.sql
 docker compose exec mongodb mongodump --out /backup --db featbit
 ```
 
-## When to Choose Each Tier
-
-### Choose Standalone If:
-- **Production or non-production** with low to moderate traffic:  
-   - Low to moderate concurrent WebSocket connections from frontend clients
-   - Moderate API call volume to clients
-- Low event volume (feature flag usage events & custom events)
-- Simple single-server deployment preferred
-- Cost-effective solution for small-scale production use
-- Quick evaluation of FeatBit
-
-**Not Recommended For:**
-- Very high concurrent WebSocket connections
-- High event volume requiring event streaming
-- Need for caching layer to improve performance
-
-### Choose Standard If:
-- **Very high concurrent WebSocket connections & API calls**  
-- Need caching layer (Redis) for improved performance
-- Moderate event volume (feature flag usage events & custom events)
-- Production environment requiring reliability
-- Good balance of complexity vs features
-
-**Consider Professional If:**
-- Very high event volume requiring Kafka event streaming
-- Require real-time analytics at scale with ClickHouse
-- Need horizontal scalability for data analytics
-
-### Choose Professional If:
-- **Very high concurrent WebSocket connections & API calls**  
-- **Very high event volume** (feature flag usage events & custom events)
-- Need Kafka for high-throughput event streaming
-- Need ClickHouse for real-time analytics at scale
-- Have dedicated DevOps resources
-- Budget for infrastructure
-
-**Consider Standard If:**
-- Limited DevOps expertise
-- Moderate event volume (Redis sufficient for message queue)
-- Cost-sensitive
-
 ## Official Resources
 
 ### Documentation
@@ -285,9 +284,3 @@ docker compose exec mongodb mongodump --out /backup --db featbit
 - **Azure Container Apps**: https://github.com/featbit/featbit-aspire
 - **Terraform (AWS)**: https://github.com/featbit/featbit-terraform-aws
 
-## Related Skills
-
-- **featbit-deployment-kubernetes**: Kubernetes/Helm deployments with auto-scaling
-- **featbit-documentation**: Official deployment and architecture documentation lookup
-- **featbit-getting-started**: Initial setup, creating feature flags, SDK integration
-- **featbit-opentelemetry**: Observability and monitoring setup

@@ -10,19 +10,36 @@ metadata:
 
 # FeatBit React Native SDK
 
-## When to Use This Skill
+Client SDK for React Native mobile apps (iOS/Android) and Expo projects. Connects from the device via WebSocket, syncs flag data for the current user, and evaluates flags locally. Requires a mandatory `buildConfig()` call before the provider. The initialization package (`@featbit/react-native-sdk`) is separate from the hooks package (`@featbit/react-client-sdk`). User fields use `keyId` and `name` (not `id` and `userName`).
 
-Use for React Native mobile applications (iOS/Android) and Expo projects that evaluate feature flags on the client side.
+## Execution Procedure
 
-**Why client SDK**: Connects from the mobile device via WebSocket, syncs flag data for the current user, and evaluates flags locally. Supports both React Native CLI and Expo Go.
+```
+1. Install packages
+   npm install @featbit/react-native-sdk
 
-**Key difference from the React web SDK**: initialization requires a mandatory `buildConfig()` call before the provider, and the initialization package (`@featbit/react-native-sdk`) is separate from the hooks package (`@featbit/react-client-sdk`). User fields are also different: `keyId` and `name` (not `id` and `userName`).
+2. Build config
+   config = buildConfig({ options: { user, sdkKey, streamingUri, eventsUrl } })
 
-Do not use for React web browser apps (use `featbit-sdks-react`) or any server-side context.
+3. Choose provider wrapper
+   IF app can show loading screen while SDK initializes:
+     use asyncWithFbProvider(config) → returns Promise<Provider>
+     await the provider, then render <Provider><App /></Provider>
+   ELSE (render immediately, flags arrive via re-render):
+     use withFbProvider(config)(App) → returns wrapped component
+     export default the wrapped component
 
-## Source
+4. Wrap app with chosen provider
+   export default WrappedApp
 
-https://github.com/featbit/featbit-react-native-sdk
+5. Consume flags in components
+   import { useFlags } from '@featbit/react-client-sdk'
+   const { flagKey } = useFlags()
+
+6. Evaluate and branch on flag values
+   IF flagKey === expectedValue → feature-on path
+   ELSE → feature-off path
+```
 
 ## Setup Workflow
 
@@ -81,7 +98,7 @@ export default function TestComponent({isDarkMode}: {isDarkMode: boolean}) {
 
 **Important**: `useFlags` is imported from `@featbit/react-client-sdk`, not from `@featbit/react-native-sdk`.
 
-If flags return fallback values unexpectedly, verify `sdkKey`, `streamingUri`, and `eventsUrl`.
+If flags return fallback values unexpectedly, verify `sdkKey`, `streamingUri`, and `eventsUrl`. If all three are correct, check that `buildConfig()` is called before the provider and that the WebSocket connection is not blocked by a firewall or proxy. Enable SDK debug logging to inspect the connection handshake.
 
 ## Feature Flag Evaluation
 
@@ -125,7 +142,3 @@ const options = {
 
 To switch users after initialization, call `await fbClient.identify(user)` with an updated user object (via `useFbClient()`).
 
-## Read Next Only When Needed
-
-- Read [Initializing the SDK](https://github.com/featbit/featbit-react-native-sdk#initializing-the-sdk) when the user asks about `asyncWithFbProvider` vs `withFbProvider` or how `buildConfig` works in more detail.
-- Read the [React Client SDK README — Consuming flags](https://github.com/featbit/featbit-react-client-sdk#consuming-flags) for full documentation on hooks, class components (`withFbConsumer`, `contextType`), `reactOptions.useCamelCaseFlagKeys`, and bootstrap values — the React Native SDK inherits all of this behavior.

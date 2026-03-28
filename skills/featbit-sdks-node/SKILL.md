@@ -10,15 +10,33 @@ metadata:
 
 # FeatBit Node.js Server SDK
 
-## When to Use This Skill
+Server-side Node.js and TypeScript SDK for real-time feature flag evaluation in web servers, REST APIs, and background workers. Maintains one persistent WebSocket connection per process, synchronizes all feature flag data locally in under 100 ms, and evaluates every feature flag locally without a remote call. Do not use for browser JavaScript (use `featbit-sdks-javascript`), React (`featbit-sdks-react`), or React Native (`featbit-sdks-react-native`).
 
-Use for server-side Node.js and TypeScript applications — web servers, REST APIs, background workers — that need real-time feature flag evaluation.
+## Execution Procedure
 
-Why server-side SDK: maintains one persistent WebSocket connection per process, synchronizes all flag data locally in under 100 ms, and evaluates every flag locally without a remote call. Do not use for browser JavaScript (use `featbit-sdks-javascript`), React (`featbit-sdks-react`), or React Native (`featbit-sdks-react-native`).
+```
+1. Install package
+   npm install --save @featbit/node-server-sdk
 
-## Source
+2. Build FbClient
+   new FbClientBuilder()
+     .sdkKey(envSecret)
+     .streamingUri(wsUri)
+     .eventsUri(httpUri)
+     .build()
 
-https://github.com/featbit/featbit-node-server-sdk
+3. Evaluate first feature flag
+   await fbClient.waitForInitialization()
+   user = new UserBuilder(key).name(name).build()
+   value = await fbClient.boolVariation(flagKey, user, fallback)
+
+4. Integrate into application
+   Wire FbClient into request handlers / worker loops.
+   Use boolVariation / stringVariation / numberVariation / jsonVariation as needed.
+
+5. Close client on shutdown
+   await fbClient.close()
+```
 
 ## Setup Workflow
 
@@ -82,7 +100,7 @@ const boolVariationDetail = await fbClient.boolVariationDetail(flagKey, user, fa
 console.log(`Returns ${boolVariationDetail.value}, Kind: ${boolVariationDetail.kind}, Reason: ${boolVariationDetail.reason}`);
 ```
 
-Use `boolVariation` when only the flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed.
+Use `boolVariation` when only the feature flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed.
 
 Also available: `stringVariation`/`stringVariationDetail`, `numberVariation`/`numberVariationDetail`, `jsonVariation`/`jsonVariationDetail`.
 
@@ -123,7 +141,7 @@ await fbClient.close();
 
 Use `fbClient.track(user, eventName)` when the event is a simple counter. Use `fbClient.track(user, eventName, numericValue)` when the event also carries a numeric metric such as revenue, score, or quantity. `numericValue` is optional and defaults to `1.0`.
 
-Call `track` only after the related feature flag evaluation call. If `track` runs before the flag is evaluated for that user, the custom event will not be included in experiment results.
+Call `track` only after the related feature flag evaluation call. If `track` runs before the feature flag is evaluated for that user, the custom event will not be included in experiment results.
 
 ## OpenFeature Integration
 
@@ -135,7 +153,7 @@ npm install @featbit/node-server-sdk
 npm install @featbit/openfeature-provider-node-server
 ```
 
-Register the FeatBit provider and evaluate flags via the OpenFeature client:
+Register the FeatBit provider and evaluate feature flags via the OpenFeature client:
 
 ```typescript
 import { OpenFeature, ProviderEvents } from '@openfeature/server-sdk';
@@ -156,10 +174,5 @@ OpenFeature.addHandler(ProviderEvents.Ready, async () => {
 });
 ```
 
-See [openfeature-provider-node-server](https://github.com/featbit/openfeature-provider-node-server) for `ProviderEvents.ConfigurationChanged` and flag change subscription examples.
+See [openfeature-provider-node-server](https://github.com/featbit/openfeature-provider-node-server) for `ProviderEvents.ConfigurationChanged` and feature flag change subscription examples.
 
-## Read Next Only When Needed
-
-- Read the official README section for [evaluating flags](https://github.com/featbit/featbit-node-server-sdk#evaluating-flags) when the user asks how to inspect evaluation detail or use non-boolean typed variants (`stringVariation`, `numberVariation`, `jsonVariation`).
-- Read the official README section for [IUser](https://github.com/featbit/featbit-node-server-sdk#iuser) when the user asks about user attributes, custom properties, targeting fields, or user construction patterns.
-- Read the official README sections for [FbClientNode](https://github.com/featbit/featbit-node-server-sdk#fbclientnode), [polling mode](https://github.com/featbit/featbit-node-server-sdk#fbclient-using-polling), [logger](https://github.com/featbit/featbit-node-server-sdk#logger), [offline mode](https://github.com/featbit/featbit-node-server-sdk#offline-mode), [disable events collection](https://github.com/featbit/featbit-node-server-sdk#disable-events-collection), and [experiments](https://github.com/featbit/featbit-node-server-sdk#experiments-abn-testing) when the user asks about custom events, A/B testing, conversion tracking, or event collection behavior.

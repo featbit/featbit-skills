@@ -10,17 +10,17 @@ metadata:
 
 # FeatBit React Client SDK
 
-## When to Use This Skill
+## Execution Procedure
 
-Use for client-side React applications (React 16.3+) that evaluate feature flags in the browser.
-
-**Why client SDK**: Connects directly from the browser via WebSocket, syncs flag data for the current user, and evaluates flags locally. No backend proxy is required.
-
-Do not use for React Native (use the React Native SDK), Next.js server-side rendering, or any server-side context — use `@featbit/node-server-sdk` for server-side Next.js instead.
-
-## Source
-
-https://github.com/featbit/featbit-react-client-sdk
+```
+1. Install package: npm install @featbit/react-client-sdk
+2. Choose provider:
+   - withFbProvider      → synchronous, renders immediately, feature flags arrive after
+   - asyncWithFbProvider → asynchronous, awaits initialization, feature flags ready at first render
+3. Wrap app root with the chosen provider, passing sdkKey + streamingUrl + eventsUrl + user
+4. In child components, call useFlags() to read feature flag values
+5. Branch UI logic on feature flag values (boolean, string, or JSON)
+```
 
 ## Setup Workflow
 
@@ -39,7 +39,7 @@ npm install @featbit/react-client-sdk
 
 **Step 2: Wrap the app root with the provider**
 
-Use `asyncWithFbProvider` at the app entry point before rendering so flags are ready at startup:
+Use `asyncWithFbProvider` at the app entry point before rendering so feature flags are ready at startup:
 
 ```tsx
 import { createRoot } from 'react-dom/client';
@@ -69,9 +69,9 @@ import { asyncWithFbProvider } from '@featbit/react-client-sdk';
 })();
 ```
 
-**Why `asyncWithFbProvider`**: Awaiting initialization prevents flag flicker — the provider resolves before the first render. Use `withFbProvider` only if you prefer to render first and apply flag updates after.
+**Why `asyncWithFbProvider`**: Awaiting initialization prevents feature flag flicker — the provider resolves before the first render. Use `withFbProvider` only if you prefer to render first and apply feature flag updates after.
 
-**Step 3: Consume flags in a component**
+**Step 3: Consume feature flags in a component**
 
 ```tsx
 import { useFlags } from '@featbit/react-client-sdk';
@@ -82,7 +82,7 @@ function MyComponent() {
 }
 ```
 
-If flags return fallback values unexpectedly, verify `sdkKey`, `streamingUrl`, and `eventsUrl`.
+If feature flags return fallback values unexpectedly, verify `sdkKey`, `streamingUrl`, and `eventsUrl`.
 
 ## Feature Flag Evaluation
 
@@ -107,7 +107,7 @@ const MyComponent = props => {
 };
 ```
 
-`useFlags()` returns all flags. Destructure for known keys or access by bracket/dot notation. Use `useFbClient()` to get the underlying JavaScript SDK client (e.g., to call `await fbClient.identify(user)` after login).
+`useFlags()` returns all feature flags. Destructure for known keys or access by bracket/dot notation. Use `useFbClient()` to get the underlying JavaScript SDK client (e.g., to call `await fbClient.identify(user)` after login).
 
 **Class components** — two options:
 - `withFbConsumer`: wraps the component and injects `flags` and `fbClient` as props
@@ -138,10 +138,3 @@ const config = {
 
 To update the user after login, call `await fbClient.identify(user)` with the same shape. See [Switch user after initialization](https://github.com/featbit/featbit-react-client-sdk#switch-user-after-initialization).
 
-## Read Next Only When Needed
-
-- [Initializing the SDK](https://github.com/featbit/featbit-react-client-sdk#initializing-the-sdk) — only when the user asks about `asyncWithFbProvider` vs `withFbProvider` or deferred initialization.
-- [Consuming flags](https://github.com/featbit/featbit-react-client-sdk#consuming-flags) — only when the user asks about `withFbConsumer`, `contextType`, or class component patterns.
-- [Switch user after initialization](https://github.com/featbit/featbit-react-client-sdk#switch-user-after-initialization) — only when the user asks about calling `fbClient.identify()` post-login.
-- [Fallback flag values](https://github.com/featbit/featbit-react-client-sdk#populating-the-sdk-with-fallback-flag-values) — only when the user asks about `options.bootstrap` for pre-render default values.
-- [Flag keys](https://github.com/featbit/featbit-react-client-sdk#flag-keys) — only when the user asks about `useCamelCaseFlagKeys` or key collision issues.

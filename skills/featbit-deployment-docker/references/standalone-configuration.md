@@ -1,3 +1,8 @@
+---
+name: standalone-configuration
+description: Complete docker-compose.yml and setup guide for FeatBit Standalone deployment
+---
+
 # Standalone Deployment - Complete Configuration
 
 Complete docker-compose.yml and detailed setup guide for FeatBit Standalone deployment.

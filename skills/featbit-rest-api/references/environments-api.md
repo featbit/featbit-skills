@@ -1,3 +1,8 @@
+---
+name: environments-api
+description: API reference for creating and managing FeatBit environments within projects
+---
+
 # Environments API
 
 APIs for managing FeatBit environments. Environments allow you to maintain separate configurations for different deployment stages (e.g., development, staging, production).

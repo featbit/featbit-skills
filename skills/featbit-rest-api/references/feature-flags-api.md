@@ -1,3 +1,8 @@
+---
+name: feature-flags-api
+description: API reference for creating and configuring FeatBit feature flags with variation types
+---
+
 # Feature Flags API
 
 APIs for managing FeatBit feature flags. Feature flags enable you to control feature rollouts, perform A/B testing, and manage configuration dynamically.

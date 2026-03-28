@@ -12,14 +12,16 @@ metadata:
 
 Use this skill only to choose the correct language-specific SDK skill. Do not keep implementation details for every SDK in this file.
 
-## Routing Workflow
+## Execution Procedure
 
+```pseudo
 1. Infer the runtime from the user request.
-2. Activate exactly one language-specific SDK skill.
+2. Look up the Routing Table below → activate exactly one language-specific SDK skill.
 3. If the runtime is ambiguous, ask which language or framework the user is using.
 4. After the language is known, stop here and continue in the language-specific skill.
+```
 
-## Skill Map
+## Routing Table
 
 - `.NET` or `.cs`, `.csproj`, ASP.NET Core: `featbit-sdks-dotnet`
 - `Java` or `.java`, Maven, Gradle: `featbit-sdks-java`
@@ -29,14 +31,3 @@ Use this skill only to choose the correct language-specific SDK skill. Do not ke
 - React web: `featbit-sdks-react`
 - React Native mobile: `featbit-sdks-react-native`
 - Python, Flask, Django, FastAPI: `featbit-sdks-python`
-
-## Source Repositories
-
-- .NET: https://github.com/featbit/featbit-dotnet-sdk
-- Java: https://github.com/featbit/featbit-java-sdk
-- Go: https://github.com/featbit/featbit-go-sdk
-- Node.js: https://github.com/featbit/featbit-node-server-sdk
-- JavaScript: https://github.com/featbit/featbit-js-client-sdk
-- React: https://github.com/featbit/featbit-react-client-sdk
-- React Native: https://github.com/featbit/featbit-react-native-sdk
-- Python: https://github.com/featbit/featbit-python-sdk

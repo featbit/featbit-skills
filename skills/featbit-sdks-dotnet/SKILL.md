@@ -10,24 +10,20 @@ metadata:
 
 # FeatBit .NET Server SDK
 
-## When to Use This Skill
+Use for server-side .NET applications — Console apps, Web API, Worker Services, and ASP.NET Core — that need real-time feature flag evaluation. Establishes one persistent streaming connection, evaluates all feature flags locally, and returns results with near-zero latency on each call. Do not use for Blazor WebAssembly or MAUI — those require a client-side SDK.
 
-Use for server-side .NET applications — Console apps, Web API, Worker Services, and ASP.NET Core — that need real-time feature flag evaluation.
+## Execution Procedure
 
-Why server-side SDK: establishes one persistent streaming connection, evaluates all flags locally, and returns results with near-zero latency on each call. Do not use for Blazor WebAssembly or MAUI — those require a client-side SDK.
-
-## Source
-
-https://github.com/featbit/featbit-dotnet-sdk
+```
+1. Install package → dotnet add package FeatBit.ServerSdk
+2. Configure FbClient with EnvSecret, Streaming URI, Event URI
+3. Evaluate first feature flag → BoolVariation / StringVariation
+   - IF client.Initialized == false → verify EnvSecret and URIs, retry
+4. IF ASP.NET Core project → switch to DI registration (AddFeatBit)
+5. IF user mentions OpenFeature → read references/openfeature-integration.md
+```
 
 ## Setup Workflow
-
-Copy and track progress:
-- [ ] Step 1: Install the package
-- [ ] Step 2: Initialize the client
-- [ ] Step 3: Evaluate the first feature flag
-- [ ] Step 4: If this is ASP.NET Core, switch to dependency injection
-- [ ] Step 5: If advanced behavior is needed, read the specific reference or README section
 
 **Step 1: Install the package**
 
@@ -80,6 +76,8 @@ builder.Services.AddFeatBit(options =>
 
 Inject `IFbClient` where feature flag evaluation is needed.
 
+**Step 5: If the user mentions OpenFeature, read `references/openfeature-integration.md`.**
+
 ## Feature Flag Evaluation
 
 After the client is initialized, evaluate a feature flag with a user and a fallback value:
@@ -92,7 +90,7 @@ var boolVariation = client.BoolVariation(flagKey, user, defaultValue: false);
 var boolVariationDetail = client.BoolVariationDetail(flagKey, user, defaultValue: false);
 ```
 
-Use `BoolVariation` when only the flag value is needed. Use `BoolVariationDetail` when the user also asks why a value was returned.
+Use `BoolVariation` when only the feature flag value is needed. Use `BoolVariationDetail` when the user also asks why a value was returned.
 
 ## User Custom Properties
 
@@ -107,10 +105,3 @@ var user = FbUser.Builder("a-unique-key-of-user")
 ```
 
 Use built-in properties for stable identity fields. Use `Custom(key, value)` for targeting attributes that must be referenced in feature flag rules.
-
-## Read Next Only When Needed
-
-- Read the official README section for [evaluating flags](https://github.com/featbit/featbit-dotnet-sdk#evaluating-flags) when the user asks how to evaluate a feature flag, inspect reasons, or choose the correct variation method.
-- Read the official README section for [FbUser](https://github.com/featbit/featbit-dotnet-sdk#fbuser) when the user asks about user attributes, custom properties, targeting fields, or user construction patterns.
-- Read `references/openfeature-integration.md` only when the user asks about OpenFeature or the FeatBit OpenFeature provider for .NET.
-- Read the official README sections for [offline mode](https://github.com/featbit/featbit-dotnet-sdk#offline-mode), [disable events collection](https://github.com/featbit/featbit-dotnet-sdk#disable-events-collection), [experiments](https://github.com/featbit/featbit-dotnet-sdk#experiments), and [dependency injection](https://github.com/featbit/featbit-dotnet-sdk#dependency-injection) only when those topics are requested.

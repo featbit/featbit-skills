@@ -10,15 +10,30 @@ metadata:
 
 # FeatBit Go Server SDK
 
-## When to Use This Skill
+Server-side Go SDK for real-time feature flag evaluation in HTTP servers, background workers, and CLI tools. Maintains one persistent WebSocket connection, synchronizes all feature flag data locally in under 100 ms, then evaluates every feature flag locally in under 10 ms per call on average. Do not use for frontend JavaScript or mobile applications — those require a client-side SDK.
 
-Use for server-side Go applications — HTTP servers, background workers, CLI tools — that need real-time feature flag evaluation.
+## Execution Procedure
 
-Why server-side SDK: maintains one persistent WebSocket connection, synchronizes all flag data locally in under 100 ms, then evaluates every flag locally in under 10 ms per call on average. Do not use for frontend JavaScript or mobile applications — those require a client-side SDK.
+```
+1. Install module
+   go get github.com/featbit/featbit-go-sdk
 
-## Source
+2. Build FBClient
+   client = NewFBClient(envSecret, streamingUrl, eventUrl)
+   IF err → validate config, retry
 
-https://github.com/featbit/featbit-go-sdk
+3. Evaluate first feature flag
+   user = NewUserBuilder(key).UserName(name).Build()
+   value, detail = client.BoolVariation(flagKey, user, fallback)
+   verify value ≠ fallback (confirms SDK connected)
+
+4. Integrate into app
+   call *Variation methods at decision points
+   add Custom() properties when targeting rules need them
+
+5. Close client on shutdown
+   defer client.Close()
+```
 
 ## Setup Workflow
 
@@ -27,7 +42,6 @@ Copy and track progress:
 - [ ] Step 2: Create the client with secret and URLs
 - [ ] Step 3: Build the user and evaluate the first feature flag
 - [ ] Step 4: If initialization fails, validate configuration and retry
-- [ ] Step 5: Read advanced README sections only when needed
 
 **Step 1: Install the module**
 
@@ -56,7 +70,7 @@ Use the official pattern:
 ```go
 user, _ := interfaces.NewUserBuilder("<unique-user-key>").UserName("Jane").Build()
 _, detail, _ := client.BoolVariation("flag-key", user, false)
-fmt.Printf("flag %s returns %s, reason: %s\n", detail.KeyName, detail.Variation, detail.Reason)
+fmt.Printf("feature flag %s returns %s, reason: %s\n", detail.KeyName, detail.Variation, detail.Reason)
 ```
 
 **Step 4: Validate the integration**
@@ -73,9 +87,9 @@ value, detail, _ := client.BoolVariation("flag-key", user, false)
 fmt.Println(value, detail.Reason)
 ```
 
-Use the first return value when only the flag result is needed. Use `detail` when the evaluation reason is also needed — `detail.Reason` explains why the value was returned, `detail.KeyName` and `detail.Variation` identify the matched variation.
+Use the first return value when only the feature flag result is needed. Use `detail` when the evaluation reason is also needed — `detail.Reason` explains why the value was returned, `detail.KeyName` and `detail.Variation` identify the matched variation.
 
-Also available for non-boolean flags: `Variation` (string), `IntVariation`, `DoubleVariation`, `JsonVariation`.
+Also available for non-boolean feature flags: `Variation` (string), `IntVariation`, `DoubleVariation`, `JsonVariation`.
 
 ## User Custom Properties
 
@@ -91,8 +105,3 @@ user, _ := interfaces.NewUserBuilder("a-unique-key-of-user").
 
 Use `Custom(key, value)` for any attribute that must be referenced in feature flag targeting rules.
 
-## Read Next Only When Needed
-
-- Read the official README section for [evaluation](https://github.com/featbit/featbit-go-sdk#evaluation) when the user asks how to evaluate a feature flag, use non-boolean variation types (String, Int, Double, Json), inspect evaluation details, or call `AllLatestFlagsVariations` to get all flags for a user at once.
-- Read the official README section for [FBUser](https://github.com/featbit/featbit-go-sdk#fbuser) when the user asks about user attributes, custom properties, targeting fields, or user construction patterns.
-- Read the official README sections for [FBClient](https://github.com/featbit/featbit-go-sdk#fbclient), [FBConfig and components](https://github.com/featbit/featbit-go-sdk#fbconfig-and-components), [offline mode](https://github.com/featbit/featbit-go-sdk#offline-mode), and [experiments](https://github.com/featbit/featbit-go-sdk#experiments-abn-testing) only when those topics are requested.

@@ -3,36 +3,44 @@ name: featbit-deployment-aws
 description: Guidance for deploying FeatBit on AWS, including ECS Fargate, EKS (Kubernetes), and Terraform. Use when user asks about deploying or running FeatBit on AWS. Do not use for Docker Compose deployments or Kubernetes deployments on non-AWS clouds.
 license: MIT
 metadata:
+  author: FeatBit
   version: 1.0.0
   category: deployment
 ---
 
 # FeatBit on AWS
 
-## Recommended Deployment Options
+Deploy FeatBit on AWS using ECS Fargate with Terraform (recommended) or EKS with Helm.
 
-**Option 1 — ECS Fargate + Terraform (recommended baseline)**
-The official [featbit-terraform-aws](https://github.com/featbit/featbit-terraform-aws) project provides a ready-to-use Terraform setup for deploying FeatBit on AWS ECS Fargate with ALB, Aurora PostgreSQL, and ElastiCache. This is the recommended starting point for most AWS deployments.
+## Execution Procedure
 
-**Option 2 — AWS Kubernetes (EKS)**
-For teams already running Kubernetes on AWS, use the Helm chart approach instead.
-See the **featbit-deployment-kubernetes** skill for full guidance.
+```
+1. Determine deployment method
+   ├─ ECS Fargate (default for most teams)
+   │   ├─ Use the official featbit-terraform-aws Terraform module
+   │   ├─ Read references/ecs-high-availability.md for multi-AZ guidance
+   │   └─ Scale stateless services behind ALB as needed
+   └─ EKS (team already runs Kubernetes on AWS)
+       └─ Redirect to featbit-deployment-kubernetes skill
+```
 
----
+## ECS Fargate + Terraform (Recommended)
 
-## Q: Can I run multiple ECS Fargate tasks for High Availability?
+Use the official [featbit-terraform-aws](https://github.com/featbit/featbit-terraform-aws) Terraform module to deploy FeatBit on ECS Fargate with ALB, Aurora PostgreSQL, and ElastiCache. Start here for most AWS deployments.
 
-**A:** Yes. All four FeatBit services (`ui`, `api-server`, `evaluation-server`, `data-analytics-server`) are stateless and support multiple concurrent instances. Place an ALB in front of each service first, then increase the task count.
+For EKS deployments, use the **featbit-deployment-kubernetes** skill instead.
 
-Note the distinction: running multiple tasks in the **same AZ** improves **fault tolerance** (a crashed task is replaced while others keep serving traffic), but it is not true **High Availability**. For HA, tasks must span multiple subnets in different AZs so the service survives an entire AZ (Availability Zone) going down.
+## High Availability on ECS Fargate
 
-Not all services are equally critical — `evaluation-server` and `api-server` have direct user impact if they go down and should be scaled first. `ui` only affects the portal. `data-analytics-server` only affects analytics; flags keep working without it.
+All four FeatBit services (`ui`, `api-server`, `evaluation-server`, `data-analytics-server`) are stateless. Scale them by placing an ALB in front of each service and increasing the task count.
 
-[references/ecs-high-availability.md](references/ecs-high-availability.md)
+Running multiple tasks in the **same AZ** improves **fault tolerance** (a crashed task is replaced while others keep serving). For true **High Availability**, spread tasks across multiple subnets in different AZs so the service survives an entire AZ outage.
 
----
+Prioritize scaling `evaluation-server` and `api-server` first — they have direct user impact. `ui` only affects the management portal. `data-analytics-server` only affects analytics; feature flags keep working without it.
+
+See [references/ecs-high-availability.md](references/ecs-high-availability.md) for detailed guidance.
 
 ## Related Skills
 
-- **featbit-deployment-docker**: Docker Compose deployment guide
+- **featbit-deployment-docker**: Docker Compose deployment
 - **featbit-deployment-kubernetes**: Kubernetes/Helm deployments (also covers AWS EKS)

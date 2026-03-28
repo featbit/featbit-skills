@@ -10,15 +10,27 @@ metadata:
 
 # FeatBit JavaScript Client SDK
 
-## When to Use This Skill
+Use for browser-based JavaScript and TypeScript applications that evaluate feature flags client-side — vanilla JS apps, SPAs, or any non-React framework. For React, use `featbit-sdks-react` instead. Designed for single-user browser contexts; stores feature flag data in localStorage and syncs via WebSocket streaming or HTTP polling. Do not use for Node.js server-side applications — those require `featbit-sdks-node`.
 
-Use for browser-based JavaScript and TypeScript applications that evaluate feature flags client-side — vanilla JS apps, SPAs, or any non-React framework. For React, use `featbit-sdks-react` instead.
+## Execution Procedure
 
-Why client-side SDK: designed for single-user browser contexts, stores flag data in localStorage, and syncs via WebSocket streaming or HTTP polling. Do not use for Node.js server-side applications — those require `featbit-sdks-node`.
-
-## Source
-
-https://github.com/featbit/featbit-js-client-sdk
+```
+1. Install @featbit/js-client-sdk via npm
+2. Create FbClient
+   a. Build a User with key + optional name/custom props
+   b. Configure sdkKey, streamingUri, eventsUri
+   c. Attach user and build the client
+3. Initialize
+   a. await fbClient.waitForInitialization()
+   b. On failure → verify sdkKey, streamingUri, eventsUri, user → retry once
+   c. If retry fails → report error and config to user, stop
+4. Evaluate feature flags
+   a. boolVariation / stringVariation / numberVariation / jsonVariation
+   b. Use *Detail variants when evaluation reason is needed
+5. (Optional) Listen for feature flag changes via event subscription
+6. (Optional) Switch user at runtime via identify()
+7. Close client when done
+```
 
 ## Setup Workflow
 
@@ -62,7 +74,7 @@ await fbClient.waitForInitialization();
 const boolVariation = await fbClient.boolVariation('flag-key', false);
 ```
 
-If initialization does not complete or the first value is the fallback unexpectedly, verify `sdkKey`, `streamingUri`, `eventsUri`, and the initial user, then retry.
+If initialization does not complete or the first value is the fallback unexpectedly, verify `sdkKey`, `streamingUri`, `eventsUri`, and the initial user, then retry once. If the retry also fails, report the error message and current configuration to the user and stop.
 
 ## Feature Flag Evaluation
 
@@ -78,7 +90,7 @@ const boolVariation = await fbClient.boolVariation(flagKey, false);
 const boolVariationDetail = await fbClient.boolVariationDetail(flagKey, false);
 ```
 
-All variation calls return a `Promise` — always use `await`. Use `boolVariation` when only the flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed.
+All variation calls return a `Promise` — always use `await`. Use `boolVariation` when only the feature flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed.
 
 Also available: `stringVariation`/`stringVariationDetail`, `numberVariation`/`numberVariationDetail`, `jsonVariation`/`jsonVariationDetail`.
 
@@ -108,9 +120,3 @@ npm install @openfeature/web-sdk featbit-js-client-sdk @featbit/openfeature-prov
 
 See the [openfeature-provider-js-client](https://github.com/featbit/openfeature-provider-js-client) repository for usage examples.
 
-## Read Next Only When Needed
-
-- Read the official README section for [evaluation](https://github.com/featbit/featbit-js-client-sdk#evaluation) when the user asks how to inspect evaluation detail or use non-boolean typed variants (`stringVariation`, `numberVariation`, `jsonVariation`).
-- Read the official README section for [IUser](https://github.com/featbit/featbit-js-client-sdk#iuser) when the user asks about user attributes, custom properties, targeting fields, or user construction patterns.
-- Read the official README section for [events](https://github.com/featbit/featbit-js-client-sdk#events) when the user asks how to subscribe to feature flag changes at runtime.
-- Read the official README sections for [bootstrap](https://github.com/featbit/featbit-js-client-sdk#bootstrap), [offline mode](https://github.com/featbit/featbit-js-client-sdk#offline-mode), [switch user after initialization](https://github.com/featbit/featbit-js-client-sdk#switch-user-after-initialization), [polling mode](https://github.com/featbit/featbit-js-client-sdk#fbclient-using-polling), [disable events collection](https://github.com/featbit/featbit-js-client-sdk#disable-events-collection), and [experiments](https://github.com/featbit/featbit-js-client-sdk#experiments-abn-testing) only when those topics are requested.

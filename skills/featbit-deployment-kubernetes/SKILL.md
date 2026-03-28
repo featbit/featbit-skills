@@ -12,6 +12,39 @@ metadata:
 
 Deploy FeatBit to Kubernetes using official Helm Charts with support for two architecture tiers, multiple service exposure methods, external databases, and auto-scaling.
 
+## Execution Procedure
+
+```
+1. CHECK prerequisites
+   - Kubernetes >= 1.23 running and reachable
+   - Helm >= 3.7.0 installed
+   - kubectl configured for target cluster
+   - IF upgrading from < v0.9.0 → run migration scripts FIRST
+
+2. DETERMINE architecture tier
+   - IF user needs analytics/insights → Professional (Kafka + ClickHouse)
+   - ELSE → Standard (PostgreSQL/MongoDB + optional Redis)
+
+3. CONFIGURE values.yaml
+   - SET architecture.tier ("standard" | "pro")
+   - SET architecture.database ("postgres" | "mongodb")
+   - CONFIGURE service exposure (Ingress / LoadBalancer / NodePort)
+   - IF external DB → disable bundled DB, set connection strings
+   - IF TLS needed → configure cert-manager or manual certs
+   - REFERENCE official examples for the chosen scenario
+
+4. INSTALL or UPGRADE via Helm
+   - helm repo add featbit https://featbit.github.io/featbit-charts
+   - helm repo update
+   - IF fresh install → helm install featbit featbit/featbit -f values.yaml -n <ns> --create-namespace
+   - IF upgrade → review migration/RELEASE-v{version}.md, then helm upgrade featbit featbit/featbit -f values.yaml -n <ns>
+
+5. VERIFY deployment
+   - kubectl get pods -n <ns>  → all pods Running/Ready
+   - kubectl get svc -n <ns>   → endpoints reachable
+   - Access UI dashboard and confirm login
+```
+
 ## Complete Guide
 
 **Official Repository**: https://github.com/featbit/featbit-charts
@@ -39,7 +72,7 @@ Database (PostgreSQL or MongoDB) with optional Redis caching.
 Standard tier + Kafka + ClickHouse for real-time analytics and insights.
 - **Use for**: Enterprise deployments requiring real-time data analysis
 
-## Configuration Examples
+## Configure Services
 
 Official example configurations organized by deployment scenario:
 
@@ -74,14 +107,14 @@ Examples include:
 
 Browse all available configuration examples for different deployment scenarios and cloud providers.
 
-## Upgrading & Migrations
+## Upgrade and Migrate
 
 **Important**: Starting from v0.9.0, database migrations are NOT automatic.
 
 - **Migration Scripts**: https://github.com/featbit/featbit-charts/tree/main/migration
 - **Migration Guide**: Review `migration/RELEASE-v{version}.md` before upgrading
 
-## Key Resources
+## Consult These Resources
 
 - **Values Reference**: https://github.com/featbit/featbit-charts/blob/main/charts/featbit/values.yaml
 - **Chart README**: https://github.com/featbit/featbit-charts/blob/main/README.md
