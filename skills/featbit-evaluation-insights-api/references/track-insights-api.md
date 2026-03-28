@@ -1,3 +1,8 @@
+---
+name: track-insights-api
+description: FeatBit insights tracking API for recording flag evaluations, custom metric events, and experiment data
+---
+
 # Track Insights API Reference
 
 **Endpoint**: `POST {evaluation-server-url}/api/public/insight/track`

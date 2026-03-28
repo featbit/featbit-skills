@@ -1,3 +1,8 @@
+---
+name: projects-api
+description: API reference for creating, retrieving, and listing FeatBit projects
+---
+
 # Projects API
 
 APIs for managing FeatBit projects. Projects are top-level containers for organizing feature flags across different applications.

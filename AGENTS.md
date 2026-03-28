@@ -31,7 +31,7 @@ At startup, only `name` and `description` are pre-loaded. `SKILL.md` is read onl
 ### Directory and Naming
 
 - Every skill directory must be named `featbit-{topic}`.
-- The `name` field in `SKILL.md` frontmatter must exactly match the directory name (e.g., `name: featbit-dotnet-sdk` lives in `skills/featbit-dotnet-sdk/SKILL.md`).
+- The `name` field in `SKILL.md` frontmatter must exactly match the directory name (e.g., `name: featbit-sdks-dotnet` lives in `skills/featbit-sdks-dotnet/SKILL.md`).
 - `references/` is one level deep only. Never create `references/db/v1/schema.md`; use `references/schema.md`.
 - Never create `README.md`, `CHANGELOG.md`, or `INSTALLATION.md` inside a skill directory.
 

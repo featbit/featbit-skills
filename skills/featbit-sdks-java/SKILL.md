@@ -10,28 +10,22 @@ metadata:
 
 # FeatBit Java Server SDK
 
-## When to Use This Skill
+Use for server-side Java applications — Spring Boot, Jakarta EE, standalone services — that need real-time feature flag evaluation. Requires Java SE 8 or above. Maintains one persistent WebSocket connection, synchronizes all feature flag data locally in under 100 ms, then evaluates every feature flag locally in under 10 ms per call on average. Do not use for Android or client-side JavaScript — those require a client-side SDK.
 
-Use for server-side Java applications — Spring Boot, Jakarta EE, standalone services — that need real-time feature flag evaluation. Requires Java SE 8 or above.
+## Execution Procedure
 
-Why server-side SDK: maintains one persistent WebSocket connection, synchronizes all flag data locally in under 100 ms, then evaluates every flag locally in under 10 ms per call on average. Do not use for Android or client-side JavaScript — those require a client-side SDK.
+```
+1. Add Maven or Gradle dependency (co.featbit:featbit-java-sdk)
+2. Build FBConfig with streaming + event URLs → create FBClient
+3. Verify client.isInitialized() == true
+4. Build FBUser → evaluate first feature flag with boolVariation
+5. Add .custom() properties to FBUser when targeting rules need them
+6. Call client.close() on application shutdown
+```
 
-## Source
+## Setup
 
-https://github.com/featbit/featbit-java-sdk
-
-## Setup Workflow
-
-Copy and track progress:
-- [ ] Step 1: Add the dependency
-- [ ] Step 2: Build `FBConfig` and create the client
-- [ ] Step 3: Build `FBUser` and evaluate the first feature flag
-- [ ] Step 4: Validate initialization and close the client
-- [ ] Step 5: Read advanced README sections only when needed
-
-**Step 1: Add the dependency**
-
-Use one build tool:
+**Add the dependency** — pick one build tool:
 
 ```xml
 <dependency>
@@ -45,9 +39,7 @@ Use one build tool:
 implementation 'co.featbit:featbit-java-sdk:1.4.5'
 ```
 
-**Step 2: Create the client**
-
-Use this minimal setup:
+**Create the client:**
 
 ```java
 FBConfig config = new FBConfig.Builder()
@@ -58,44 +50,28 @@ FBConfig config = new FBConfig.Builder()
 FBClient client = new FBClientImp("<your-env-secret>", config);
 ```
 
-**Step 3: Evaluate the first feature flag**
-
-Use the official pattern:
-
-```java
-FBUser user = new FBUser.Builder("<unique-user-key>").userName("Jane").build();
-
-// Flag value only
-Boolean flagValue = client.boolVariation("flag-key", user, false);
-System.out.printf("flag returns %b for user %s%n", flagValue, user.getUserName());
-
-// Flag value with evaluation detail
-EvalDetail<Boolean> ed = client.boolVariationDetail("flag-key", user, false);
-System.out.printf("flag returns %b, reason: %s%n", ed.getVariation(), ed.getReason());
-```
-
-**Step 4: Validate the integration**
-
-If `client.isInitialized()` is false or evaluation returns the fallback unexpectedly, verify the secret and both URLs, then retry. Call `client.close()` during shutdown.
+If `client.isInitialized()` is false, verify the environment secret and both URLs, then retry. Call `client.close()` during application shutdown.
 
 ## Feature Flag Evaluation
 
-After the client is initialized, evaluate a feature flag with a user and a fallback value:
+Build an `FBUser` and evaluate a feature flag with a fallback value:
 
 ```java
-FBUser user = new FBUser.Builder("<unique-user-key>").userName("Jane").build();
+FBUser user = new FBUser.Builder("<unique-user-key>")
+    .userName("Jane")
+    .build();
 
-// Value only
+// Feature flag value only
 Boolean value = client.boolVariation("flag-key", user, false);
 
-// Value with evaluation detail
+// Feature flag value with evaluation detail
 EvalDetail<Boolean> detail = client.boolVariationDetail("flag-key", user, false);
 System.out.printf("returns %b, reason: %s%n", detail.getVariation(), detail.getReason());
 ```
 
-Use `boolVariation` when only the flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed — `detail.getReason()` explains why the variation was returned.
+Use `boolVariation` when only the feature flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed — `detail.getReason()` explains why the variation was returned.
 
-Also available for non-boolean flags: `variation`/`variationDetail` (string), `intVariation`/`intVariationDetail`, `longVariation`/`longVariationDetail`, `doubleVariation`/`doubleVariationDetail`, `jsonVariation`/`jsonVariationDetail`.
+Also available for non-boolean feature flags: `variation`/`variationDetail` (string), `intVariation`/`intVariationDetail`, `longVariation`/`longVariationDetail`, `doubleVariation`/`doubleVariationDetail`, `jsonVariation`/`jsonVariationDetail`.
 
 ## User Custom Properties
 
@@ -110,10 +86,3 @@ FBUser user = new FBUser.Builder("a-unique-key-of-user")
 ```
 
 Use `.custom(key, value)` for any attribute that must be referenced in feature flag targeting rules.
-
-## Read Next Only When Needed
-
-- Read the official README section for [evaluation](https://github.com/featbit/featbit-java-sdk#evaluation) when the user asks how to evaluate a feature flag, use non-boolean typed variants, inspect evaluation detail, or call `getAllLatestFlagsVariations` to get all flags for a user at once.
-- Read the official README section for [FBUser](https://github.com/featbit/featbit-java-sdk#fbuser) when the user asks about user attributes, custom properties, targeting fields, or user construction patterns.
-- Read the official README section for [flag tracking](https://github.com/featbit/featbit-java-sdk#flag-tracking) when the user asks how to listen for feature flag value changes at runtime.
-- Read the official README sections for [FBClient](https://github.com/featbit/featbit-java-sdk#fbclient), [FBConfig and components](https://github.com/featbit/featbit-java-sdk#fbconfig-and-components), [offline mode](https://github.com/featbit/featbit-java-sdk#offline-mode), and [experiments](https://github.com/featbit/featbit-java-sdk#experiments-abn-testing) only when those topics are requested.

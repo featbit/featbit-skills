@@ -12,14 +12,33 @@ metadata:
 
 Expert guidance for interacting with FeatBit services through the REST API. Use these endpoints to manage projects, environments, feature flags, and more programmatically.
 
-## When to Use This Skill
+## Execution Procedure
 
-Activate when users:
-- Need to call FeatBit management APIs (projects, environments, flags)
-- Ask about API authentication (JWT Bearer or OpenAPI Key)
-- Want to automate FeatBit resource creation via scripts or CI/CD
-- Need API request/response formats and error handling
-- Ask about specific endpoint URLs, parameters, or payloads
+```
+1. AUTHENTICATE
+   - Obtain credentials: JWT Bearer token (user auth) OR OpenAPI key (machine-to-machine)
+   - Read references/authentication.md for token acquisition details
+
+2. IDENTIFY OPERATION
+   - Determine the resource: project | environment | feature flag
+   - Determine the action: list | create | get
+
+3. READ REFERENCE
+   - Project operations → references/projects-api.md
+   - Environment operations → references/environments-api.md
+   - Feature flag operations → references/feature-flags-api.md
+   - Workflow patterns → references/common-patterns.md
+
+4. CONSTRUCT API CALL
+   - Base URL: https://{host}/api/v1/{resource}
+   - Set headers: Content-Type: application/json, Authorization
+   - Build request body per reference schema
+
+5. HANDLE RESPONSE
+   - Check "success" field in response wrapper
+   - On success: extract "data" payload
+   - On failure: inspect "errors" array, map HTTP status code, retry or report
+```
 
 ## Base URL and Versioning
 
@@ -32,7 +51,7 @@ https://your-featbit-instance.com/api/v{version}
 
 ## Authentication
 
-FeatBit supports two authentication methods:
+Authenticate using one of two methods:
 
 ### 1. JWT Bearer Token (User Authentication)
 
@@ -40,7 +59,7 @@ FeatBit supports two authentication methods:
 Authorization: Bearer {jwt_token}
 ```
 
-Best for: interactive sessions, user-scoped operations.
+Use for interactive sessions and user-scoped operations.
 
 ### 2. OpenAPI Key (Machine-to-Machine)
 
@@ -48,13 +67,13 @@ Best for: interactive sessions, user-scoped operations.
 Authorization: {api_key}
 ```
 
-Best for: CI/CD pipelines, automation scripts, service-to-service calls.
+Use for CI/CD pipelines, automation scripts, and service-to-service calls.
 
 **Detailed Guide**: [references/authentication.md](references/authentication.md)
 
 ## Response Format
 
-All API responses follow a standardized wrapper:
+Expect all API responses in this standardized wrapper:
 
 ```json
 {
@@ -158,14 +177,14 @@ curl -X POST "https://your-featbit-instance.com/api/v1/envs/{envId}/feature-flag
   }'
 ```
 
-- Supports variation types: `boolean`, `string`, `number`, `json`
+- Specify variation type as one of: `boolean`, `string`, `number`, `json`
 - Key pattern: `^[a-zA-Z0-9._-]+$`
 
 **Full Reference**: [references/feature-flags-api.md](references/feature-flags-api.md)
 
 ## Workflow Example
 
-A typical setup flow — create project, add environment, create flag:
+Follow this setup flow to create a project, add an environment, and create a flag:
 
 ```bash
 # 1. Create a project (auto-creates Prod and Dev environments)

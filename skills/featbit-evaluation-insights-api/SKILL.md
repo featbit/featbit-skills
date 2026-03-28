@@ -18,14 +18,6 @@ Direct HTTP access to FeatBit's evaluation server — the foundation for buildin
 - Track Insights API: https://docs.featbit.co/api-docs/track-insights-api
   (source: https://github.com/featbit/featbit-docs/blob/main/pages/api-docs/track-insights-api.md)
 
-## When to Use This Skill
-
-Activate when users:
-- Build custom FeatBit SDK for Android, iOS/Swift, Kotlin, Unity, or any platform without an official SDK
-- Call the evaluation server directly via HTTP without using a client library
-- Need to implement flag evaluation + A/B experiment tracking from scratch
-- Ask about `sendToExperiment`, variation insights, custom metric events, or batch insight payloads
-
 ## Prerequisites
 
 Before writing any code:
@@ -36,16 +28,24 @@ Before writing any code:
    ```
    > See [How to get the environment secret](https://docs.featbit.co/sdk/faq#how-to-get-the-environment-secret)
 
-## Core Workflow
+## Execution Procedure
 
-This is the recommended pattern for a custom mobile/frontend SDK:
+```python
+# Recommended pattern for a custom mobile/frontend SDK
 
-```
-Step 1 ─ App launch       →  Evaluate ALL flags (or filtered by tags/keys)
-Step 2 ─ Store locally    →  Cache results in memory for fast synchronous reads
-Step 3 ─ Track insights   →  Fire-and-forget: send evaluation records to FeatBit
-Step 4 ─ Poll for updates →  Repeat Step 1 periodically using `filter.timestamp`
-Step 5 ─ Track metrics    →  Send custom events (conversion, click, purchase) as they occur
+# Step 1 — App launch: evaluate ALL feature flags (or filtered by tags/keys)
+flags = POST evaluate(user, filter?)
+# Step 2 — Store locally: cache results in memory for fast synchronous reads
+cache.update(flags)
+# Step 3 — Track insights: fire-and-forget, send evaluation records to FeatBit
+async POST track(variations=flags_with_sendToExperiment)
+# Step 4 — Poll for updates: repeat Step 1 periodically using filter.timestamp
+on_interval:
+    changed = POST evaluate(user, filter={timestamp: last_poll_ms})
+    cache.update(changed)
+# Step 5 — Track metrics: send custom events (conversion, click, purchase) as they occur
+on_user_action:
+    async POST track(metrics=[{eventName, numericValue, ...}])
 ```
 
 ### Step 1: Evaluate Feature Flags
@@ -71,7 +71,7 @@ Minimal request body:
 }
 ```
 
-Response — array of flag evaluation results:
+Response — array of feature flag evaluation results:
 
 ```json
 [
@@ -107,7 +107,7 @@ Key fields:
 }
 ```
 
-> `filter.timestamp` — Unix ms. Returns only flags modified **after** this timestamp. Pass the timestamp from the previous call to implement efficient polling.
+> `filter.timestamp` — Unix ms. Returns only feature flags modified **after** this timestamp. Pass the timestamp from the previous call to implement efficient polling.
 
 Read `references/flag-evaluation-api.md` for the complete schema, all filter options, and error responses.
 
@@ -115,9 +115,9 @@ Read `references/flag-evaluation-api.md` for the complete schema, all filter opt
 
 Store the response array in memory keyed by `flag.key`. Serve flag values synchronously from cache — never block UI on a network call.
 
-### Step 3: Track Flag Evaluation Insights (fire-and-forget)
+### Step 3: Track Feature Flag Evaluation Insights (fire-and-forget)
 
-After evaluating flags, send evaluation records asynchronously.
+After evaluating feature flags, send evaluation records asynchronously.
 
 ```
 POST {evaluation-server-url}/api/public/insight/track
@@ -159,9 +159,9 @@ Request body — array of insight objects:
 - Copy `variation.id`, `variation.value`, and `sendToExperiment` exactly from the evaluation response. Do **not** derive or guess these values.
 - At least one of `variations` or `metrics` must be non-empty in each insight object. A payload where both are empty arrays is a no-op.
 
-### Step 4: Poll for Flag Updates
+### Step 4: Poll for Feature Flag Updates
 
-On a background timer, re-evaluate using `filter.timestamp` set to the time of the last successful poll. Only changed flags are returned — update your cache with the diff.
+On a background timer, re-evaluate using `filter.timestamp` set to the time of the last successful poll. Only changed feature flags are returned — update your cache with the diff.
 
 ### Step 5: Track Custom Metric Events
 
@@ -194,10 +194,10 @@ Read `references/track-insights-api.md` for the complete schema, batch examples,
 
 | Scenario | Action |
 |---|---|
-| Evaluate all flags on launch | POST evaluate with user, no filter |
-| Evaluate only mobile-tagged flags | POST evaluate with `filter.tags: ["mobile"]` |
-| Evaluate one specific flag | POST evaluate with `filter.keys: ["flag-key"]` |
-| Detect flag changes since last poll | POST evaluate with `filter.timestamp: {lastPollMs}` |
+| Evaluate all feature flags on launch | POST evaluate with user, no filter |
+| Evaluate only mobile-tagged feature flags | POST evaluate with `filter.tags: ["mobile"]` |
+| Evaluate one specific feature flag | POST evaluate with `filter.keys: ["flag-key"]` |
+| Detect feature flag changes since last poll | POST evaluate with `filter.timestamp: {lastPollMs}` |
 | Record which variation user saw | POST track with `variations` array |
 | Record A/B test conversion | POST track with `metrics` array |
 | Record both at once | POST track with both `variations` and `metrics` in one payload |
@@ -207,8 +207,8 @@ Read `references/track-insights-api.md` for the complete schema, batch examples,
 Copy and track progress:
 - [ ] Step 1: Store evaluation server URL and secret key in app config (never hardcode in source)
 - [ ] Step 2: At app startup, call evaluate endpoint and cache results in memory
-- [ ] Step 3: Fire-and-forget: post flag variation insights immediately after evaluation
-- [ ] Step 4: Implement background polling with `filter.timestamp` to pick up flag changes
+- [ ] Step 3: Fire-and-forget: post feature flag variation insights immediately after evaluation
+- [ ] Step 4: Implement background polling with `filter.timestamp` to pick up feature flag changes
 - [ ] Step 5: Expose a `getFlag(key, defaultValue)` helper that reads from cache synchronously
 - [ ] Step 6: On relevant user action, post metric insights asynchronously
 - [ ] Step 7: On user context change (login, upgrade), re-evaluate immediately

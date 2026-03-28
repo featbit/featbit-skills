@@ -1,3 +1,8 @@
+---
+name: flag-evaluation-api
+description: FeatBit feature flag evaluation REST API endpoint reference with request/response schemas, filtering, polling, and error handling
+---
+
 # Flag Evaluation API Reference
 
 **Endpoint**: `POST {evaluation-server-url}/api/public/featureflag/evaluate`

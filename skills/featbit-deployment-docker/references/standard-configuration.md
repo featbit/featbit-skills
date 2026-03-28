@@ -1,3 +1,8 @@
+---
+name: standard-configuration
+description: Complete configurations for FeatBit Standard deployment with PostgreSQL or MongoDB + Redis
+---
+
 # Standard Deployment - Complete Configuration
 
 Complete configurations for FeatBit Standard deployment with PostgreSQL or MongoDB + Redis.

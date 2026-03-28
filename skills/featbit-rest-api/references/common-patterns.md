@@ -1,3 +1,8 @@
+---
+name: common-patterns
+description: Workflow examples, error codes, naming conventions, and best practices for FeatBit REST API usage
+---
+
 # Common Patterns
 
 Workflow examples, error code reference, and best practices for FeatBit REST API usage.

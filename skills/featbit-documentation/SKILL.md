@@ -12,28 +12,37 @@ metadata:
 
 This skill is a **fallback** for FeatBit questions. Use it **only after** other FeatBit skills do not provide a complete answer. Its job is to return a short list of **likely relevant documentation URLs** so the agent can open those pages and extract the final details.
 
-## When to Use This Skill
+## Execution Procedure
 
-Activate this skill when:
-- A FeatBit question is not fully answered by more specific FeatBit skills.
-- The request requires authoritative details from FeatBit docs.
-- The best next step is to point the agent to official documentation URLs.
+```
+1. CHECK if another FeatBit skill already answers the question fully
+   → YES: stop, defer to that skill
+   → NO: continue
 
-Do **not** use this skill when another FeatBit skill already provides a full answer.
+2. IDENTIFY the topic from the user's question
+   → map to one or more of the 12 documentation sections below
 
-## Output Rules (Critical)
+3. LOOK UP the documentation index (references/complete-documentation-index.md)
+   → find the most relevant pages for the identified topic(s)
+
+4. RETURN 3–7 URLs ranked by relevance
+   → one-line rationale per URL
+   → prefer docs.featbit.co; add GitHub links only when more authoritative
+```
+
+## Follow These Output Rules
 
 1. **Return URLs only** (plus a brief 1-line rationale per URL).
 2. **Prefer docs.featbit.co URLs** from the documentation index.
 3. Provide **3–7 URLs max**, ranked by relevance.
 4. If a GitHub repo is more authoritative than docs, include it **in addition** to docs URLs.
 
-## Quick Navigation Guide
+## Navigate by Topic
 
 FeatBit documentation is organized into 12 main sections. Use the topic keywords below to identify relevant areas, then consult the complete index for specific URLs.
 
-**Complete Documentation Index**: [references/complete-documentation-index.md](references/complete-documentation-index.md)  
-Contains all 75 documentation URLs with detailed summaries. Reference this when you need specific page URLs.
+**Complete Documentation Index**: [references/complete-documentation-index.md](references/complete-documentation-index.md)
+All 75 documentation URLs with detailed summaries. Consult this for specific page URLs.
 
 ### Documentation Topics
 
@@ -91,7 +100,7 @@ Contains all 75 documentation URLs with detailed summaries. Reference this when 
     - Relay Proxy: https://github.com/featbit/featbit-agent
     - Terraform AWS: https://github.com/featbit/featbit-terraform-aws
 
-## Usage Example
+## Follow This Example
 
 **User query**: "How do I gradually roll out a feature to 20% of users?"
 

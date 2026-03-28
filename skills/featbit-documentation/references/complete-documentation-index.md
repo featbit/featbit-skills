@@ -1,3 +1,8 @@
+---
+name: complete-documentation-index
+description: Index of all 75 FeatBit documentation pages with summaries covering setup, flags, experimentation, APIs, deployment, and integrations
+---
+
 # Complete FeatBit Documentation Index
 
 This reference contains all 75 documentation URLs from docs.featbit.co with summaries. Use this to find the most relevant pages for user queries.

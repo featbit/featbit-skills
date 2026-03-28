@@ -10,17 +10,31 @@ metadata:
 
 # FeatBit Python Server SDK
 
-## When to Use This Skill
+Integrate FeatBit feature flags into server-side Python applications — Flask, Django, FastAPI, background workers, or scripts. Flags sync via WebSocket on startup (<100ms) and evaluate locally with no remote call per request. Do not use for browser JavaScript, React, React Native, or any frontend context.
 
-Use for server-side Python applications — Flask, Django, FastAPI, background workers, or scripts — that evaluate feature flags on the backend.
+## Execution Procedure
 
-**Why server SDK**: Flags sync via WebSocket on startup (<100ms) and are evaluated locally with no remote call per request. The process holds one persistent singleton client.
+```
+1. INSTALL package
+   pip install fb-python-sdk
 
-Do not use for browser JavaScript, React, React Native, or any frontend context.
+2. CONFIGURE singleton client
+   Call set_config() once at application startup
+   Call get() to obtain the process-wide singleton
 
-## Source
+3. EVALUATE first feature flag
+   Check client.initialize (property, no parens) before evaluating
+   Call variation() or variation_detail() with user dict and flag key
 
-https://github.com/featbit/featbit-python-sdk
+4. INTEGRATE into framework
+   Flask: init in create_app(), store on app.config
+   Django: init in AppConfig.ready()
+   FastAPI: init in lifespan handler
+   Scripts: init at module top-level
+
+5. CLOSE client on shutdown
+   Call client.stop() to flush pending analytics events
+```
 
 ## Setup Workflow
 
@@ -90,11 +104,11 @@ print(detail.reason)     # why this value was returned
 all_flags = client.get_all_latest_flag_variations(user)
 ```
 
-Use `variation` when only the resolved value is needed. Use `variation_detail` when the caller needs to know why a specific value was returned (targeting rule, default, etc.).
+Call `variation` when only the resolved value is needed. Call `variation_detail` when the caller needs to know why a specific value was returned (targeting rule, default, etc.).
 
 ## User Custom Properties
 
-The Python SDK represents a user as a plain `dict`. Add any extra keys directly — no builder class is required:
+Represent a user as a plain `dict`. Add any extra keys directly — no builder class is required:
 
 ```python
 user = {
@@ -107,12 +121,5 @@ user = {
 flag_value = client.variation('flag-key', user, False)
 ```
 
-FeatBit targeting rules can reference any key in this dict.
+Reference any key in this dict from FeatBit targeting rules.
 
-## Read Next Only When Needed
-
-- [Flag tracking / listeners](https://github.com/featbit/featbit-python-sdk#flag-tracking) — only when the user asks about reacting to flag changes at runtime.
-- [Experiments / A-B testing](https://github.com/featbit/featbit-python-sdk#experiments-abn-testing) — only when the user asks about `track_metric` or experiment events.
-- [Offline mode](https://github.com/featbit/featbit-python-sdk#offline-mode) — only when the user asks about `Config(..., offline=True)` or bootstrapping without a server.
-- [Data synchronization](https://github.com/featbit/featbit-python-sdk#data-synchonization) — only when the user asks about WebSocket reconnect or sync behavior.
-- [FBClient reference](https://github.com/featbit/featbit-python-sdk#fbclient) — only when the user asks about advanced client configuration or lifecycle options.
