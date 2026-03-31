@@ -1,3 +1,8 @@
+---
+name: professional-configuration
+description: Complete docker-compose configuration and setup guide for FeatBit Professional deployment with ClickHouse and Kafka.
+---
+
 # Professional Deployment - Complete Configuration
 
 Complete guide for FeatBit Professional deployment with ClickHouse and Kafka for enterprise-scale deployments.

@@ -1,3 +1,8 @@
+---
+name: environments-api
+description: REST API endpoints for managing FeatBit environments (create, list, update, delete).
+---
+
 # Environments API
 
 APIs for managing FeatBit environments. Environments allow you to maintain separate configurations for different deployment stages (e.g., development, staging, production).

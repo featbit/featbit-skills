@@ -1,24 +1,13 @@
+---
+name: track-insights-api
+description: FeatBit insight tracking API — endpoint, event types, request schema, and custom event examples.
+---
+
 # Track Insights API Reference
 
 **Endpoint**: `POST {evaluation-server-url}/api/public/insight/track`
 **Official docs**: https://docs.featbit.co/api-docs/track-insights-api
 **Source**: https://github.com/featbit/featbit-docs/blob/main/pages/api-docs/track-insights-api.md
-
-## Table of Contents
-
-1. [Purpose](#purpose)
-2. [Authentication](#authentication)
-3. [Request Schema](#request-schema)
-4. [Use Cases](#use-cases)
-   - [Track Flag Evaluations Only](#1-track-flag-evaluations-only)
-   - [Track Custom Metric Events Only](#2-track-custom-metric-events-only)
-   - [Track Both Together](#3-track-both-together)
-   - [Batch Multiple Users](#4-batch-multiple-users)
-5. [Response](#response)
-6. [Error Responses](#error-responses)
-7. [Best Practices](#best-practices)
-
----
 
 ## Purpose
 

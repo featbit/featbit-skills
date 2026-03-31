@@ -34,12 +34,12 @@ This skill provides practical, step-by-step guidance for new FeatBit users to qu
 
 **Basic Feature Flag Creation:**
 
-The simplest feature flag type is boolean (true/false). The "game runner" flag demonstrates this:
+The simplest feature flag type is boolean (true/false). The "game runner" feature flag demonstrates this:
 
 **Steps:**
 1. Navigate to Feature Flags page
 2. Click "+ Add" button (top right)
-3. Enter flag name: "game runner"
+3. Enter feature flag name: "game runner"
 4. Keep default boolean type
 5. Configure variations:
    - **OFF** → returns `false` (disables feature)
@@ -49,9 +49,9 @@ The simplest feature flag type is boolean (true/false). The "game runner" flag d
 
 **Understanding Boolean Flags:**
 - Boolean flags control binary feature states (on/off, enabled/disabled)
-- SDK evaluates flag and returns boolean value to application
+- SDK evaluates the feature flag and returns boolean value to application
 - Application code determines what happens based on the returned value
-- Turning flag ON typically enables the feature; OFF disables it
+- Turning the feature flag ON typically enables the feature; OFF disables it
 
 ### 3. Interactive Demo - Dino Game
 
@@ -65,14 +65,14 @@ The simplest feature flag type is boolean (true/false). The "game runner" flag d
 
 **Making the Game Appear:**
 1. Go to Feature Flags page
-2. Find "game runner" flag
-3. Click on flag item or "Detail" button
-4. Toggle flag to ON
+2. Find "game runner" feature flag
+3. Click on the feature flag item or "Detail" button
+4. Turn feature flag ON
 5. Return to demo page
 6. Dino Game now appears and is playable
 
 **Key Concept:**
-This demonstrates real-time feature control - changing flag state in the portal immediately affects the application behavior without code deployment or restart.
+This demonstrates real-time feature control - changing feature flag state in the portal immediately affects the application behavior without code deployment or restart.
 
 ### 4. Creating Multi-Variant Feature Flags
 
@@ -80,7 +80,7 @@ This demonstrates real-time feature control - changing flag state in the portal 
 
 Multi-variant flags allow more than two states, perfect for A/B/C testing, configuration values, or progressive rollouts.
 
-**Example: Difficulty Mode Flag**
+**Example: Difficulty Mode Feature Flag**
 
 **Steps:**
 1. Navigate to Feature Flags page
@@ -92,15 +92,15 @@ Multi-variant flags allow more than two states, perfect for A/B/C testing, confi
    - `normal`
    - `hard`
 6. Configure serving rules:
-   - When flag is OFF → serves `easy`
-   - When flag is ON → serves `normal`
+   - When feature flag is OFF → serves `easy`
+   - When feature flag is ON → serves `normal`
    - Default: OFF
 7. Click "Save"
 
 **Demo Interaction:**
 1. In demo page, click "Next Task" button
 2. Dino Game shows difficulty adjustment controls
-3. Change targeting rules in flag detail page
+3. Change targeting rules in the feature flag detail page
 4. Observe game difficulty change in real-time
 
 **Multi-Variant Use Cases:**
@@ -128,7 +128,7 @@ FeatBit provides automatically generated starter code for quick SDK integration.
   - SDK initialization with server URL and environment key
   - User identification with custom properties
   - Feature flag evaluation
-  - Flag update listener (for real-time changes)
+  - Feature flag update listener (for real-time changes)
   - Basic usage examples
 
 **Step 3 - Verify Connection:**
@@ -152,25 +152,25 @@ See [SDK Overview](https://docs.featbit.co/sdk/overview#supported-sdks) for comp
 
 1. **Start with Boolean Flags**: When learning FeatBit, begin with simple boolean flags before moving to multi-variant flags. This helps you understand the core concepts without complexity.
 
-2. **Use the Interactive Demo**: The Dino Game demo is designed to provide immediate visual feedback. Use it to experiment with flag changes and understand the impact in real-time before implementing in your application.
+2. **Use the Interactive Demo**: The Dino Game demo is designed to provide immediate visual feedback. Use it to experiment with feature flag changes and understand the impact in real-time before implementing in your application.
 
 3. **Follow the Portal Guidance**: The Getting Started wizard in the portal provides automatically generated, environment-specific code. This eliminates configuration errors and ensures correct setup.
 
-4. **Test Flag Changes**: Before implementing flags in production applications, verify behavior in the demo environment or development environment to understand how flag evaluation works.
+4. **Test Feature Flag Changes**: Before implementing feature flags in production applications, verify behavior in the demo environment or development environment to understand how feature flag evaluation works.
 
-5. **Understand Flag States**: Remember that boolean flags have two states (ON/OFF) but multi-variant flags can serve different values in each state. Plan your flag variations based on your use case requirements.
+5. **Understand Feature Flag States**: Remember that boolean feature flags have two states (ON/OFF) but multi-variant feature flags can serve different values in each state. Plan your feature flag variations based on your use case requirements.
 
 6. **SDK Connection Verification**: Always verify SDK connection in the portal's Step 3 before proceeding to production integration. This confirms proper configuration and network connectivity.
 
 7. **User Context Matters**: When evaluating flags, provide meaningful user context (user ID, attributes). This enables advanced targeting and segmentation later.
 
-8. **Real-Time Updates**: FeatBit SDKs support real-time flag updates via WebSocket. Leverage this for instant feature control without application restarts.
+8. **Real-Time Updates**: FeatBit SDKs support real-time feature flag updates via WebSocket. Leverage this for instant feature control without application restarts.
 
 ## Common Integration Patterns
 
-### Pattern 1: Simple Feature Toggle
+### Pattern 1: Simple Feature Flag Switch
 
-**Use Case:** Show/hide a feature based on flag state
+**Use Case:** Show/hide a feature based on feature flag state
 
 ```javascript
 // After SDK initialization
@@ -185,9 +185,9 @@ if (isGameEnabled) {
 }
 ```
 
-### Pattern 2: Configuration via Multi-Variant Flag
+### Pattern 2: Configuration via Multi-Variant Feature Flag
 
-**Use Case:** Adjust application behavior based on flag variation
+**Use Case:** Adjust application behavior based on feature flag variation
 
 ```javascript
 // Get difficulty mode
@@ -207,12 +207,12 @@ switch(difficulty) {
 }
 ```
 
-### Pattern 3: Real-Time Flag Updates
+### Pattern 3: Real-Time Feature Flag Updates
 
-**Use Case:** React to flag changes without page reload
+**Use Case:** React to feature flag changes without page reload
 
 ```javascript
-// Listen for flag changes
+// Listen for feature flag changes
 client.on('update', (changes) => {
   if (changes.includes('difficulty-mode')) {
     const newDifficulty = client.variation('difficulty-mode', 'easy');
@@ -235,12 +235,12 @@ After completing the Getting Started guide, explore these topics:
 5. **Experimentation & A/B Testing** - Measure feature impact with metrics
 6. **Entitlement Management** - Control feature access based on subscription tiers
 7. **Remote Configuration** - Use feature flags for dynamic configuration
-8. **Feature Workflow** - Implement scheduled flag changes and triggers
+8. **Feature Workflow** - Implement scheduled feature flag changes and triggers
 
 ## Troubleshooting Common Issues
 
-**Issue: Demo doesn't show flag changes**
-- Verify flag is saved properly in portal
+**Issue: Demo doesn't show feature flag changes**
+- Verify feature flag is saved properly in portal
 - Check browser console for WebSocket connection errors
 - Refresh demo page if connection was interrupted
 
@@ -249,8 +249,8 @@ After completing the Getting Started guide, explore these topics:
 - Ensure server URL is accessible from your network
 - Check firewall settings if using self-hosted instance
 
-**Issue: Flag evaluation returns default value**
-- Confirm flag name matches exactly (case-sensitive)
+**Issue: Feature flag evaluation returns default value**
+- Confirm feature flag name matches exactly (case-sensitive)
 - Verify SDK is initialized before evaluation
 - Check that environment key corresponds to correct environment
 

@@ -14,7 +14,7 @@ metadata:
 
 Use for server-side Go applications — HTTP servers, background workers, CLI tools — that need real-time feature flag evaluation.
 
-Why server-side SDK: maintains one persistent WebSocket connection, synchronizes all flag data locally in under 100 ms, then evaluates every flag locally in under 10 ms per call on average. Do not use for frontend JavaScript or mobile applications — those require a client-side SDK.
+Why server-side SDK: maintains one persistent WebSocket connection, synchronizes all feature flag data locally in under 100 ms, then evaluates every feature flag locally in under 10 ms per call on average. Do not use for frontend JavaScript or mobile applications — those require a client-side SDK.
 
 ## Source
 
@@ -56,7 +56,7 @@ Use the official pattern:
 ```go
 user, _ := interfaces.NewUserBuilder("<unique-user-key>").UserName("Jane").Build()
 _, detail, _ := client.BoolVariation("flag-key", user, false)
-fmt.Printf("flag %s returns %s, reason: %s\n", detail.KeyName, detail.Variation, detail.Reason)
+fmt.Printf("feature flag %s returns %s, reason: %s\n", detail.KeyName, detail.Variation, detail.Reason)
 ```
 
 **Step 4: Validate the integration**
@@ -73,9 +73,9 @@ value, detail, _ := client.BoolVariation("flag-key", user, false)
 fmt.Println(value, detail.Reason)
 ```
 
-Use the first return value when only the flag result is needed. Use `detail` when the evaluation reason is also needed — `detail.Reason` explains why the value was returned, `detail.KeyName` and `detail.Variation` identify the matched variation.
+Use the first return value when only the feature flag result is needed. Use `detail` when the evaluation reason is also needed — `detail.Reason` explains why the value was returned, `detail.KeyName` and `detail.Variation` identify the matched variation.
 
-Also available for non-boolean flags: `Variation` (string), `IntVariation`, `DoubleVariation`, `JsonVariation`.
+Also available for non-boolean feature flags: `Variation` (string), `IntVariation`, `DoubleVariation`, `JsonVariation`.
 
 ## User Custom Properties
 
@@ -93,6 +93,6 @@ Use `Custom(key, value)` for any attribute that must be referenced in feature fl
 
 ## Read Next Only When Needed
 
-- Read the official README section for [evaluation](https://github.com/featbit/featbit-go-sdk#evaluation) when the user asks how to evaluate a feature flag, use non-boolean variation types (String, Int, Double, Json), inspect evaluation details, or call `AllLatestFlagsVariations` to get all flags for a user at once.
+- Read the official README section for [evaluation](https://github.com/featbit/featbit-go-sdk#evaluation) when the user asks how to evaluate a feature flag, use non-boolean variation types (String, Int, Double, Json), inspect evaluation details, or call `AllLatestFlagsVariations` to get all feature flags for a user at once.
 - Read the official README section for [FBUser](https://github.com/featbit/featbit-go-sdk#fbuser) when the user asks about user attributes, custom properties, targeting fields, or user construction patterns.
 - Read the official README sections for [FBClient](https://github.com/featbit/featbit-go-sdk#fbclient), [FBConfig and components](https://github.com/featbit/featbit-go-sdk#fbconfig-and-components), [offline mode](https://github.com/featbit/featbit-go-sdk#offline-mode), and [experiments](https://github.com/featbit/featbit-go-sdk#experiments-abn-testing) only when those topics are requested.

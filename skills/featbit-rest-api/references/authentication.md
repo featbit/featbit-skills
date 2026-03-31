@@ -1,3 +1,8 @@
+---
+name: authentication
+description: FeatBit REST API authentication methods — Personal Access Token and Environment Secret.
+---
+
 # Authentication
 
 FeatBit supports two methods for authenticating API requests.

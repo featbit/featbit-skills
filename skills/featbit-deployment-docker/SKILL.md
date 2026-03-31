@@ -11,6 +11,33 @@ metadata:
 
 Expert guidance for deploying FeatBit with Docker Compose. This skill provides deployment instructions for all three tiers with links to detailed configuration files.
 
+## Execution Procedure
+
+```python
+def assist_docker_deployment(query):
+    # Route by user intent to the right reference
+    if mentions("standalone", "simple", "single server", "evaluation", "quick start"):
+        read("references/standalone-configuration.md")
+    elif mentions("standard", "postgresql + redis", "mongodb + redis", "production"):
+        read("references/standard-configuration.md")         # overview & index
+        if mentions("postgresql", "postgres"):
+            read("references/standard-postgresql-configuration.md")
+        elif mentions("mongodb", "mongo"):
+            read("references/standard-mongodb-configuration.md")
+    elif mentions("professional", "enterprise", "kafka", "clickhouse", "scale"):
+        read("references/professional-configuration.md")
+    elif mentions("environment variable", "env var", "config"):
+        read("references/environment-variables.md")           # index → sub-refs
+    elif mentions("troubleshoot", "error", "not working", "failed", "issue"):
+        read("references/troubleshooting.md")                 # index → sub-refs
+    elif mentions("which tier", "comparison", "choose"):
+        # Answer from Core Concepts + "When to Choose Each Tier" sections
+        pass
+    else:
+        # Default: show tier comparison, ask user to pick
+        pass
+```
+
 ## Core Concepts
 
 FeatBit offers three deployment architectures optimized for different scales:
@@ -98,9 +125,9 @@ docker compose -f docker-compose-mongodb.yml up -d
 
 **Prerequisites**: Docker 20.10+, Docker Compose 2.0+, 4GB RAM (8GB recommended)
 
-**Complete Guide**: [references/standard-configuration.md](references/standard-configuration.md)
-- Full configurations for both PostgreSQL and MongoDB options
-- Production setup with managed services
+**Complete Guide**: [references/standard-configuration.md](references/standard-configuration.md) (overview & index)
+- [references/standard-postgresql-configuration.md](references/standard-postgresql-configuration.md) - Full PostgreSQL + Redis config, init scripts, managed services
+- [references/standard-mongodb-configuration.md](references/standard-mongodb-configuration.md) - Full MongoDB + Redis config, init scripts
 - Resource requirements
 - When to choose Standard vs Professional
 
@@ -150,19 +177,14 @@ Complete reference for all configuration options:
 
 ### Troubleshooting
 
-Common issues and solutions:
+Common issues and solutions, organized by category:
 
-**[references/troubleshooting.md](references/troubleshooting.md)**
-- Port conflicts
-- UI connection issues  
-- Database connection failures
-- Service startup problems
-- WebSocket connection failures
-- Redis and MongoDB issues
-- Kafka and ClickHouse troubleshooting
-- Performance problems
-- Emergency recovery procedures
-- Debugging tips
+**[references/troubleshooting.md](references/troubleshooting.md)** — Index routing to focused guides:
+- **[references/troubleshooting-login.md](references/troubleshooting-login.md)** — Login failures, database initialization, API server health
+- **[references/troubleshooting-database.md](references/troubleshooting-database.md)** — Database connections, MongoDB auth, data persistence
+- **[references/troubleshooting-networking.md](references/troubleshooting-networking.md)** — Port conflicts, UI-API connectivity, WebSocket, Redis
+- **[references/troubleshooting-infrastructure.md](references/troubleshooting-infrastructure.md)** — Service startup, Kafka, ClickHouse, disk space, performance
+- **[references/troubleshooting-recovery.md](references/troubleshooting-recovery.md)** — Emergency recovery, debugging tips, getting help
 
 ## Quick Commands
 

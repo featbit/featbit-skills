@@ -1,3 +1,8 @@
+---
+name: ecs-high-availability
+description: High-availability FeatBit deployment on AWS ECS Fargate with ALB, auto-scaling, and Terraform reference.
+---
+
 # FeatBit on AWS ECS Fargate — High Availability Setup
 
 > **Baseline reference**: The [featbit-terraform-aws](https://github.com/featbit/featbit-terraform-aws) project implements the architecture described in this document. Use it as your starting point for AWS deployments.

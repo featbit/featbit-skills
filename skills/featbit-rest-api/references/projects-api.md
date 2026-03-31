@@ -1,13 +1,77 @@
+---
+name: projects-api
+description: REST API endpoints for managing FeatBit projects (create, list, update, delete).
+---
+
 # Projects API
 
 APIs for managing FeatBit projects. Projects are top-level containers for organizing feature flags across different applications.
 
 ## Table of Contents
 
-1. [Create Project](#create-project)
-2. [Get a Project](#get-a-project)
-3. [Get Project List](#get-project-list)
-4. [Source Code References](#source-code-references)
+1. [Common Response Shape](#common-response-shape)
+2. [ProjectWithEnvs Schema](#projectwithenvs-schema)
+3. [Create Project](#create-project)
+4. [Get a Project](#get-a-project)
+5. [Get Project List](#get-project-list)
+6. [Source Code References](#source-code-references)
+
+---
+
+## Common Response Shape
+
+All endpoints return the standard envelope:
+
+```json
+{ "success": true, "data": <payload>, "errors": [] }
+```
+
+On error: `success: false`, `data: null`, `errors` contains `{ code, message }` objects.
+
+---
+
+## ProjectWithEnvs Schema
+
+Every project response uses this shape (`data` for single, `data[]` for list):
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | guid | Project unique identifier |
+| `name` | string | Project display name |
+| `key` | string | Project unique key |
+| `environments` | array | All environments in the project |
+| `environments[].id` | guid | Environment unique identifier |
+| `environments[].projectId` | guid | Parent project ID |
+| `environments[].name` | string | Environment display name |
+| `environments[].key` | string | Environment unique key |
+| `environments[].description` | string | Environment description |
+| `environments[].secrets` | array | Environment secrets (Server Key + Client Key) |
+| `environments[].secrets[].id` | string | Secret ID |
+| `environments[].secrets[].name` | string | Secret name ("Server Key" or "Client Key") |
+| `environments[].secrets[].type` | string | `Server` or `Client` |
+| `environments[].secrets[].value` | string | Secret value |
+| `environments[].settings` | array | Environment settings |
+| `environments[].createdAt` | datetime | Creation timestamp (UTC) |
+| `environments[].updatedAt` | datetime | Last update timestamp (UTC) |
+
+**Example environment object** (referenced in endpoint examples below):
+
+```json
+{
+  "id": "8d7e9f12-3456-7890-abcd-ef1234567890",
+  "projectId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Prod",
+  "key": "prod",
+  "description": "Production environment",
+  "secrets": [
+    { "id": "secret-guid-1", "name": "Server Key", "type": "Server", "value": "AbCdEf123456-8d7e9f12345678" },
+    { "id": "secret-guid-2", "name": "Client Key", "type": "Client", "value": "XyZaBc789012-8d7e9f12345678" }
+  ],
+  "settings": [],
+  "createdAt": "2026-02-09T10:30:00Z",
+  "updatedAt": "2026-02-09T10:30:00Z"
+}
+```
 
 ---
 
@@ -43,13 +107,12 @@ Authorization: Bearer {jwt_token}
 ### Example Request
 
 ```json
-{
-  "name": "E-Commerce Platform",
-  "key": "ecommerce"
-}
+{ "name": "E-Commerce Platform", "key": "ecommerce" }
 ```
 
 ### Success Response (200 OK)
+
+Returns a `ProjectWithEnvs` object. Two default environments ("Prod" and "Dev") are auto-created, each with a Server Key and Client Key.
 
 ```json
 {
@@ -58,56 +121,7 @@ Authorization: Bearer {jwt_token}
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "name": "E-Commerce Platform",
     "key": "ecommerce",
-    "environments": [
-      {
-        "id": "8d7e9f12-3456-7890-abcd-ef1234567890",
-        "projectId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "name": "Prod",
-        "key": "prod",
-        "description": "",
-        "secrets": [
-          {
-            "id": "secret-guid-1",
-            "name": "Server Key",
-            "type": "Server",
-            "value": "AbCdEf123456-8d7e9f12345678"
-          },
-          {
-            "id": "secret-guid-2",
-            "name": "Client Key",
-            "type": "Client",
-            "value": "XyZaBc789012-8d7e9f12345678"
-          }
-        ],
-        "settings": [],
-        "createdAt": "2026-02-09T10:30:00Z",
-        "updatedAt": "2026-02-09T10:30:00Z"
-      },
-      {
-        "id": "9e8f0a23-4567-8901-bcde-f12345678901",
-        "projectId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "name": "Dev",
-        "key": "dev",
-        "description": "",
-        "secrets": [
-          {
-            "id": "secret-guid-3",
-            "name": "Server Key",
-            "type": "Server",
-            "value": "GhIjKl456789-9e8f0a23456789"
-          },
-          {
-            "id": "secret-guid-4",
-            "name": "Client Key",
-            "type": "Client",
-            "value": "MnOpQr012345-9e8f0a23456789"
-          }
-        ],
-        "settings": [],
-        "createdAt": "2026-02-09T10:30:00Z",
-        "updatedAt": "2026-02-09T10:30:00Z"
-      }
-    ]
+    "environments": [ /* Prod env, Dev env — see schema above */ ]
   },
   "errors": []
 }
@@ -135,7 +149,7 @@ Authorization: Bearer {jwt_token}
 
 - **Auto-generated Environments**: Creates two default environments: "Prod" and "Dev"
 - **Auto-generated Secrets**: Each environment automatically gets a Server Key and Client Key
-- **Organization Context**: The organization ID is automatically extracted from the authenticated user's context
+- **Organization Context**: Organization ID is extracted from the authenticated user's context
 
 ### cURL Example
 
@@ -143,17 +157,14 @@ Authorization: Bearer {jwt_token}
 curl -X POST "https://your-featbit-instance.com/api/v1/projects" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer {jwt_token}" \
-  -d '{
-    "name": "E-Commerce Platform",
-    "key": "ecommerce"
-  }'
+  -d '{"name": "E-Commerce Platform", "key": "ecommerce"}'
 ```
 
 ---
 
 ## Get a Project
 
-Retrieve detailed information about a specific project, including all its environments and associated secrets.
+Retrieve detailed information about a specific project, including all its environments and secrets.
 
 ### Endpoint
 
@@ -180,6 +191,8 @@ Authorization: Bearer {jwt_token}
 
 ### Success Response (200 OK)
 
+Returns a single `ProjectWithEnvs` object (see [schema](#projectwithenvs-schema)).
+
 ```json
 {
   "success": true,
@@ -187,32 +200,7 @@ Authorization: Bearer {jwt_token}
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "name": "E-Commerce Platform",
     "key": "ecommerce",
-    "environments": [
-      {
-        "id": "8d7e9f12-3456-7890-abcd-ef1234567890",
-        "projectId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "name": "Prod",
-        "key": "prod",
-        "description": "Production environment",
-        "secrets": [
-          {
-            "id": "secret-guid-1",
-            "name": "Server Key",
-            "type": "Server",
-            "value": "AbCdEf123456-8d7e9f12345678"
-          },
-          {
-            "id": "secret-guid-2",
-            "name": "Client Key",
-            "type": "Client",
-            "value": "XyZaBc789012-8d7e9f12345678"
-          }
-        ],
-        "settings": [],
-        "createdAt": "2026-02-09T10:30:00Z",
-        "updatedAt": "2026-02-09T10:30:00Z"
-      }
-    ]
+    "environments": [ /* see schema above */ ]
   },
   "errors": []
 }
@@ -224,16 +212,14 @@ Authorization: Bearer {jwt_token}
 {
   "success": false,
   "data": null,
-  "errors": [
-    { "code": "NotFound", "message": "Project not found" }
-  ]
+  "errors": [{ "code": "NotFound", "message": "Project not found" }]
 }
 ```
 
 ### cURL Example
 
 ```bash
-curl -X GET "https://your-featbit-instance.com/api/v1/projects/3fa85f64-5717-4562-b3fc-2c963f66afa6" \
+curl -X GET "https://your-featbit-instance.com/api/v1/projects/{projectId}" \
   -H "Authorization: Bearer {jwt_token}"
 ```
 
@@ -262,100 +248,29 @@ Authorization: Bearer {jwt_token}
 
 ### Parameters
 
-None. The organization ID is automatically extracted from the authenticated user's context.
+None. Organization ID is extracted from the authenticated user's context.
 
 ### Success Response (200 OK)
+
+Returns `ProjectWithEnvs[]` — an array of projects (see [schema](#projectwithenvs-schema)).
 
 ```json
 {
   "success": true,
   "data": [
-    {
-      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "name": "E-Commerce Platform",
-      "key": "ecommerce",
-      "environments": [
-        {
-          "id": "8d7e9f12-3456-7890-abcd-ef1234567890",
-          "projectId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "name": "Prod",
-          "key": "prod",
-          "description": "Production environment",
-          "secrets": [
-            { "id": "secret-guid-1", "name": "Server Key", "type": "Server", "value": "AbCdEf123456-8d7e9f12345678" },
-            { "id": "secret-guid-2", "name": "Client Key", "type": "Client", "value": "XyZaBc789012-8d7e9f12345678" }
-          ],
-          "settings": [],
-          "createdAt": "2026-02-09T10:30:00Z",
-          "updatedAt": "2026-02-09T10:30:00Z"
-        }
-      ]
-    },
-    {
-      "id": "b2c3d4e5-f6a7-8901-2345-678901abcdef",
-      "name": "Mobile App",
-      "key": "mobile-app",
-      "environments": [
-        {
-          "id": "c3d4e5f6-a7b8-9012-3456-789012bcdef0",
-          "projectId": "b2c3d4e5-f6a7-8901-2345-678901abcdef",
-          "name": "Prod",
-          "key": "prod",
-          "description": "",
-          "secrets": [
-            { "id": "secret-guid-5", "name": "Server Key", "type": "Server", "value": "StUvWx678901-c3d4e5f6a7b890" },
-            { "id": "secret-guid-6", "name": "Client Key", "type": "Client", "value": "YzAbCd234567-c3d4e5f6a7b890" }
-          ],
-          "settings": [],
-          "createdAt": "2026-01-15T08:00:00Z",
-          "updatedAt": "2026-01-15T08:00:00Z"
-        }
-      ]
-    }
+    { "id": "...", "name": "E-Commerce Platform", "key": "ecommerce", "environments": [ /* ... */ ] },
+    { "id": "...", "name": "Mobile App", "key": "mobile-app", "environments": [ /* ... */ ] }
   ],
   "errors": []
 }
 ```
 
-### Empty Response (200 OK)
-
-```json
-{
-  "success": true,
-  "data": [],
-  "errors": []
-}
-```
-
-### Response Data Schema
-
-Returns `ProjectWithEnvs[]` — an array of projects with nested environments:
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | guid | Project unique identifier |
-| `name` | string | Project display name |
-| `key` | string | Project unique key |
-| `environments` | array | All environments in the project |
-| `environments[].id` | guid | Environment unique identifier |
-| `environments[].projectId` | guid | Parent project ID |
-| `environments[].name` | string | Environment display name |
-| `environments[].key` | string | Environment unique key |
-| `environments[].description` | string | Environment description |
-| `environments[].secrets` | array | Environment secrets (Server Key + Client Key) |
-| `environments[].secrets[].id` | string | Secret ID |
-| `environments[].secrets[].name` | string | Secret name |
-| `environments[].secrets[].type` | string | Secret type: `Server` or `Client` |
-| `environments[].secrets[].value` | string | Secret value |
-| `environments[].settings` | array | Environment settings |
-| `environments[].createdAt` | datetime | Creation timestamp (UTC) |
-| `environments[].updatedAt` | datetime | Last update timestamp (UTC) |
+Empty org returns `{ "success": true, "data": [], "errors": [] }`.
 
 ### Notes
 
-- **No Pagination**: Returns all projects in the organization — no pagination parameters
+- **No Pagination**: Returns all projects — no pagination parameters
 - **Includes Environments**: Each project includes complete environment info with secrets
-- **Organization Context**: Organization ID is extracted from the authenticated user's context automatically
 
 ### cURL Example
 

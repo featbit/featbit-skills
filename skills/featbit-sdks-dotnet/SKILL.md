@@ -47,8 +47,8 @@ using FeatBit.Sdk.Server.Model;
 using FeatBit.Sdk.Server.Options;
 
 var options = new FbOptionsBuilder("<your-env-secret>")
-  .Streaming(new Uri("ws://localhost:5100"))
-  .Event(new Uri("http://localhost:5100"))
+  .Streaming(new Uri("ws://localhost:5100"))   // replace with your FeatBit server URL
+  .Event(new Uri("http://localhost:5100"))     // replace with your FeatBit server URL
   .Build();
 
 var client = new FbClient(options);

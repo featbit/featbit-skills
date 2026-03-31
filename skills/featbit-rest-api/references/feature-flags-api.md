@@ -1,3 +1,8 @@
+---
+name: feature-flags-api
+description: REST API endpoints for managing FeatBit feature flags (CRUD, targeting rules, variations).
+---
+
 # Feature Flags API
 
 APIs for managing FeatBit feature flags. Feature flags enable you to control feature rollouts, perform A/B testing, and manage configuration dynamically.

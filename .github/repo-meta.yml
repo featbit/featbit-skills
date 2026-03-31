@@ -1,0 +1,18 @@
+description: "Give your AI coding agent expert-level FeatBit knowledge — 17 skills covering SDKs, deployments, and APIs for the Agent Skills ecosystem."
+topics:
+  # Tier 1: Core identity
+  - agent-skills
+  - featbit
+  - feature-flags
+  # Tier 2: Technology
+  - claude-code
+  - cursor
+  - github-copilot
+  - windsurf
+  - ai-coding
+  # Tier 3: Discoverability
+  - docker-compose
+  - kubernetes
+  - sdk-integration
+  - opentelemetry
+  - ab-testing

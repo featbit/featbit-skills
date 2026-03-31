@@ -14,7 +14,7 @@ metadata:
 
 Use for server-side Node.js and TypeScript applications — web servers, REST APIs, background workers — that need real-time feature flag evaluation.
 
-Why server-side SDK: maintains one persistent WebSocket connection per process, synchronizes all flag data locally in under 100 ms, and evaluates every flag locally without a remote call. Do not use for browser JavaScript (use `featbit-sdks-javascript`), React (`featbit-sdks-react`), or React Native (`featbit-sdks-react-native`).
+Why server-side SDK: maintains one persistent WebSocket connection per process, synchronizes all feature flag data locally in under 100 ms, and evaluates every feature flag locally without a remote call. Do not use for browser JavaScript (use `featbit-sdks-javascript`), React (`featbit-sdks-react`), or React Native (`featbit-sdks-react-native`).
 
 ## Source
 
@@ -46,8 +46,8 @@ import { FbClientBuilder, UserBuilder } from "@featbit/node-server-sdk";
 
 const fbClient = new FbClientBuilder()
     .sdkKey('<your-env-secret>')
-    .streamingUri('ws://localhost:5100')
-    .eventsUri('http://localhost:5100')
+    .streamingUri('ws://localhost:5100')   // replace with your FeatBit server URL
+    .eventsUri('http://localhost:5100')    // replace with your FeatBit server URL
     .build();
 ```
 
@@ -82,7 +82,7 @@ const boolVariationDetail = await fbClient.boolVariationDetail(flagKey, user, fa
 console.log(`Returns ${boolVariationDetail.value}, Kind: ${boolVariationDetail.kind}, Reason: ${boolVariationDetail.reason}`);
 ```
 
-Use `boolVariation` when only the flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed.
+Use `boolVariation` when only the feature flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed.
 
 Also available: `stringVariation`/`stringVariationDetail`, `numberVariation`/`numberVariationDetail`, `jsonVariation`/`jsonVariationDetail`.
 
@@ -123,7 +123,7 @@ await fbClient.close();
 
 Use `fbClient.track(user, eventName)` when the event is a simple counter. Use `fbClient.track(user, eventName, numericValue)` when the event also carries a numeric metric such as revenue, score, or quantity. `numericValue` is optional and defaults to `1.0`.
 
-Call `track` only after the related feature flag evaluation call. If `track` runs before the flag is evaluated for that user, the custom event will not be included in experiment results.
+Call `track` only after the related feature flag evaluation call. If `track` runs before the feature flag is evaluated for that user, the custom event will not be included in experiment results.
 
 ## OpenFeature Integration
 
@@ -135,7 +135,7 @@ npm install @featbit/node-server-sdk
 npm install @featbit/openfeature-provider-node-server
 ```
 
-Register the FeatBit provider and evaluate flags via the OpenFeature client:
+Register the FeatBit provider and evaluate feature flags via the OpenFeature client:
 
 ```typescript
 import { OpenFeature, ProviderEvents } from '@openfeature/server-sdk';
@@ -156,7 +156,7 @@ OpenFeature.addHandler(ProviderEvents.Ready, async () => {
 });
 ```
 
-See [openfeature-provider-node-server](https://github.com/featbit/openfeature-provider-node-server) for `ProviderEvents.ConfigurationChanged` and flag change subscription examples.
+See [openfeature-provider-node-server](https://github.com/featbit/openfeature-provider-node-server) for `ProviderEvents.ConfigurationChanged` and feature flag change subscription examples.
 
 ## Read Next Only When Needed
 

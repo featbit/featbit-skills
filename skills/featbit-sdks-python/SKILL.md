@@ -14,7 +14,7 @@ metadata:
 
 Use for server-side Python applications — Flask, Django, FastAPI, background workers, or scripts — that evaluate feature flags on the backend.
 
-**Why server SDK**: Flags sync via WebSocket on startup (<100ms) and are evaluated locally with no remote call per request. The process holds one persistent singleton client.
+**Why server SDK**: Feature flags sync via WebSocket on startup (<100ms) and are evaluated locally with no remote call per request. The process holds one persistent singleton client.
 
 Do not use for browser JavaScript, React, React Native, or any frontend context.
 
@@ -46,8 +46,8 @@ from fbclient.config import Config
 
 set_config(Config(
     env_secret='<your-env-secret>',
-    event_url='http://localhost:5100',
-    streaming_url='ws://localhost:5100'
+    event_url='http://localhost:5100',       # replace with your FeatBit server URL
+    streaming_url='ws://localhost:5100'     # replace with your FeatBit server URL
 ))
 client = get()
 ```
@@ -60,10 +60,10 @@ client = get()
 if client.initialize:
     user = {'key': 'user-key-123', 'name': 'Jane'}
     detail = client.variation_detail('flag-key', user, default=None)
-    print(f'flag returns {detail.variation}, reason: {detail.reason}')
+    print(f'feature flag returns {detail.variation}, reason: {detail.reason}')
 ```
 
-**Why check `client.initialize`**: This property (no parentheses) confirms the SDK has synced flag data. If false, `env_secret`, `event_url`, or `streaming_url` is likely wrong.
+**Why check `client.initialize`**: This property (no parentheses) confirms the SDK has synced feature flag data. If false, `env_secret`, `event_url`, or `streaming_url` is likely wrong.
 
 **Step 4: Shut down cleanly**
 
@@ -86,7 +86,7 @@ detail = client.variation_detail('flag-key', user, default=None)
 print(detail.variation)  # the resolved value
 print(detail.reason)     # why this value was returned
 
-# All flags for a user
+# All feature flags for a user
 all_flags = client.get_all_latest_flag_variations(user)
 ```
 

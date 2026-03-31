@@ -1,3 +1,8 @@
+---
+name: openfeature-integration
+description: OpenFeature provider setup and usage for the FeatBit .NET Server SDK.
+---
+
 # OpenFeature Integration for FeatBit .NET Server SDK
 
 This is the [OpenFeature](https://github.com/open-feature/dotnet-sdk) provider for the [FeatBit .NET Server SDK](https://github.com/featbit/featbit-dotnet-sdk).

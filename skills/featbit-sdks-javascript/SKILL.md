@@ -14,7 +14,7 @@ metadata:
 
 Use for browser-based JavaScript and TypeScript applications that evaluate feature flags client-side — vanilla JS apps, SPAs, or any non-React framework. For React, use `featbit-sdks-react` instead.
 
-Why client-side SDK: designed for single-user browser contexts, stores flag data in localStorage, and syncs via WebSocket streaming or HTTP polling. Do not use for Node.js server-side applications — those require `featbit-sdks-node`.
+Why client-side SDK: designed for single-user browser contexts, stores feature flag data in localStorage, and syncs via WebSocket streaming or HTTP polling. Do not use for Node.js server-side applications — those require `featbit-sdks-node`.
 
 ## Source
 
@@ -47,8 +47,8 @@ const user = new UserBuilder('<unique-user-key>').name('Jane').build();
 
 const fbClient = new FbClientBuilder()
     .sdkKey('<your-env-secret>')
-    .streamingUri('ws://localhost:5100')
-    .eventsUri('http://localhost:5100')
+    .streamingUri('ws://localhost:5100')   // replace with your FeatBit server URL
+    .eventsUri('http://localhost:5100')    // replace with your FeatBit server URL
     .user(user)
     .build();
 ```
@@ -78,7 +78,7 @@ const boolVariation = await fbClient.boolVariation(flagKey, false);
 const boolVariationDetail = await fbClient.boolVariationDetail(flagKey, false);
 ```
 
-All variation calls return a `Promise` — always use `await`. Use `boolVariation` when only the flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed.
+All variation calls return a `Promise` — always use `await`. Use `boolVariation` when only the feature flag value is needed. Use `boolVariationDetail` when the evaluation reason is also needed.
 
 Also available: `stringVariation`/`stringVariationDetail`, `numberVariation`/`numberVariationDetail`, `jsonVariation`/`jsonVariationDetail`.
 
