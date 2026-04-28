@@ -5,6 +5,16 @@ All notable changes to the FeatBit Agent Skills collection will be documented in
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-04-28
+
+### Added
+- **`featbit-experimentation` skill** — instrumentation guidance for FeatBit experiments and A/B tests.
+  Covers `POST /api/track/event` for both flag-evaluation exposures and metric events
+  (binary conversion, continuous revenue, duration), the `user.keyId` + timestamp attribution
+  contracts, per-language helper patterns for Node.js, .NET, Java, Go, Python, Browser JS, and
+  React, and the trade-off between FeatBit's track-service, flag-evaluation insights, and a
+  self-hosted warehouse.
+
 ## [2.1.2] - 2026-03-17
 
 ### Fixed

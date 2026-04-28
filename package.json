@@ -1,7 +1,7 @@
 {
   "name": "@featbit/claude-skills",
-  "version": "2.1.2",
-  "description": "Official agent skills collection for FeatBit with 17 specialized skills for SDK integration, deployment, APIs, and platform workflows",
+  "version": "2.2.0",
+  "description": "Official agent skills collection for FeatBit with 18 specialized skills for SDK integration, deployment, APIs, experimentation, and platform workflows",
   "main": "package.json",
   "author": {
     "name": "FeatBit Team",
@@ -130,6 +130,11 @@
       "name": "featbit-evaluation-insights-api",
       "path": "skills/featbit-evaluation-insights-api",
       "description": "Flag Evaluation API and Track Insights API for building custom SDKs on mobile platforms (Kotlin, Swift, Android, iOS, etc.)"
+    },
+    {
+      "name": "featbit-experimentation",
+      "path": "skills/featbit-experimentation",
+      "description": "Wire flag-evaluation exposures and metric events into FeatBit's experimentation engine to measure A/B and multivariate tests"
     }
   ]
 }

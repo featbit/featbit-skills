@@ -1,6 +1,6 @@
 ﻿# FeatBit Agent Skills
 
-[![Version](https://img.shields.io/badge/version-2.1.2-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![skills.sh](https://img.shields.io/badge/install-skills.sh-black.svg)](https://skills.sh/featbit/featbit-skills)
 
@@ -18,7 +18,7 @@ This collection gives agents focused, low-noise guidance for the exact FeatBit w
 
 | | |
 |---|---|
-| 17 Skills | SDK integration, deployment, API, and platform knowledge |
+| 18 Skills | SDK integration, deployment, API, experimentation, and platform knowledge |
 | 7 Languages | .NET, Node.js, Python, Java, Go, JavaScript, React / React Native |
 | 3 Deployment targets | Docker Compose, Kubernetes/Helm, AWS ECS Fargate |
 
@@ -33,6 +33,7 @@ Use skills selectively. Loading all skills when only one is relevant wastes cont
 | Platform | [featbit-opentelemetry](skills/featbit-opentelemetry/SKILL.md) | Configures FeatBit metrics, traces, and logs with OpenTelemetry |
 | API | [featbit-rest-api](skills/featbit-rest-api/SKILL.md) | Manages projects, environments, and feature flags via FeatBit REST APIs |
 | API | [featbit-evaluation-insights-api](skills/featbit-evaluation-insights-api/SKILL.md) | Calls evaluation and track-insights APIs for custom SDKs and unsupported platforms |
+| API | [featbit-experimentation](skills/featbit-experimentation/SKILL.md) | Instruments flag exposures and metric events for FeatBit A/B tests and experimentation analysis |
 | Deployment | [featbit-deployment-docker](skills/featbit-deployment-docker/SKILL.md) | Deploys FeatBit with Docker Compose across Standalone, Standard, and Professional tiers |
 | Deployment | [featbit-deployment-kubernetes](skills/featbit-deployment-kubernetes/SKILL.md) | Deploys FeatBit to Kubernetes with Helm across managed and self-managed clusters |
 | Deployment | [featbit-deployment-aws](skills/featbit-deployment-aws/SKILL.md) | Deploys FeatBit on AWS with ECS Fargate, ALB, and Terraform patterns |
