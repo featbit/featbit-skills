@@ -1,10 +1,10 @@
 ---
 name: featbit
-description: Routes FeatBit engineering questions to current official sources. Use for integrating any FeatBit SDK or OpenFeature provider; deploying, upgrading, maintaining, or observing FeatBit with Docker Compose, Kubernetes and Helm, Microsoft Aspire, AWS or Azure Terraform, or OpenTelemetry; using Management, Evaluation, and Track Insights REST APIs; or finding official documentation for feature flag operations, experimentation, IAM, integrations, data import and export, or relay proxy. Do not use for general feature flag advice unrelated to FeatBit.
+description: Routes FeatBit engineering questions to current official sources. Use for integrating any FeatBit SDK or OpenFeature provider; managing FeatBit resources with Terraform; deploying, upgrading, maintaining, or observing FeatBit with Docker Compose, Kubernetes and Helm, Microsoft Aspire, AWS or Azure Terraform, or OpenTelemetry; using Management, Evaluation, and Track Insights REST APIs; or finding official documentation for feature flag operations, experimentation, IAM, integrations, data import and export, or relay proxy. Do not use for general feature flag advice unrelated to FeatBit.
 license: MIT
 metadata:
   author: FeatBit
-  version: 0.1.0
+  version: 0.1.1
   category: platform
 ---
 
@@ -17,6 +17,8 @@ Read only the reference relevant to the request. Treat its linked FeatBit docume
 **SDK:** Read [references/sdk.md](references/sdk.md) when application code needs a FeatBit SDK or OpenFeature provider, or when an unsupported platform needs the Evaluation and Track Insights APIs.
 
 **REST API:** Read [references/rest-api.md](references/rest-api.md) when the request involves programmatic resource management, the live Management OpenAPI contract, direct feature flag evaluation, or Track Insights.
+
+**Terraform Provider:** Use the official [FeatBit Terraform Provider](https://github.com/featbit/terraform-provider-featbit) when managing FeatBit resources with Terraform, and follow the repository's current documentation and releases.
 
 **Deployment and maintenance:** Read [references/deployment.md](references/deployment.md) for installation, deployment, upgrades, maintenance, troubleshooting, or observability with Docker Compose, Kubernetes and Helm, Microsoft Aspire, AWS or Azure Terraform, or OpenTelemetry.
 

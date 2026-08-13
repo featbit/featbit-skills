@@ -1,6 +1,6 @@
 # FeatBit Agent Skill
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/featbit/featbit-skills/releases/tag/0.1.0)
+[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](https://github.com/featbit/featbit-skills/releases/tag/0.1.1)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![skills.sh](https://img.shields.io/badge/install-skills.sh-black.svg)](https://skills.sh/featbit/featbit-skills)
 
