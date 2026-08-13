@@ -10,7 +10,7 @@ One source-first Agent Skill for AI coding agents working with [FeatBit](https:/
 
 | | |
 |---|---|
-| 1 Skill | Routes FeatBit SDK, REST API, deployment, maintenance, observability, and other official documentation requests |
+| 1 Skill | Routes FeatBit SDK, REST API, Terraform resource management, deployment, maintenance, observability, and other official documentation requests |
 | 3 References | Small source maps for SDKs, HTTP APIs, and platform operations |
 | 0 Documentation Mirrors | Detailed instructions remain in current FeatBit repositories, docs, releases, and live API contracts |
 
@@ -18,12 +18,13 @@ One source-first Agent Skill for AI coding agents working with [FeatBit](https:/
 
 | Skill | Description |
 |---|---|
-| [featbit](skills/featbit/SKILL.md) | Selects the relevant reference or documentation search route and sends the agent to the current authoritative FeatBit source |
+| [featbit](skills/featbit/SKILL.md) | Routes requests to the relevant reference, the official Terraform Provider repository, or current FeatBit documentation |
 
 The skill uses only the source route needed by the request:
 
 - [SDK sources](skills/featbit/references/sdk.md) lists every SDK and OpenFeature provider in the official SDK catalog, with its GitHub repository and intended use.
 - [REST API sources](skills/featbit/references/rest-api.md) links the live Management OpenAPI contract and the official Evaluation and Track Insights guides.
+- [Terraform Provider](https://github.com/featbit/terraform-provider-featbit) is the official source for managing FeatBit resources with Terraform.
 - [Deployment sources](skills/featbit/references/deployment.md) links the official Compose, Helm, Aspire, AWS Terraform, Azure Terraform, and OpenTelemetry sources.
 - [Other FeatBit documentation](https://docs.featbit.co/) is searched directly for topics outside those references, with the documentation sitemap used only as a discovery fallback.
 
