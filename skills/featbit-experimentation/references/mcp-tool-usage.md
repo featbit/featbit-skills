@@ -13,28 +13,28 @@ These tools are exposed by the FeatBit API MCP implementation:
 
 | Tool | Use |
 |---|---|
-| `featbit_release_decision_get_experiment` | Read experiment state, runs, activities, setup mode, metrics, and analysis data. |
-| `featbit_release_decision_update_experiment` | Patch experiment-level fields such as goal, intent, hypothesis, change, constraints, lastAction, and lastLearning. |
-| `featbit_release_decision_set_stage` | Move the experiment framework stage. Valid stages are `intent`, `hypothesis`, `implementing`, `measuring`, and `learning`. |
-| `featbit_release_decision_update_metrics` | Persist the primary metric contract and guardrails. Do not write primary metric fields through `update_experiment`. |
-| `featbit_release_decision_create_run` | Create a run under an existing experiment. |
-| `featbit_release_decision_update_run` | Patch run metadata, status, observation window, method, metric snapshot fields, decision fields, and learning fields. |
-| `featbit_release_decision_update_run_traffic` | Configure the Experiment Traffic Assignment panel: method, control/treatment roles, assignment unit, layer id/key, bucket slice start/end, audience filters, allocation plan, and analysis sampling. It does not mutate the live feature flag. |
-| `featbit_release_decision_analyze_run` | Run server-side analysis and persist refreshed `inputData` and `analysisResult` onto the run. |
-| `featbit_release_decision_list_layers` | List registered release-decision layers in the experiment environment before assigning a run to a layer. |
-| `featbit_release_decision_create_layer` | Create a registered layer after explicit user approval. |
-| `featbit_release_decision_update_layer` | Update a registered layer after explicit user approval. |
-| `featbit_release_decision_archive_layer` | Archive a registered layer after explicit user approval. |
-| `featbit_release_decision_get_feature_flag` | Read the bound FeatBit feature flag, revision, enabled state, variations, and targeting from the experiment environment. |
-| `featbit_release_decision_create_feature_flag` | Create a feature flag in the experiment environment after explicit user approval. |
-| `featbit_release_decision_update_feature_flag_targeting` | Apply targeting/rollout directly or create a change request after explicit user approval. Requires latest `revision`. |
-| `featbit_release_decision_toggle_feature_flag` | Enable or disable the feature flag after explicit user approval. Targeting updates do not toggle flags. |
+| `featbit_experiment_get_experiment` | Read experiment state, runs, activities, setup mode, metrics, and analysis data. |
+| `featbit_experiment_update_experiment` | Patch experiment-level fields such as goal, intent, hypothesis, change, constraints, lastAction, and lastLearning. |
+| `featbit_experiment_set_stage` | Move the experiment framework stage. Valid stages are `intent`, `hypothesis`, `implementing`, `measuring`, and `learning`. |
+| `featbit_experiment_update_metrics` | Persist the primary metric contract and guardrails. Do not write primary metric fields through `update_experiment`. |
+| `featbit_experiment_create_run` | Create a run under an existing experiment. |
+| `featbit_experiment_update_run` | Patch run metadata, status, observation window, method, metric snapshot fields, decision fields, and learning fields. |
+| `featbit_experiment_update_run_traffic` | Configure the Experiment Traffic Assignment panel: method, control/treatment roles, assignment unit, layer id/key, bucket slice start/end, audience filters, allocation plan, and analysis sampling. It does not mutate the live feature flag. |
+| `featbit_experiment_analyze_run` | Run server-side analysis and persist refreshed `inputData` and `analysisResult` onto the run. |
+| `featbit_experiment_list_layers` | List registered release-decision layers in the experiment environment before assigning a run to a layer. |
+| `featbit_experiment_create_layer` | Create a registered layer after explicit user approval. |
+| `featbit_experiment_update_layer` | Update a registered layer after explicit user approval. |
+| `featbit_experiment_archive_layer` | Archive a registered layer after explicit user approval. |
+| `featbit_experiment_get_feature_flag` | Read the bound FeatBit feature flag, revision, enabled state, variations, and targeting from the experiment environment. |
+| `featbit_experiment_create_feature_flag` | Create a feature flag in the experiment environment after explicit user approval. |
+| `featbit_experiment_update_feature_flag_targeting` | Apply targeting/rollout directly or create a change request after explicit user approval. Requires latest `revision`. |
+| `featbit_experiment_toggle_feature_flag` | Enable or disable the feature flag after explicit user approval. Targeting updates do not toggle flags. |
 
-There is no current `featbit_release_decision_add_message` MCP tool. Do not call it. Durable notes should be written through `update_experiment.lastAction`, `update_experiment.lastLearning`, or run decision/learning fields as appropriate.
+There is no current `featbit_experiment_add_message` MCP tool. Do not call it. Durable notes should be written through `update_experiment.lastAction`, `update_experiment.lastLearning`, or run decision/learning fields as appropriate.
 
 ## Global Practices
 
-1. Start every MCP-backed turn with `featbit_release_decision_get_experiment`.
+1. Start every MCP-backed turn with `featbit_experiment_get_experiment`.
 2. Treat the FeatBit API database as the source of truth. Do not create local experiment files or sync scripts.
 3. Use feature-flag tools only after the experiment resolves an environment through `experimentId`; do not ask the user for `envId`.
 4. Ask for explicit approval immediately before any production-impacting flag mutation: create flag, update targeting, create change request, enable, or disable.
@@ -49,9 +49,9 @@ There is no current `featbit_release_decision_add_message` MCP tool. Do not call
 
 Use:
 
-- `featbit_release_decision_get_experiment`
-- `featbit_release_decision_update_experiment`
-- `featbit_release_decision_set_stage`
+- `featbit_experiment_get_experiment`
+- `featbit_experiment_update_experiment`
+- `featbit_experiment_set_stage`
 
 Best practice:
 
@@ -62,13 +62,13 @@ Best practice:
 
 Use:
 
-- `featbit_release_decision_get_experiment`
-- `featbit_release_decision_get_feature_flag`
-- `featbit_release_decision_create_feature_flag`
-- `featbit_release_decision_update_feature_flag_targeting`
-- `featbit_release_decision_toggle_feature_flag`
-- `featbit_release_decision_update_experiment`
-- `featbit_release_decision_set_stage`
+- `featbit_experiment_get_experiment`
+- `featbit_experiment_get_feature_flag`
+- `featbit_experiment_create_feature_flag`
+- `featbit_experiment_update_feature_flag_targeting`
+- `featbit_experiment_toggle_feature_flag`
+- `featbit_experiment_update_experiment`
+- `featbit_experiment_set_stage`
 
 Best practice:
 
@@ -81,10 +81,10 @@ Best practice:
 
 Use:
 
-- `featbit_release_decision_get_experiment`
-- `featbit_release_decision_update_metrics`
-- `featbit_release_decision_update_experiment`
-- `featbit_release_decision_set_stage`
+- `featbit_experiment_get_experiment`
+- `featbit_experiment_update_metrics`
+- `featbit_experiment_update_experiment`
+- `featbit_experiment_set_stage`
 
 Best practice:
 
@@ -96,18 +96,18 @@ Best practice:
 
 Use:
 
-- `featbit_release_decision_get_experiment`
-- `featbit_release_decision_create_run`
-- `featbit_release_decision_list_layers`
-- `featbit_release_decision_create_layer`
-- `featbit_release_decision_update_layer`
-- `featbit_release_decision_archive_layer`
-- `featbit_release_decision_get_feature_flag`
-- `featbit_release_decision_toggle_feature_flag`
-- `featbit_release_decision_update_run_traffic`
-- `featbit_release_decision_update_run`
-- `featbit_release_decision_update_experiment`
-- `featbit_release_decision_set_stage`
+- `featbit_experiment_get_experiment`
+- `featbit_experiment_create_run`
+- `featbit_experiment_list_layers`
+- `featbit_experiment_create_layer`
+- `featbit_experiment_update_layer`
+- `featbit_experiment_archive_layer`
+- `featbit_experiment_get_feature_flag`
+- `featbit_experiment_toggle_feature_flag`
+- `featbit_experiment_update_run_traffic`
+- `featbit_experiment_update_run`
+- `featbit_experiment_update_experiment`
+- `featbit_experiment_set_stage`
 
 Best practice:
 
@@ -129,10 +129,10 @@ Best practice:
 
 Use:
 
-- `featbit_release_decision_get_experiment`
-- `featbit_release_decision_analyze_run`
-- `featbit_release_decision_update_run`
-- `featbit_release_decision_update_experiment`
+- `featbit_experiment_get_experiment`
+- `featbit_experiment_analyze_run`
+- `featbit_experiment_update_run`
+- `featbit_experiment_update_experiment`
 - Feature-flag tools only if the user asks to execute the rollout decision.
 
 Best practice:
@@ -147,10 +147,10 @@ Best practice:
 
 Use:
 
-- `featbit_release_decision_get_experiment`
-- `featbit_release_decision_update_experiment`
-- `featbit_release_decision_set_stage`
-- `featbit_release_decision_update_run`
+- `featbit_experiment_get_experiment`
+- `featbit_experiment_update_experiment`
+- `featbit_experiment_set_stage`
+- `featbit_experiment_update_run`
 
 Best practice:
 
