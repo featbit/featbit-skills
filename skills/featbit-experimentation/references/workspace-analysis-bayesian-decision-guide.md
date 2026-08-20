@@ -87,7 +87,7 @@ evidence analysis stage            ← reads analysisResult, frames CONTINUE / P
 learning capture stage             ← records what was learned
 ```
 
-The agent triggers analysis via `featbit_release_decision_analyze_run`. After `analysisResult` is written to the run record, the agent hands off to the evidence analysis stage so the decision can be tied back to the original hypothesis.
+The agent triggers analysis via `featbit_experiment_analyze_run`. After `analysisResult` is written to the run record, the agent hands off to the evidence analysis stage so the decision can be tied back to the original hypothesis.
 
 ---
 
@@ -95,7 +95,7 @@ The agent triggers analysis via `featbit_release_decision_analyze_run`. After `a
 
 The `/analyze` endpoint is idempotent — re-hit it with `"forceFresh": true` whenever you want fresh numbers:
 
-Call `featbit_release_decision_analyze_run` with `experimentId`, `runId`, and `forceFresh: true`.
+Call `featbit_experiment_analyze_run` with `experimentId`, `runId`, and `forceFresh: true`.
 
 `inputData` and `analysisResult` on the run record are both refreshed.
 

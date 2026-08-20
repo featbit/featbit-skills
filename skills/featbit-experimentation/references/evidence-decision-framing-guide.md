@@ -127,5 +127,5 @@ Decision: [CONTINUE / PAUSE / ROLLBACK CANDIDATE / INCONCLUSIVE]
 Reasoning: [2–3 sentences tying the evidence to the hypothesis and the decision category]
 
 Plain-language action: [what to do to the feature flag now: move treatment to 100%, expand 50% -> 80% -> 100%, hold current split, rollback to control/default, or keep observing]
-Next action: [specific action: ask for approval, then update rollout through `featbit_release_decision_update_feature_flag_targeting` with `confirmedByUser: true` and enable/disable through `featbit_release_decision_toggle_feature_flag` with `confirmedByUser: true` when available; otherwise investigate guardrail, fix instrumentation, or extend window]
+Next action: [specific action: ask for approval, then update rollout through `featbit_experiment_update_feature_flag_targeting` with `confirmedByUser: true` and enable/disable through `featbit_experiment_toggle_feature_flag` with `confirmedByUser: true` when available; otherwise investigate guardrail, fix instrumentation, or extend window]
 ```

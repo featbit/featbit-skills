@@ -31,7 +31,7 @@ These effects share one property: **they are temporary**. A holdout group runnin
 
 ## How It Works
 
-At full launch, adjust the feature flag traffic split to keep a small holdout group on the old version. Use `featbit_release_decision_get_feature_flag` to read the latest flag revision and `featbit_release_decision_update_feature_flag_targeting` to apply the split when FeatBit MCP tools are available, but only after the user approves the exact holdout rollout. Targeting changes do not enable the flag; if launch begins now, ask for approval to enable the flag, call `featbit_release_decision_toggle_feature_flag` with `confirmedByUser: true` and `isEnabled: true`, and read the flag back before recording `launched_at`:
+At full launch, adjust the feature flag traffic split to keep a small holdout group on the old version. Use `featbit_experiment_get_feature_flag` to read the latest flag revision and `featbit_experiment_update_feature_flag_targeting` to apply the split when FeatBit MCP tools are available, but only after the user approves the exact holdout rollout. Targeting changes do not enable the flag; if launch begins now, ask for approval to enable the flag, call `featbit_experiment_toggle_feature_flag` with `confirmedByUser: true` and `isEnabled: true`, and read the flag back before recording `launched_at`:
 
 ```
 Feature flag: new-onboarding-flow
@@ -49,9 +49,9 @@ Both groups experience identical external conditions — same season, same trend
 
 ## Running Holdout Analysis
 
-Create a separate run for each time checkpoint with `featbit_release_decision_create_run` and `featbit_release_decision_update_run`, using a time-stamped slug and the checkpoint's `observationStart` / `observationEnd` dates, then trigger analysis on each:
+Create a separate run for each time checkpoint with `featbit_experiment_create_run` and `featbit_experiment_update_run`, using a time-stamped slug and the checkpoint's `observationStart` / `observationEnd` dates, then trigger analysis on each:
 
-Call `featbit_release_decision_analyze_run` for each holdout run with `forceFresh: true`.
+Call `featbit_experiment_analyze_run` for each holdout run with `forceFresh: true`.
 
 Each checkpoint needs its own run record. The run is identical to the original except for `observationStart` / `observationEnd` dates.
 
@@ -126,8 +126,8 @@ Holdout groups sit **after** the A/B or Bandit experiment concludes. They are no
 
 | Checkpoint | Action |
 |-----------|--------|
-| Launch day | After explicit user approval, set feature flag to 95/5 with `featbit_release_decision_update_feature_flag_targeting` and `confirmedByUser: true` when available; enable with `featbit_release_decision_toggle_feature_flag` and `confirmedByUser: true` if the flag is off; note `launched_at` in experiment record only after readback confirms the intended state |
-| Day 30 | Trigger analysis on the holdout-30d run via `featbit_release_decision_analyze_run` with `forceFresh: true` |
+| Launch day | After explicit user approval, set feature flag to 95/5 with `featbit_experiment_update_feature_flag_targeting` and `confirmedByUser: true` when available; enable with `featbit_experiment_toggle_feature_flag` and `confirmedByUser: true` if the flag is off; note `launched_at` in experiment record only after readback confirms the intended state |
+| Day 30 | Trigger analysis on the holdout-30d run via `featbit_experiment_analyze_run` with `forceFresh: true` |
 | Day 60 | Repeat |
 | Day 90 | Repeat; decide whether to fully close the holdout group |
 | Any point | If effect has clearly collapsed, consider rollback investigation |

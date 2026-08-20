@@ -33,7 +33,7 @@ In the FeatBit UI:
 6. Save and activate the experiment
 
 The experiment begins collecting metric data once:
-- The flag is enabled. If MCP tools are available, ask the user to approve enabling the exact flag, use `featbit_release_decision_toggle_feature_flag` with `confirmedByUser: true`, and read back `isEnabled: true` instead of asking the user to flip the UI toggle.
+- The flag is enabled. If MCP tools are available, ask the user to approve enabling the exact flag, use `featbit_experiment_toggle_feature_flag` with `confirmedByUser: true`, and read back `isEnabled: true` instead of asking the user to flip the UI toggle.
 - Users are being assigned to variants
 - Events are being tracked with the same user keys as the flag evaluations
 
@@ -74,9 +74,9 @@ These are guidelines, not rules. Business context, guardrail health, and traffic
 
 ## After Making a Decision
 
-1. Persist the decision to the database via `featbit_release_decision_update_run` (`decision`, `decisionSummary`, `decisionReason`, and `status: "decided"`)
-2. If **CONTINUE** and the user asks the agent to execute the action: summarize the exact rollout, get approval, expand rollout with `featbit_release_decision_update_feature_flag_targeting` and `confirmedByUser: true` when available, then use `featbit_release_decision_toggle_feature_flag` with `confirmedByUser: true` if the flag must be enabled; otherwise use the FeatBit UI
-3. If **ROLLBACK CANDIDATE** and the user asks the agent to execute the action: summarize the rollback, get approval, route users back to control/default with `featbit_release_decision_update_feature_flag_targeting` and `confirmedByUser: true` when available, or disable the flag with `featbit_release_decision_toggle_feature_flag` and `confirmedByUser: true` for immediate rollback; otherwise disable the flag in the FeatBit UI
+1. Persist the decision to the database via `featbit_experiment_update_run` (`decision`, `decisionSummary`, `decisionReason`, and `status: "decided"`)
+2. If **CONTINUE** and the user asks the agent to execute the action: summarize the exact rollout, get approval, expand rollout with `featbit_experiment_update_feature_flag_targeting` and `confirmedByUser: true` when available, then use `featbit_experiment_toggle_feature_flag` with `confirmedByUser: true` if the flag must be enabled; otherwise use the FeatBit UI
+3. If **ROLLBACK CANDIDATE** and the user asks the agent to execute the action: summarize the rollback, get approval, route users back to control/default with `featbit_experiment_update_feature_flag_targeting` and `confirmedByUser: true` when available, or disable the flag with `featbit_experiment_toggle_feature_flag` and `confirmedByUser: true` for immediate rollback; otherwise disable the flag in the FeatBit UI
 4. If **INCONCLUSIVE**: extend the window or close without action and document why
 
 Archive the experiment after the flag is fully rolled out or rolled back to preserve the result data for the the learning capture stage cycle.

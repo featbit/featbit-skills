@@ -42,13 +42,13 @@ Keys:
 Instrumentation code
   → track-service (receives flag_evaluation + metric events)
       → ClickHouse (stores raw events)
-          → FeatBit API analysis via featbit_release_decision_analyze_run
+          → FeatBit API analysis via featbit_experiment_analyze_run
               → POST /api/query/experiment (track-service query endpoint)
                   → assembles inputData + runs analysis
                       → writes inputData + analysisResult to run record
 ```
 
-Your job is to make sure instrumentation sends evaluation and metric events with the correct `envId`, `flagKey`, user key, variation, event names, timestamps, and any user properties required by `audienceFilters` or a custom `assignmentUnitSelector`. Once events land, `featbit_release_decision_analyze_run` handles the rest — no manual data assembly needed.
+Your job is to make sure instrumentation sends evaluation and metric events with the correct `envId`, `flagKey`, user key, variation, event names, timestamps, and any user properties required by `audienceFilters` or a custom `assignmentUnitSelector`. Once events land, `featbit_experiment_analyze_run` handles the rest — no manual data assembly needed.
 
 ---
 
@@ -140,14 +140,14 @@ If `/analyze` returns `{ "status": "no_data" }`:
 
 If `/analyze` returns `{ "status": "no_data", "reason": "zero_users" }`:
 - Metric events are present but no users have been assigned to variants yet
-- Read the flag with `featbit_release_decision_get_feature_flag` and confirm `isEnabled` is true. If collection should be active and the toggle tool is available, ask the user to approve enabling the exact flag, call `featbit_release_decision_toggle_feature_flag` with `confirmedByUser: true` and `isEnabled: true`, then read back before retrying analysis.
+- Read the flag with `featbit_experiment_get_feature_flag` and confirm `isEnabled` is true. If collection should be active and the toggle tool is available, ask the user to approve enabling the exact flag, call `featbit_experiment_toggle_feature_flag` with `confirmedByUser: true` and `isEnabled: true`, then read back before retrying analysis.
 - Confirm the FeatBit SDK is calling `variation()` in the live codebase
 
 ---
 
 ## Verifying Input Data Quality
 
-After triggering analysis, read the `inputData` written back to the run record via `featbit_release_decision_get_experiment` and sanity-check:
+After triggering analysis, read the `inputData` written back to the run record via `featbit_experiment_get_experiment` and sanity-check:
 
 - Both variant keys match `controlVariant` and `treatmentVariant` in the experiment record
 - `n` values are plausible — not 0, not absurdly high

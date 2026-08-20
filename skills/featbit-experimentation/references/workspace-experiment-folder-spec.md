@@ -33,12 +33,12 @@ The experiment record owns the durable goal, intent, hypothesis, metrics, and le
 | `audienceFilters` | run traffic | Optional JSON array of user-property filters applied before analysis |
 | `minimumSample` | run | Validity floor per analyzed variant |
 | `priorProper` / `priorMean` / `priorStddev` | run | Bayesian prior configuration |
-| `inputData` | run | Aggregated analysis input written by `featbit_release_decision_analyze_run` |
-| `analysisResult` | run | Computed analysis output written by `featbit_release_decision_analyze_run` |
+| `inputData` | run | Aggregated analysis input written by `featbit_experiment_analyze_run` |
+| `analysisResult` | run | Computed analysis output written by `featbit_experiment_analyze_run` |
 
 Rules:
 
-- Read real variation values with `featbit_release_decision_get_feature_flag` before configuring control/treatment roles.
+- Read real variation values with `featbit_experiment_get_feature_flag` before configuring control/treatment roles.
 - Do not change `controlVariant`, `treatmentVariant`, or traffic sampling on a collecting/analyzing/decided run unless the user explicitly approves the evidence change.
 - `observationStart` must not be earlier than the time exposure really began.
 - `minimumSample` is a validity floor, not a stopping rule.
@@ -84,7 +84,7 @@ Semantics:
 
 Analysis sampling runs after layer/audience filtering and after reading the actual served variation. It samples inside each served variation.
 
-Use `featbit_release_decision_update_run_traffic`:
+Use `featbit_experiment_update_run_traffic`:
 
 ```json
 {
@@ -148,7 +148,7 @@ Metric aggregation still follows the metric definition:
 
 ## `inputData` Format
 
-`inputData` is written by `featbit_release_decision_analyze_run` after querying live stats.
+`inputData` is written by `featbit_experiment_analyze_run` after querying live stats.
 
 ```json
 {
@@ -202,4 +202,4 @@ Rules:
 }
 ```
 
-Do not edit `analysisResult` by hand. Re-run `featbit_release_decision_analyze_run` when data or run configuration changes.
+Do not edit `analysisResult` by hand. Re-run `featbit_experiment_analyze_run` when data or run configuration changes.

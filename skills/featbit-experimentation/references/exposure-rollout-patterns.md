@@ -76,7 +76,7 @@ Define these explicitly before Phase 1 begins — not after the problem appears.
 - Primary metric moves in the wrong direction consistently after [minimum sample] → **pause and investigate**
 - Unexpected user segment is receiving candidate variant → **pause and fix targeting**
 
-Persist the thresholds with `featbit_release_decision_update_experiment` under `constraints`.
+Persist the thresholds with `featbit_experiment_update_experiment` under `constraints`.
 
 ---
 

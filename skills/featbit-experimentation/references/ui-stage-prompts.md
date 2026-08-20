@@ -11,7 +11,7 @@ Do not recite private UI hints. Use them only to choose the next question.
 
 ## Common Rules
 
-- Read the experiment through `featbit_release_decision_get_experiment` before doing stage work.
+- Read the experiment through `featbit_experiment_get_experiment` before doing stage work.
 - If required FeatBit MCP tools are missing, ask the user to register the MCP from the Release Decision page before continuing.
 - If a FeatBit MCP call fails because a token is expired or revoked, ask the user to create a new MCP token and restart or resume the agent with the new setup command.
 - Act like a release-decision coach, not a batch job.
@@ -53,7 +53,7 @@ Completion criteria:
 
 Do not ask for variants, rollout percentages, metric event keys, observed data, primary metric contract, guardrails, `metricType`, or `metricAgg`.
 
-Persist through `featbit_release_decision_update_experiment`; keep expected metric direction inside hypothesis text only.
+Persist through `featbit_experiment_update_experiment`; keep expected metric direction inside hypothesis text only.
 
 ## Stage: exposure
 
@@ -61,7 +61,7 @@ User-facing task: make the change reversible with a FeatBit-managed flag, real f
 
 Apply CF-03 and CF-04.
 
-Use FeatBit flag MCP tools when available. Read existing flags and real variations with `featbit_release_decision_get_feature_flag`; if it returns `ResourceNotFound`, create the missing flag with `featbit_release_decision_create_feature_flag` only after the flag contract is complete and the user approves creation; read the created flag back; update rollout/targeting with `featbit_release_decision_update_feature_flag_targeting` only after the user approves the targeting change. Targeting updates do not enable the flag. If exposure should begin now, ask for approval to enable the flag, call `featbit_release_decision_toggle_feature_flag` with `isEnabled: true`, then read back and verify `isEnabled`.
+Use FeatBit flag MCP tools when available. Read existing flags and real variations with `featbit_experiment_get_feature_flag`; if it returns `ResourceNotFound`, create the missing flag with `featbit_experiment_create_feature_flag` only after the flag contract is complete and the user approves creation; read the created flag back; update rollout/targeting with `featbit_experiment_update_feature_flag_targeting` only after the user approves the targeting change. Targeting updates do not enable the flag. If exposure should begin now, ask for approval to enable the flag, call `featbit_experiment_toggle_feature_flag` with `isEnabled: true`, then read back and verify `isEnabled`.
 
 If direct flag tooling is unavailable, define the concrete flag contract, variants, rollout, toggle state, and rollback rules, then tell the user what to create or bind in the FeatBit UI.
 
@@ -76,7 +76,7 @@ Completion criteria:
 
 Do not ask for metric event keys or observed data.
 
-Persist only concrete flag, audience, rollout, toggle, and rollback decisions through MCP. When calling `featbit_release_decision_update_feature_flag_targeting`, pass `confirmedByUser: true`, the latest flag `revision`, and a complete targeting object only after explicit user approval. When turning exposure on or off, use `featbit_release_decision_toggle_feature_flag` with `confirmedByUser: true` and verify with `get_feature_flag` only after explicit user approval. Direct update is the default; use change-request mode only if reviewer ids are known or approval is explicitly required.
+Persist only concrete flag, audience, rollout, toggle, and rollback decisions through MCP. When calling `featbit_experiment_update_feature_flag_targeting`, pass `confirmedByUser: true`, the latest flag `revision`, and a complete targeting object only after explicit user approval. When turning exposure on or off, use `featbit_experiment_toggle_feature_flag` with `confirmedByUser: true` and verify with `get_feature_flag` only after explicit user approval. Direct update is the default; use change-request mode only if reviewer ids are known or approval is explicitly required.
 
 Do not mark Exposure satisfied when the experiment only contains a proposed flag key in `constraints`. A flag is bound only after `get_feature_flag` succeeds or `create_feature_flag` succeeds and the flag is read back successfully.
 
@@ -90,7 +90,7 @@ Define exactly one deciding metric, a small set of guardrails, event instrumenta
 
 Use FeatBit-managed flag evaluation data and FeatBit metric event data as the evidence source. Third-party API evidence is only planned and must not be used for actual analysis yet.
 
-When the primary metric name, event, type, aggregation, expected better direction, or guardrails are confirmed, write them with `featbit_release_decision_update_metrics`.
+When the primary metric name, event, type, aggregation, expected better direction, or guardrails are confirmed, write them with `featbit_experiment_update_metrics`.
 
 Completion criteria:
 
@@ -98,7 +98,7 @@ Completion criteria:
 - Guardrails exist and have clear degradation direction.
 - Required event instrumentation is named and mapped to FeatBit metric events.
 - Run window, traffic mode, and minimum sample expectation are defined.
-- When a run is moved to collection, the bound feature flag is read back as `isEnabled: true`; use `featbit_release_decision_toggle_feature_flag` if it is off.
+- When a run is moved to collection, the bound feature flag is read back as `isEnabled: true`; use `featbit_experiment_toggle_feature_flag` if it is off.
 - Evidence comes from FeatBit flag evaluation data and FeatBit metric events.
 
 Do not ask the user to manually enter variants or observed data.
@@ -113,12 +113,12 @@ Procedure:
 
 1. Read the experiment.
 2. Inspect selected run, current `analysisResult`, observation window, primary metric, guardrails, minimum sample, SRM result, and risk values.
-3. If analysis is missing or clearly unusable, call `featbit_release_decision_analyze_run` with `forceFresh=true`, then read the refreshed experiment.
+3. If analysis is missing or clearly unusable, call `featbit_experiment_analyze_run` with `forceFresh=true`, then read the refreshed experiment.
 4. Do not replace a usable Bayesian/Bandit `analysisResult` with stats-ready/raw stats. Usable Bayesian analysis includes SRM, sample check, primary metric rows with `p_win`/risk, and guardrails. If refreshed analysis is only raw stats, stop and report analyzer mismatch.
 5. Pick exactly one API decision value: `CONTINUE`, `PAUSE`, `ROLLBACK`, or `INCONCLUSIVE`. If reasoning says `ROLLBACK CANDIDATE`, persist `ROLLBACK`.
 6. Write `decision`, `decisionSummary`, `decisionReason`, and `status="decided"` to the run.
 7. Write `lastAction="Decision: <category>"` to the experiment. Do not move stage to `learning` unless learning capture is explicitly requested.
-8. If the user asks to execute the rollout action and feature-flag MCP tools are available, read the latest flag revision, summarize the exact flag operation, get explicit user approval, then call `featbit_release_decision_update_feature_flag_targeting` with `confirmedByUser: true`. Use `featbit_release_decision_toggle_feature_flag` as needed with `confirmedByUser: true`: `isEnabled: true` for launch/expansion when the flag is off, `isEnabled: false` for immediate pause/rollback that should stop exposure. Do not silently mutate the flag as part of analysis.
+8. If the user asks to execute the rollout action and feature-flag MCP tools are available, read the latest flag revision, summarize the exact flag operation, get explicit user approval, then call `featbit_experiment_update_feature_flag_targeting` with `confirmedByUser: true`. Use `featbit_experiment_toggle_feature_flag` as needed with `confirmedByUser: true`: `isEnabled: true` for launch/expansion when the flag is off, `isEnabled: false` for immediate pause/rollback that should stop exposure. Do not silently mutate the flag as part of analysis.
 
 Guardrail inverse mapping: `increase_bad` means inverse true; `decrease_bad` means inverse false.
 

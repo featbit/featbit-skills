@@ -55,7 +55,7 @@ Every time the web `/analyze` endpoint runs a bandit:
 
 The web app's analyze endpoint picks `bandit` automatically from the run's `method` field — no separate script invocation:
 
-Call `featbit_release_decision_analyze_run` with `experimentId`, `runId`, and `forceFresh: true`.
+Call `featbit_experiment_analyze_run` with `experimentId`, `runId`, and `forceFresh: true`.
 
 Reads:
 - Run record from the database (variant names, metric events, `method: "bandit"`)
@@ -125,11 +125,11 @@ for (const [arm, weight] of Object.entries(banditWeights)) {
 
 **MCP flow:**
 ```python
-flag = MCP("featbit_release_decision_get_feature_flag", experimentId=experiment_id, key=flag_key)
+flag = MCP("featbit_experiment_get_feature_flag", experimentId=experiment_id, key=flag_key)
 targeting = flag.targeting
 targeting.fallthrough.variations = rollout_variations_from_bandit_weights
 require_explicit_user_approval("apply bandit traffic weights", targeting)
-MCP("featbit_release_decision_update_feature_flag_targeting", experimentId=experiment_id, key=flag_key, request={
+MCP("featbit_experiment_update_feature_flag_targeting", experimentId=experiment_id, key=flag_key, request={
     "confirmedByUser": True,
     "revision": flag.revision,
     "targeting": targeting,
@@ -137,12 +137,12 @@ MCP("featbit_release_decision_update_feature_flag_targeting", experimentId=exper
 })
 if not flag.isEnabled:
     require_explicit_user_approval("enable feature flag while applying bandit weights", {"key": flag_key, "isEnabled": True})
-    MCP("featbit_release_decision_toggle_feature_flag", experimentId=experiment_id, key=flag_key, request={
+    MCP("featbit_experiment_toggle_feature_flag", experimentId=experiment_id, key=flag_key, request={
         "confirmedByUser": True,
         "isEnabled": True,
         "comment": "Enable flag while applying bandit traffic weights"
     })
-    flag = MCP("featbit_release_decision_get_feature_flag", experimentId=experiment_id, key=flag_key)
+    flag = MCP("featbit_experiment_get_feature_flag", experimentId=experiment_id, key=flag_key)
     assert flag.isEnabled, "feature flag must be enabled for bandit traffic allocation"
 ```
 
@@ -151,7 +151,7 @@ Update the `fallthrough.variations[].rollout` field with the computed ranges. Ta
 Direct update is the default. Use change-request mode only when reviewer ids are supplied or approval is explicitly required:
 
 ```python
-MCP("featbit_release_decision_update_feature_flag_targeting", experimentId=experiment_id, key=flag_key, request={
+MCP("featbit_experiment_update_feature_flag_targeting", experimentId=experiment_id, key=flag_key, request={
     "confirmedByUser": True,
     "revision": flag.revision,
     "targeting": targeting,
@@ -161,7 +161,7 @@ MCP("featbit_release_decision_update_feature_flag_targeting", experimentId=exper
 })
 ```
 
-This step requires FeatBit system integration. Full automation (scheduled reweighting without manual intervention) requires a scheduler that calls `featbit_release_decision_analyze_run` periodically and applies the returned weights through `featbit_release_decision_update_feature_flag_targeting`.
+This step requires FeatBit system integration. Full automation (scheduled reweighting without manual intervention) requires a scheduler that calls `featbit_experiment_analyze_run` periodically and applies the returned weights through `featbit_experiment_update_feature_flag_targeting`.
 
 > **Book reference** — *Experimentation for Engineers*, Chapter 3: the book describes the full Thompson Sampling feedback loop as a continuous "sample → estimate posterior → allocate → repeat" cycle. The scheduling interval (how often to reweight) is a tuning parameter: shorter intervals react faster but add noise; longer intervals are more stable but slower to adapt.
 
@@ -185,9 +185,9 @@ At this point:
 
 ## Transition to Final Analysis
 
-After stopping, switch the run's `method` to `bayesian_ab` with `featbit_release_decision_update_run` and trigger a final analysis on the full collected dataset:
+After stopping, switch the run's `method` to `bayesian_ab` with `featbit_experiment_update_run` and trigger a final analysis on the full collected dataset:
 
-Call `featbit_release_decision_analyze_run` with `forceFresh: true`.
+Call `featbit_experiment_analyze_run` with `forceFresh: true`.
 
 **Important caveat**: bandit experiments produce unequal traffic splits (e.g. 90/10 by the end). This means:
 - The δ (delta) estimate in `analysisResult` is valid but has wider uncertainty than a balanced 50/50 design
@@ -206,6 +206,6 @@ Hand off to the evidence analysis stage with:
 | Phase | Action | Frequency |
 |-------|--------|-----------|
 | Burn-in | Collect data, do not reweight | Until every arm ≥ 100 users |
-| Exploit | Trigger `featbit_release_decision_analyze_run` (run is on `method: bandit`), apply the returned weights with `featbit_release_decision_update_feature_flag_targeting`, and verify the flag is enabled with `featbit_release_decision_toggle_feature_flag` / readback when needed | Every 6–24 hours |
+| Exploit | Trigger `featbit_experiment_analyze_run` (run is on `method: bandit`), apply the returned weights with `featbit_experiment_update_feature_flag_targeting`, and verify the flag is enabled with `featbit_experiment_toggle_feature_flag` / readback when needed | Every 6–24 hours |
 | Stopping | `best_arm_probabilities >= 0.95` | Check each cycle |
-| Wrap-up | Switch run to `method: bayesian_ab`, trigger `featbit_release_decision_analyze_run`, hand off to the evidence analysis stage | Once, after stopping |
+| Wrap-up | Switch run to `method: bayesian_ab`, trigger `featbit_experiment_analyze_run`, hand off to the evidence analysis stage | Once, after stopping |

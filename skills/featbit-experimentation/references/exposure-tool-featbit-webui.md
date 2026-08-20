@@ -71,7 +71,7 @@ Targeting rules define which users see a specific variation before percentage ro
 1. Set targeting rules first (while flag is still OFF)
 2. Verify rules cover protected audiences (who must NOT see the candidate)
 3. Set rollout percentage to initial value (5–10%)
-4. After explicit user approval, enable the flag with `featbit_release_decision_toggle_feature_flag` and `confirmedByUser: true` when MCP is available, or with the UI toggle when it is not
+4. After explicit user approval, enable the flag with `featbit_experiment_toggle_feature_flag` and `confirmedByUser: true` when MCP is available, or with the UI toggle when it is not
 
 Protected audiences that must NOT see a new variant should be in an individual rule returning the default OFF variant. This rule must be placed above the rollout rule.
 
