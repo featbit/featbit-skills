@@ -1,5 +1,5 @@
 ---
-name: featbit-experimentation-skills
+name: featbit-experimentation
 description: End-to-end FeatBit experimentation and release-decision workflow. Use when shaping product intent, writing a hypothesis, defining feature flags and rollout strategy, designing metrics and instrumentation, creating or analyzing experiment runs, deciding continue/pause/rollback/inconclusive, or capturing learnings for the next iteration.
 license: Apache-2.0
 metadata:
