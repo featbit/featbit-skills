@@ -1,17 +1,17 @@
 # FeatBit Agent Skill
 
-[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](https://github.com/featbit/featbit-skills/releases/tag/0.1.1)
+[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/featbit/featbit-skills/releases/tag/0.1.2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![skills.sh](https://img.shields.io/badge/install-skills.sh-black.svg)](https://skills.sh/featbit/featbit-skills)
 
-One source-first Agent Skill for AI coding agents working with [FeatBit](https://featbit.co). Compatible with Codex, Claude Code, Cursor, GitHub Copilot, Windsurf, and other tools supported by `skills.sh`.
+Two Agent Skills for AI coding agents working with [FeatBit](https://featbit.co). Compatible with Codex, Claude Code, Cursor, GitHub Copilot, Windsurf, and other tools supported by `skills.sh`.
 
 ## What Is Included
 
 | | |
 |---|---|
-| 1 Skill | Routes FeatBit SDK, REST API, Terraform resource management, deployment, maintenance, observability, and other official documentation requests |
-| 3 References | Small source maps for SDKs, HTTP APIs, and platform operations |
+| 2 Skills | Route FeatBit engineering questions to official sources and guide end-to-end experimentation and release decisions |
+| Focused References | Source maps for FeatBit engineering plus stage-specific experimentation guidance |
 | 0 Documentation Mirrors | Detailed instructions remain in current FeatBit repositories, docs, releases, and live API contracts |
 
 ## Skill
@@ -19,14 +19,15 @@ One source-first Agent Skill for AI coding agents working with [FeatBit](https:/
 | Skill | Description |
 |---|---|
 | [featbit](skills/featbit/SKILL.md) | Routes requests to the relevant reference, the official Terraform Provider repository, or current FeatBit documentation |
+| [featbit-experimentation](skills/featbit-experimentation/SKILL.md) | Guides product intent, hypotheses, rollout strategy, measurement, analysis, release decisions, and learning capture |
 
-The skill uses only the source route needed by the request:
+The `featbit` skill uses only the source route needed by the request:
 
 - [SDK sources](skills/featbit/references/sdk.md) lists every SDK and OpenFeature provider in the official SDK catalog, with its GitHub repository and intended use.
 - [REST API sources](skills/featbit/references/rest-api.md) links the live Management OpenAPI contract and the official Evaluation and Track Insights guides.
 - [Terraform Provider](https://github.com/featbit/terraform-provider-featbit) is the official source for managing FeatBit resources with Terraform.
 - [Deployment sources](skills/featbit/references/deployment.md) links the official Compose, Helm, Aspire, AWS Terraform, Azure Terraform, and OpenTelemetry sources.
-- [Other FeatBit documentation](https://docs.featbit.co/) is searched directly for topics outside those references, with the documentation sitemap used only as a discovery fallback.
+- [Other FeatBit documentation](https://github.com/featbit/featbit-docs) is searched directly on its `main` branch for topics outside those references. Relevant Markdown, MDX, and referenced image assets are read as needed.
 
 ## Install
 
@@ -36,10 +37,11 @@ npx skills add featbit/featbit-skills
 
 The installer detects supported agents and lets you install the same skill for Codex, Claude Code, GitHub Copilot, Cursor, or another supported agent.
 
-Install or list the single skill explicitly:
+Install either skill explicitly, or list all available skills:
 
 ```bash
 npx skills add featbit/featbit-skills --skill featbit
+npx skills add featbit/featbit-skills --skill featbit-experimentation
 npx skills add featbit/featbit-skills --list
 ```
 

@@ -4,7 +4,7 @@ description: Routes FeatBit engineering questions to current official sources. U
 license: MIT
 metadata:
   author: FeatBit
-  version: 0.1.1
+  version: 0.1.2
   category: platform
 ---
 
@@ -22,4 +22,4 @@ Read only the reference relevant to the request. Treat its linked FeatBit docume
 
 **Deployment and maintenance:** Read [references/deployment.md](references/deployment.md) for installation, deployment, upgrades, maintenance, troubleshooting, or observability with Docker Compose, Kubernetes and Helm, Microsoft Aspire, AWS or Azure Terraform, or OpenTelemetry.
 
-**Other FeatBit documentation:** For FeatBit topics outside SDKs, REST APIs, and deployment—such as feature flag configuration, targeting, experimentation, IAM, integrations, data import and export, or relay proxy—search [docs.featbit.co](https://docs.featbit.co/) using the user's terminology, open only the relevant pages, and use the [documentation sitemap](https://docs.featbit.co/sitemap.xml) only when search cannot locate them. Do not use this fallback for topics already covered by the three references.
+**Other FeatBit documentation:** For FeatBit topics outside SDKs, REST APIs, and deployment—such as feature flag configuration, targeting, experimentation, IAM, integrations, data import and export, or relay proxy—search the `main` branch of the official [FeatBit documentation repository](https://github.com/featbit/featbit-docs), primarily under `pages/**/*.md` and `pages/**/*.mdx`, using the user's terminology. Read only the relevant source files and, when they materially affect the answer, their referenced image assets. Do not use this route for topics already covered by the three references.
