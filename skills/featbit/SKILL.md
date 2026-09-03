@@ -4,7 +4,7 @@ description: Routes FeatBit engineering questions to current official sources. U
 license: MIT
 metadata:
   author: FeatBit
-  version: 0.1.2
+  version: 0.1.3
   category: platform
 ---
 
@@ -17,6 +17,8 @@ Read only the reference relevant to the request. Treat its linked FeatBit docume
 **SDK:** Read [references/sdk.md](references/sdk.md) when application code needs a FeatBit SDK or OpenFeature provider, or when an unsupported platform needs the Evaluation and Track Insights APIs.
 
 **REST API:** Read [references/rest-api.md](references/rest-api.md) when the request involves programmatic resource management, the live Management OpenAPI contract, direct feature flag evaluation, or Track Insights.
+
+**MCP Server:** Use the official [FeatBit MCP Server](https://github.com/featbit/featbit-mcp) to manage FeatBit feature flags through natural language with AI coding agents.
 
 **Terraform Provider:** Use the official [FeatBit Terraform Provider](https://github.com/featbit/terraform-provider-featbit) when managing FeatBit resources with Terraform, and follow the repository's current documentation and releases.
 

@@ -1,6 +1,6 @@
 # FeatBit Agent Skills
 
-[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/featbit/featbit-skills/releases/tag/0.1.2)
+[![Version](https://img.shields.io/badge/version-0.1.3-blue.svg)](https://github.com/featbit/featbit-skills/releases/tag/0.1.3)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Two Agent Skills for AI coding agents working with [FeatBit](https://featbit.co): **FeatBit** routes engineering work to current official sources, while **FeatBit Experimentation** guides end-to-end experiments and release decisions for FeatBit v6.0.0 and later. Both skills are compatible with Codex, Claude Code, Cursor, GitHub Copilot, Windsurf, and other tools supported by `skills.sh`.
